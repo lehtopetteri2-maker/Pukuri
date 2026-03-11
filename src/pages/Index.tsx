@@ -199,6 +199,8 @@ const Index = () => {
 
         <AiAnalysis weather={weather} ageGroup={ageGroup} />
 
+        <UvAlert weather={weather} />
+
         <div className="space-y-3">
           <h2 className="text-sm font-display font-700 text-muted-foreground uppercase tracking-wide">
             Lapsen ikäryhmä
