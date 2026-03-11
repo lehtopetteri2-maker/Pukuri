@@ -16,28 +16,31 @@ const SPARE_CLOTHES: ChecklistItem[] = [
   { id: "vaihtosukat", label: "Vaihtosukat", emoji: "🧦" },
 ];
 
-/** Fixed daily items per age group (always shown) */
-const dailyFixedByAge: Record<AgeGroup, ChecklistItem[]> = {
+const miscByAge: Record<AgeGroup, ChecklistItem[]> = {
   vauva: [
     { id: "vaippapaketti", label: "Vaippapaketti", emoji: "🧷" },
     { id: "tutti", label: "Tutti", emoji: "🍼" },
     { id: "unilelu", label: "Unilelu", emoji: "🧸" },
+    { id: "aurinkorasva", label: "Aurinkorasva", emoji: "☀️" },
   ],
   taapero: [
     { id: "juomapullo", label: "Juomapullo", emoji: "💧" },
     { id: "omalelu", label: "Oma lelu", emoji: "🧸" },
     { id: "välipala", label: "Välipala", emoji: "🍎" },
+    { id: "aurinkorasva", label: "Aurinkorasva", emoji: "☀️" },
   ],
   "leikki-ikäinen": [
     { id: "juomapullo", label: "Juomapullo", emoji: "💧" },
     { id: "omalelu", label: "Oma lelu", emoji: "🧸" },
     { id: "välipala", label: "Välipala", emoji: "🍎" },
+    { id: "aurinkorasva", label: "Aurinkorasva", emoji: "☀️" },
   ],
   koululainen: [
     { id: "avaimet", label: "Avaimet", emoji: "🔑" },
     { id: "välipala", label: "Välipala", emoji: "🍎" },
     { id: "uikkarit", label: "Uikkarit & pyyhe", emoji: "🩱" },
     { id: "sisäliikunta", label: "Sisäliikuntavaatteet & pyyhe", emoji: "🏃" },
+    { id: "aurinkorasva", label: "Aurinkorasva", emoji: "☀️" },
   ],
 };
 
@@ -50,20 +53,13 @@ function getDayReminder(): string | null {
   return null;
 }
 
-function getStorageKey(ageGroup: AgeGroup, type: "checked" | "note") {
-  return `daycare-checklist-${ageGroup}-${type}`;
-}
-function loadChecked(ag: AgeGroup): Set<string> {
-  try { const r = localStorage.getItem(getStorageKey(ag, "checked")); return r ? new Set(JSON.parse(r)) : new Set(); } catch { return new Set(); }
-}
+function getStorageKey(ag: AgeGroup, type: "checked" | "note") { return `daycare-checklist-${ag}-${type}`; }
+function loadChecked(ag: AgeGroup): Set<string> { try { const r = localStorage.getItem(getStorageKey(ag, "checked")); return r ? new Set(JSON.parse(r)) : new Set(); } catch { return new Set(); } }
 function saveChecked(ag: AgeGroup, s: Set<string>) { localStorage.setItem(getStorageKey(ag, "checked"), JSON.stringify([...s])); }
 function loadNote(ag: AgeGroup): string { return localStorage.getItem(getStorageKey(ag, "note")) || ""; }
 function saveNote(ag: AgeGroup, n: string) { localStorage.setItem(getStorageKey(ag, "note"), n); }
 
-interface DaycareChecklistProps {
-  ageGroup: AgeGroup;
-  weather: WeatherData;
-}
+interface DaycareChecklistProps { ageGroup: AgeGroup; weather: WeatherData; }
 
 export default function DaycareChecklist({ ageGroup, weather }: DaycareChecklistProps) {
   const [checked, setChecked] = useState<Set<string>>(() => loadChecked(ageGroup));
@@ -73,20 +69,7 @@ export default function DaycareChecklist({ ageGroup, weather }: DaycareChecklist
   useEffect(() => { saveChecked(ageGroup, checked); }, [checked, ageGroup]);
   useEffect(() => { saveNote(ageGroup, note); }, [note, ageGroup]);
 
-  // Daily fixed items — add UV-dependent sunscreen for taapero/leikki-ikäinen
-  const dailyItems = useMemo(() => {
-    const base = [...dailyFixedByAge[ageGroup]];
-    const ids = new Set(base.map((i) => i.id));
-    const add = (id: string, label: string, emoji: string) => { if (!ids.has(id)) { base.push({ id, label, emoji }); ids.add(id); } };
-
-    const uv = weather.uvi ?? 0;
-    if ((ageGroup === "taapero" || ageGroup === "leikki-ikäinen" || ageGroup === "vauva") && uv >= 3) {
-      add("aurinkorasva", "Aurinkorasva", "☀️");
-    }
-    return base;
-  }, [ageGroup, weather.uvi]);
-
-  // Weather-dependent items
+  // 1️⃣ Weather-dependent items (top priority)
   const weatherItems = useMemo(() => {
     const items: ChecklistItem[] = [];
     const ids = new Set<string>();
@@ -98,14 +81,16 @@ export default function DaycareChecklist({ ageGroup, weather }: DaycareChecklist
     if (temp > 10) add("lippis", "Lippis/Hattu", "🧢");
     if (isRainy) { add("kuravarusteet", "Kuravarusteet", "🌧️"); add("vaihtohanskat", "Vaihtohanskat", "🧤"); }
     if (temp < 10) add("lamminkerrasto", "Lämmin kerrasto", "🧶");
-    if ((ageGroup === "leikki-ikäinen" || ageGroup === "koululainen") && temp < 0) {
-      add("luistimet", "Luistimet & kypärä", "⛸️");
-    }
+    if ((ageGroup === "leikki-ikäinen" || ageGroup === "koululainen") && temp < 0) add("luistimet", "Luistimet & kypärä", "⛸️");
+
     return items;
   }, [ageGroup, weather.temperature, weather.rainProbability, weather.afternoonRain]);
 
+  // 3️⃣ Misc items (bottom)
+  const miscItems = useMemo(() => [...miscByAge[ageGroup]], [ageGroup]);
+
   const dayReminder = getDayReminder();
-  const allItems = [...dailyItems, ...weatherItems, ...SPARE_CLOTHES];
+  const allItems = [...weatherItems, ...SPARE_CLOTHES, ...miscItems];
   const allDone = allItems.every((i) => checked.has(i.id));
 
   const toggle = useCallback((id: string) => {
@@ -153,17 +138,37 @@ export default function DaycareChecklist({ ageGroup, weather }: DaycareChecklist
         </div>
       )}
 
-      {/* ── Päivittäiset tavarat ── */}
-      <div className="rounded-lg border-2 border-primary/30 bg-primary/5 p-4 mb-4">
-        <h3 className="text-xs font-display font-700 text-primary uppercase tracking-wide mb-3">
-          ☀️ Päivittäiset tavarat
-        </h3>
-        <div className="space-y-2">
-          {dailyItems.map((item) => renderItem(item))}
+      {/* ── 1. Säänmukaiset varusteet ── */}
+      {weatherItems.length > 0 && (
+        <div className="rounded-lg border-2 border-primary/30 bg-primary/5 p-4 mb-4">
+          <h3 className="text-xs font-display font-700 text-primary uppercase tracking-wide mb-3">
+            🌦️ Säänmukaiset varusteet
+          </h3>
+          <div className="space-y-2">
+            {weatherItems.map((item) => renderItem(item))}
+          </div>
         </div>
+      )}
 
-        {/* Oma muistiinpano */}
-        <div className="mt-3">
+      {/* ── 2. Varavaatteet (arkisto) ── */}
+      <div className="mb-4">
+        <h3 className="text-xs font-display font-600 text-muted-foreground/70 uppercase tracking-wide mb-2">
+          👕 Varavaatteet (arkisto) — tarkista viikoittain
+        </h3>
+        <div className="space-y-1.5">
+          {SPARE_CLOTHES.map((item) => renderItem(item, true))}
+        </div>
+      </div>
+
+      {/* ── 3. Satunnaiset tavarat ── */}
+      <div>
+        <h3 className="text-xs font-display font-600 text-muted-foreground uppercase tracking-wide mb-2">
+          🎲 Satunnaiset tavarat
+        </h3>
+        <div className="space-y-2 mb-3">
+          {miscItems.map((item) => renderItem(item))}
+        </div>
+        <div>
           <label htmlFor={`note-${ageGroup}`} className="text-xs font-display font-600 text-muted-foreground uppercase tracking-wide mb-1.5 block">
             📝 Oma muistiinpano
           </label>
@@ -176,26 +181,6 @@ export default function DaycareChecklist({ ageGroup, weather }: DaycareChecklist
             className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 resize-none"
           />
         </div>
-      </div>
-
-      {/* ── Säänmukaiset varusteet ── */}
-      {weatherItems.length > 0 && (
-        <div className="mb-4">
-          <h3 className="text-xs font-display font-700 text-muted-foreground uppercase tracking-wide mb-2">
-            🌦️ Säänmukaiset varusteet
-          </h3>
-          <div className="space-y-2">
-            {weatherItems.map((item) => renderItem(item))}
-          </div>
-        </div>
-      )}
-
-      {/* ── Varavaatteet (arkisto) ── */}
-      <h3 className="text-xs font-display font-600 text-muted-foreground/70 uppercase tracking-wide mb-2">
-        Varavaatteet (arkisto) — tarkista viikoittain
-      </h3>
-      <div className="space-y-1.5">
-        {SPARE_CLOTHES.map((item) => renderItem(item, true))}
       </div>
     </div>
   );
