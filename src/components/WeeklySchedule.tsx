@@ -64,6 +64,7 @@ function compressImage(file: File, maxWidth: number): Promise<string> {
 export default function WeeklySchedule({ ageGroup }: WeeklyScheduleProps) {
   const [image, setImage] = useState<string | null>(() => getStoredImage(ageGroup));
   const [fullscreen, setFullscreen] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [scale, setScale] = useState(1);
   const [translate, setTranslate] = useState({ x: 0, y: 0 });
   const lastDistRef = useRef<number | null>(null);
@@ -83,17 +84,22 @@ export default function WeeklySchedule({ ageGroup }: WeeklyScheduleProps) {
   }, [fullscreen]);
 
   const handleFileChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
       if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        const dataUrl = reader.result as string;
-        storeImage(ageGroup, dataUrl);
-        setImage(dataUrl);
-      };
-      reader.readAsDataURL(file);
-      e.target.value = "";
+      setIsUploading(true);
+      try {
+        const compressed = await compressImage(file, MAX_WIDTH);
+        storeImage(ageGroup, compressed);
+        setImage(compressed);
+        toast.success("Kuva tallennettu!");
+      } catch (error) {
+        console.error("Image upload failed:", error);
+        toast.error("Hups! Kuva on liian suuri tai tallennus epäonnistui. Yritä pienemmällä kuvalla.");
+      } finally {
+        setIsUploading(false);
+        e.target.value = "";
+      }
     },
     [ageGroup],
   );
