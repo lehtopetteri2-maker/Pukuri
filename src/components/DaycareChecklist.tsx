@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { AgeGroup } from "@/lib/weatherData";
+import { useState, useMemo } from "react";
+import { AgeGroup, WeatherData } from "@/lib/weatherData";
+import { AlertTriangle } from "lucide-react";
 
 interface ChecklistItem {
   id: string;
@@ -15,54 +16,86 @@ const checklistByAge: Record<AgeGroup, ChecklistItem[]> = {
     { id: "varasukat", label: "Varasukat", emoji: "🧦" },
     { id: "varaBody", label: "Varabody", emoji: "👶" },
     { id: "unilelu", label: "Unilelu", emoji: "🧸" },
-    { id: "aurinkorasva", label: "Aurinkorasva", emoji: "☀️" },
   ],
   taapero: [
     { id: "varahanskat", label: "Varahanskat", emoji: "🧤" },
     { id: "varasukat", label: "Varasukat", emoji: "🧦" },
     { id: "varaHousut", label: "Varahousut", emoji: "👖" },
     { id: "vaippapaketti", label: "Vaippapaketti", emoji: "🧷" },
-    { id: "vesipullo", label: "Vesipullo", emoji: "💧" },
     { id: "unilelu", label: "Unilelu", emoji: "🧸" },
-    { id: "aurinkorasva", label: "Aurinkorasva", emoji: "☀️" },
   ],
   "leikki-ikäinen": [
     { id: "varahanskat", label: "Varahanskat", emoji: "🧤" },
     { id: "varasukat", label: "Varasukat", emoji: "🧦" },
     { id: "varaHousut", label: "Varahousut", emoji: "👖" },
-    { id: "vesipullo", label: "Vesipullo", emoji: "💧" },
     { id: "välipala", label: "Välipala", emoji: "🍎" },
-    { id: "luistimet", label: "Luistimet", emoji: "⛸️" },
-    { id: "aurinkorasva", label: "Aurinkorasva", emoji: "☀️" },
   ],
   koululainen: [
     { id: "varahanskat", label: "Varahanskat", emoji: "🧤" },
     { id: "varasukat", label: "Varasukat", emoji: "🧦" },
     { id: "välipala", label: "Välipala", emoji: "🍎" },
-    { id: "vesipullo", label: "Vesipullo", emoji: "💧" },
     { id: "avaimet", label: "Avaimet", emoji: "🔑" },
-    { id: "luistimet", label: "Luistimet", emoji: "⛸️" },
-    { id: "uimahousut", label: "Uimahousut", emoji: "🩱" },
-    { id: "pyyhe", label: "Pyyhe", emoji: "🛁" },
   ],
 };
 
-interface DaycareChecklistProps {
-  ageGroup: AgeGroup;
+function getDayReminder(): string | null {
+  const day = new Date().getDay(); // 0=su, 1=ma, 5=pe
+  if (day === 5) return "📋 Muista tyhjentää reppu viikonlopuksi ja tarkistaa vaihtovaatteiden määrä!";
+  if (day === 0) return "👕 Huomenna on maanantai — muista pakata vaihtovaatteet päiväkotiin!";
+  if (day === 1 && new Date().getHours() < 12) return "👕 Muista viedä vaihtovaatteet takaisin päiväkotiin tänään!";
+  return null;
 }
 
-export default function DaycareChecklist({ ageGroup }: DaycareChecklistProps) {
+interface DaycareChecklistProps {
+  ageGroup: AgeGroup;
+  weather: WeatherData;
+}
+
+export default function DaycareChecklist({ ageGroup, weather }: DaycareChecklistProps) {
   const [checked, setChecked] = useState<Set<string>>(new Set());
 
-  const isSummer = () => {
-    const month = new Date().getMonth(); // 0-indexed
-    return month >= 5 && month <= 7; // kesä (6), heinä (7), elo (8)
-  };
+  const items = useMemo(() => {
+    const base = [...checklistByAge[ageGroup]];
+    const ids = new Set(base.map((i) => i.id));
 
-  const baseItems = checklistByAge[ageGroup];
-  const items = isSummer()
-    ? [...baseItems, { id: "aurinkorasva", label: "Aurinkorasva", emoji: "☀️" }]
-    : baseItems;
+    const add = (id: string, label: string, emoji: string) => {
+      if (!ids.has(id)) {
+        base.push({ id, label, emoji });
+        ids.add(id);
+      }
+    };
+
+    const temp = weather.temperature;
+    const isRainy = weather.rainProbability > 40 || weather.afternoonRain;
+
+    // Lämmin sää > +10 °C
+    if (temp > 10) {
+      add("aurinkorasva", "Aurinkorasva", "☀️");
+      add("lippis", "Lippis/Hattu", "🧢");
+    }
+
+    // Sade
+    if (isRainy) {
+      add("kuravarusteet", "Kuravarusteet", "🌧️");
+      add("vaihtohanskat", "Vaihtohanskat", "🧤");
+    }
+
+    // Kylmä < +10 °C
+    if (temp < 10) {
+      add("varavillasukat", "Varavillasukat", "🧦");
+      add("lamminkerrasto", "Lämmin kerrasto", "🧶");
+    }
+
+    // Kesäkausi (touko–elo)
+    const month = new Date().getMonth();
+    if (month >= 4 && month <= 7) {
+      add("juomapullo", "Juomapullo", "💧");
+    }
+
+    return base;
+  }, [ageGroup, weather.temperature, weather.rainProbability, weather.afternoonRain]);
+
+  const dayReminder = getDayReminder();
   const allDone = items.every((i) => checked.has(i.id));
 
   const toggle = (id: string) => {
@@ -84,6 +117,14 @@ export default function DaycareChecklist({ ageGroup }: DaycareChecklistProps) {
           </span>
         )}
       </div>
+
+      {dayReminder && (
+        <div className="flex items-start gap-2 rounded-md bg-amber-50 dark:bg-amber-950/30 border border-amber-200/50 dark:border-amber-800/30 p-3 mb-4">
+          <AlertTriangle className="h-4 w-4 text-amber-500 mt-0.5 shrink-0" />
+          <span className="text-sm text-foreground">{dayReminder}</span>
+        </div>
+      )}
+
       <div className="space-y-2">
         {items.map((item) => {
           const isDone = checked.has(item.id);
