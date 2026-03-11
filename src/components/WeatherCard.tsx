@@ -35,6 +35,10 @@ export default function WeatherCard({ weather }: WeatherCardProps) {
           <Droplets className="h-4 w-4" />
           <span>{weather.humidity}%</span>
         </div>
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <CloudRain className="h-4 w-4" />
+          <span>Sade {weather.rainProbability}%</span>
+        </div>
       </div>
     </div>
   );
