@@ -45,6 +45,11 @@ const Index = () => {
 
       <main className="max-w-lg mx-auto px-4 py-6 space-y-5">
         <LocationSearch currentCity={city} onSelectCity={handleCityChange} />
+
+        <div ref={scheduleRef}>
+          <WeeklySchedule ageGroup={ageGroup} />
+        </div>
+
         <MorningSummary weather={weather} />
         <ScheduleReminder ageGroup={ageGroup} onOpen={scrollToSchedule} />
         <NightAlert weather={weather} />
@@ -60,10 +65,6 @@ const Index = () => {
 
         <ClothingCard key={`${city}-${ageGroup}`} items={clothing} />
         <DaycareChecklist ageGroup={ageGroup} />
-
-        <div ref={scheduleRef}>
-          <WeeklySchedule ageGroup={ageGroup} />
-        </div>
 
         <p className="text-center text-xs text-muted-foreground pb-4">
           💡 Muista tarkistaa tuulenpuuskat ennen ulkoilua!
