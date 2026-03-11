@@ -188,6 +188,15 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
     }
   }
 
+  // UV-index add-on
+  if (weather.uvi !== undefined && weather.uvi >= 3) {
+    const hasHat = base.some((i) => i.name.includes("Lippalakki") || i.name.includes("Aurinkohattu") || i.name.includes("hattu"));
+    if (!hasHat) {
+      base.push({ name: "Lippis/Hattu", emoji: "🧢", description: "Korkea UV — suojaa pää auringolta" });
+    }
+    base.push({ name: "Aurinkolasit", emoji: "🕶️", description: "UV-suoja silmille" });
+  }
+
   // Deduplicate by name
   const seen = new Set<string>();
   return base.filter((item) => {
