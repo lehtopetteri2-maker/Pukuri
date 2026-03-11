@@ -1,20 +1,18 @@
 import { useState, useRef, useEffect } from "react";
 import { Search, MapPin, Loader2 } from "lucide-react";
-import { searchCities } from "@/lib/weatherData";
 
 interface LocationSearchProps {
   currentCity: string;
   onSelectCity: (city: string) => void;
+  onGeolocate: () => void;
+  loading: boolean;
 }
 
-export default function LocationSearch({ currentCity, onSelectCity }: LocationSearchProps) {
+export default function LocationSearch({ currentCity, onSelectCity, onGeolocate, loading }: LocationSearchProps) {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-
-  const results = open ? searchCities(query) : [];
 
   // Close on outside click
   useEffect(() => {
@@ -27,25 +25,20 @@ export default function LocationSearch({ currentCity, onSelectCity }: LocationSe
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  const handleSelect = (city: string) => {
-    setLoading(true);
-    setOpen(false);
-    setQuery("");
-    // Simulate loading
-    setTimeout(() => {
-      onSelectCity(city);
-      setLoading(false);
-    }, 800);
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (query.trim()) {
+      onSelectCity(query.trim());
+      setQuery("");
+      setOpen(false);
+    }
   };
 
-  const handleGPS = () => {
-    setLoading(true);
-    setOpen(false);
-    // Simulate geolocation → nearest city
-    setTimeout(() => {
-      onSelectCity("Helsinki");
-      setLoading(false);
-    }, 1200);
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSubmit(e);
+    }
   };
 
   return (
@@ -70,8 +63,9 @@ export default function LocationSearch({ currentCity, onSelectCity }: LocationSe
             </span>
           </div>
           <button
-            onClick={handleGPS}
-            className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-primary transition-colors px-2 py-1 rounded-md hover:bg-muted"
+            onClick={onGeolocate}
+            disabled={loading}
+            className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-primary transition-colors px-2 py-1 rounded-md hover:bg-muted disabled:opacity-50"
           >
             <MapPin className="h-3.5 w-3.5" />
             Käytä nykyistä sijaintia
@@ -79,7 +73,7 @@ export default function LocationSearch({ currentCity, onSelectCity }: LocationSe
         </div>
 
         {/* Search input */}
-        <div className="relative">
+        <form onSubmit={handleSubmit} className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <input
             ref={inputRef}
@@ -90,39 +84,11 @@ export default function LocationSearch({ currentCity, onSelectCity }: LocationSe
               setOpen(true);
             }}
             onFocus={() => setOpen(true)}
-            placeholder="Etsi paikkakuntaa..."
+            onKeyDown={handleKeyDown}
+            placeholder="Etsi paikkakuntaa (esim. Tampere)..."
             className="w-full rounded-md border border-input bg-background pl-9 pr-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/30 transition-shadow"
           />
-        </div>
-
-        {/* Dropdown results */}
-        {open && results.length > 0 && (
-          <div className="rounded-md border border-border bg-card shadow-lg max-h-48 overflow-y-auto animate-fade-in">
-            {results.map((city) => (
-              <button
-                key={city}
-                onClick={() => handleSelect(city)}
-                className={`w-full text-left px-3 py-2.5 text-sm transition-colors flex items-center gap-2 ${
-                  city === currentCity
-                    ? "bg-mint-light text-primary font-medium"
-                    : "text-foreground hover:bg-muted"
-                }`}
-              >
-                <MapPin className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-                {city}
-                {city === currentCity && (
-                  <span className="ml-auto text-xs text-primary">✓ Valittu</span>
-                )}
-              </button>
-            ))}
-          </div>
-        )}
-
-        {open && query && results.length === 0 && (
-          <p className="text-xs text-muted-foreground text-center py-2">
-            Paikkakuntaa ei löytynyt: "{query}"
-          </p>
-        )}
+        </form>
       </div>
     </div>
   );

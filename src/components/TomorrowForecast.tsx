@@ -1,4 +1,5 @@
-import { WeatherData, AgeGroup, getWeatherIcon } from "@/lib/weatherData";
+import { WeatherData, AgeGroup, getWeatherIcon, getClothingRecommendation } from "@/lib/weatherData";
+import type { TomorrowData } from "@/lib/weatherApi";
 import {
   getTomorrowForecast,
   getTomorrowWarnings,
@@ -9,12 +10,40 @@ import { AlertTriangle, Moon } from "lucide-react";
 interface TomorrowForecastProps {
   weather: WeatherData;
   ageGroup: AgeGroup;
+  tomorrow?: TomorrowData | null;
 }
 
-export default function TomorrowForecastCard({ weather, ageGroup }: TomorrowForecastProps) {
-  const tomorrow = getTomorrowForecast(weather);
-  const warnings = getTomorrowWarnings(weather, tomorrow);
-  const prepItems = getTomorrowPrepItems(tomorrow, ageGroup);
+export default function TomorrowForecastCard({ weather, ageGroup, tomorrow: apiTomorrow }: TomorrowForecastProps) {
+  // Use API data if available, otherwise fall back to mock
+  const mockTomorrow = getTomorrowForecast(weather);
+
+  const tempMin = apiTomorrow ? apiTomorrow.tempMin : mockTomorrow.tempMin;
+  const tempMax = apiTomorrow ? apiTomorrow.tempMax : mockTomorrow.tempMax;
+  const rainProbability = apiTomorrow ? apiTomorrow.rainProbability : mockTomorrow.rainProbability;
+  const condition = apiTomorrow ? apiTomorrow.condition : mockTomorrow.condition;
+
+  // Build a WeatherData for clothing recommendation
+  const tomorrowWeather: WeatherData = apiTomorrow
+    ? {
+        temperature: apiTomorrow.avgTemp,
+        feelsLike: apiTomorrow.avgTemp - 3,
+        condition: apiTomorrow.condition,
+        windSpeed: apiTomorrow.avgWind,
+        humidity: apiTomorrow.humidity,
+        rainProbability: apiTomorrow.rainProbability,
+        afternoonRain: apiTomorrow.rainProbability > 50,
+        city: weather.city,
+        description: apiTomorrow.description,
+      }
+    : mockTomorrow.weatherData;
+
+  const warnings = getTomorrowWarnings(weather, {
+    ...mockTomorrow,
+    weatherData: tomorrowWeather,
+    rainProbability,
+  });
+
+  const prepItems = getClothingRecommendation(tomorrowWeather, ageGroup).slice(0, 4);
 
   return (
     <div className="rounded-lg bg-night text-night-foreground p-6 shadow-md animate-fade-in">
@@ -30,13 +59,13 @@ export default function TomorrowForecastCard({ weather, ageGroup }: TomorrowFore
       <div className="flex items-center justify-between mb-4">
         <div>
           <div className="text-3xl font-display font-800 tracking-tight">
-            {tomorrow.tempMin}° / {tomorrow.tempMax}°
+            {tempMin}° / {tempMax}°
           </div>
           <p className="text-sm text-night-muted mt-1">
-            Sateen todennäköisyys {tomorrow.rainProbability} %
+            Sateen todennäköisyys {rainProbability} %
           </p>
         </div>
-        <span className="text-5xl">{getWeatherIcon(tomorrow.condition)}</span>
+        <span className="text-5xl">{getWeatherIcon(condition)}</span>
       </div>
 
       {/* Warnings */}
