@@ -12,6 +12,14 @@ export interface WeatherData {
   description: string;
 }
 
+export type AgeGroup = "vauva" | "taapero" | "koululainen";
+
+export interface ClothingItem {
+  name: string;
+  emoji: string;
+  description: string;
+}
+
 const cityWeather: Record<string, WeatherData> = {
   Helsinki: {
     temperature: -3, feelsLike: -8, condition: "snowy", windSpeed: 12,
