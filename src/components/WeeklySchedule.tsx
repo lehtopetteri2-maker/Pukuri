@@ -23,18 +23,28 @@ function removeImage(ageGroup: AgeGroup): void {
 export default function WeeklySchedule({ ageGroup }: WeeklyScheduleProps) {
   const [image, setImage] = useState<string | null>(() => getStoredImage(ageGroup));
   const [fullscreen, setFullscreen] = useState(false);
+  const [scale, setScale] = useState(1);
+  const [translate, setTranslate] = useState({ x: 0, y: 0 });
+  const lastDistRef = useRef<number | null>(null);
+  const lastCenterRef = useRef<{ x: number; y: number } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Sync when ageGroup changes
   useEffect(() => {
     setImage(getStoredImage(ageGroup));
   }, [ageGroup]);
+
+  // Reset zoom when opening/closing fullscreen
+  useEffect(() => {
+    if (fullscreen) {
+      setScale(1);
+      setTranslate({ x: 0, y: 0 });
+    }
+  }, [fullscreen]);
 
   const handleFileChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
       if (!file) return;
-
       const reader = new FileReader();
       reader.onload = () => {
         const dataUrl = reader.result as string;
@@ -42,7 +52,6 @@ export default function WeeklySchedule({ ageGroup }: WeeklyScheduleProps) {
         setImage(dataUrl);
       };
       reader.readAsDataURL(file);
-      // Reset so same file can be re-selected
       e.target.value = "";
     },
     [ageGroup],
@@ -52,6 +61,45 @@ export default function WeeklySchedule({ ageGroup }: WeeklyScheduleProps) {
     removeImage(ageGroup);
     setImage(null);
   }, [ageGroup]);
+
+  // Pinch-to-zoom handlers
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const cx = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+      const cy = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+
+      if (lastDistRef.current !== null && lastCenterRef.current !== null) {
+        const ratio = dist / lastDistRef.current;
+        setScale((s) => Math.min(Math.max(s * ratio, 1), 5));
+        setTranslate((t) => ({
+          x: t.x + (cx - lastCenterRef.current!.x),
+          y: t.y + (cy - lastCenterRef.current!.y),
+        }));
+      }
+      lastDistRef.current = dist;
+      lastCenterRef.current = { x: cx, y: cy };
+    }
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    lastDistRef.current = null;
+    lastCenterRef.current = null;
+  }, []);
+
+  // Double-tap to reset zoom
+  const lastTapRef = useRef(0);
+  const handleDoubleTap = useCallback(() => {
+    const now = Date.now();
+    if (now - lastTapRef.current < 300) {
+      setScale(1);
+      setTranslate({ x: 0, y: 0 });
+    }
+    lastTapRef.current = now;
+  }, []);
 
   const ageLabels: Record<AgeGroup, string> = {
     vauva: "Vauvan",
@@ -88,8 +136,18 @@ export default function WeeklySchedule({ ageGroup }: WeeklyScheduleProps) {
                 </div>
               </div>
               <span className="absolute bottom-2 right-2 text-[10px] bg-card/80 text-muted-foreground px-2 py-0.5 rounded-full backdrop-blur-sm">
-                Näytä koko näytöllä
+                Katso isona
               </span>
+              {/* Change photo icon overlay */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  fileInputRef.current?.click();
+                }}
+                className="absolute top-2 right-2 bg-card/90 rounded-full p-1.5 shadow hover:bg-card transition-colors"
+              >
+                <RefreshCw className="h-3.5 w-3.5 text-muted-foreground" />
+              </button>
             </div>
 
             {/* Actions */}
@@ -106,7 +164,7 @@ export default function WeeklySchedule({ ageGroup }: WeeklyScheduleProps) {
                 className="flex items-center gap-1.5 text-xs font-medium text-destructive hover:text-destructive/80 transition-colors px-3 py-2 rounded-md border border-destructive/20 hover:bg-destructive/5"
               >
                 <X className="h-3.5 w-3.5" />
-                Poista
+                Poista kuva
               </button>
             </div>
           </div>
@@ -120,7 +178,7 @@ export default function WeeklySchedule({ ageGroup }: WeeklyScheduleProps) {
               <ImagePlus className="h-5 w-5" />
             </div>
             <span className="text-sm font-display font-600 text-muted-foreground">
-              Lisää viikko-ohjelma
+              Lisää lukujärjestys
             </span>
             <span className="text-xs text-muted-foreground/70">
               Ota kuva tai valitse galleriasta
@@ -138,24 +196,41 @@ export default function WeeklySchedule({ ageGroup }: WeeklyScheduleProps) {
         />
       </div>
 
-      {/* Fullscreen overlay */}
+      {/* Fullscreen pinch-to-zoom overlay */}
       {fullscreen && image && (
         <div
-          className="fixed inset-0 z-50 bg-foreground/90 flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-foreground/90 flex items-center justify-center"
           onClick={() => setFullscreen(false)}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
         >
           <button
-            className="absolute top-4 right-4 bg-card/90 rounded-full p-2 shadow-lg hover:bg-card transition-colors"
+            className="absolute top-4 right-4 z-10 bg-card/90 rounded-full p-2 shadow-lg hover:bg-card transition-colors"
             onClick={() => setFullscreen(false)}
           >
             <X className="h-6 w-6 text-foreground" />
           </button>
+          <span className="absolute top-4 left-4 text-card/80 text-xs select-none">
+            {scale > 1 ? "Kaksoisnapautus nollataksesi" : "Nipistä zoomataksesi"}
+          </span>
           <img
             src={image}
             alt="Viikko-ohjelma — koko näyttö"
-            className="max-w-full max-h-full object-contain rounded-lg"
-            onClick={(e) => e.stopPropagation()}
+            className="max-w-full max-h-full object-contain rounded-lg select-none"
+            style={{
+              transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})`,
+              transition: lastDistRef.current ? "none" : "transform 0.2s ease",
+              touchAction: "none",
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDoubleTap();
+            }}
+            draggable={false}
           />
+          <span className="absolute bottom-4 left-1/2 -translate-x-1/2 text-card/70 text-xs select-none">
+            Sulje
+          </span>
         </div>
       )}
     </>
