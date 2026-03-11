@@ -42,6 +42,8 @@ const checklistByAge: Record<AgeGroup, ChecklistItem[]> = {
     { id: "vesipullo", label: "Vesipullo", emoji: "💧" },
     { id: "avaimet", label: "Avaimet", emoji: "🔑" },
     { id: "luistimet", label: "Luistimet", emoji: "⛸️" },
+    { id: "uimahousut", label: "Uimahousut", emoji: "🩱" },
+    { id: "pyyhe", label: "Pyyhe", emoji: "🛁" },
   ],
 };
 
