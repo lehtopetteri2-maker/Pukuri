@@ -48,7 +48,7 @@ const coldSnowGear: Record<AgeGroup, ClothingItem[]> = {
     { name: "Villakerrastot", emoji: "🧶", description: "Aluskerrastot villan päälle" },
     { name: "Talvisaappaat", emoji: "🥾", description: "Lämpimät vedenpitävät saappaat" },
     { name: "Lapaset", emoji: "🧤", description: "Hanskat tai rukkaset" },
-    { name: "Kauluri", emoji: "🧣", description: "Tuubihuivi" },
+    { name: "Kauluri", emoji: "🧣", description: "Tuubihuivi tai kypärämyssy" },
     { name: "Pipo", emoji: "🎿", description: "Lämmin villapipo" },
   ],
   koululainen: [
