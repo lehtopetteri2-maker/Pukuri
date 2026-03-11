@@ -1,5 +1,5 @@
 import { WeatherData, getWeatherIcon } from "@/lib/weatherData";
-import { Droplets, Wind, MapPin } from "lucide-react";
+import { Droplets, Wind, MapPin, CloudRain } from "lucide-react";
 
 interface WeatherCardProps {
   weather: WeatherData;
@@ -34,6 +34,10 @@ export default function WeatherCard({ weather }: WeatherCardProps) {
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Droplets className="h-4 w-4" />
           <span>{weather.humidity}%</span>
+        </div>
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <CloudRain className="h-4 w-4" />
+          <span>Sade {weather.rainProbability}%</span>
         </div>
       </div>
     </div>

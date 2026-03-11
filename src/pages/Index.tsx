@@ -2,6 +2,7 @@ import { useState } from "react";
 import WeatherCard from "@/components/WeatherCard";
 import AgeGroupToggle from "@/components/AgeGroupToggle";
 import ClothingCard from "@/components/ClothingCard";
+import MorningSummary from "@/components/MorningSummary";
 import { getMockWeather, getClothingRecommendation, AgeGroup } from "@/lib/weatherData";
 import { CloudSnow } from "lucide-react";
 
@@ -28,6 +29,7 @@ const Index = () => {
 
       {/* Content */}
       <main className="max-w-lg mx-auto px-4 py-6 space-y-5">
+        <MorningSummary weather={weather} />
         <WeatherCard weather={weather} />
 
         <div className="space-y-3">

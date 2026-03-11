@@ -6,6 +6,8 @@ export interface WeatherData {
   condition: WeatherCondition;
   windSpeed: number;
   humidity: number;
+  rainProbability: number;
+  afternoonRain: boolean;
   city: string;
   description: string;
 }
@@ -17,11 +19,12 @@ export function getMockWeather(): WeatherData {
     condition: "snowy",
     windSpeed: 12,
     humidity: 85,
+    rainProbability: 65,
+    afternoonRain: true,
     city: "Helsinki",
     description: "Lumisadetta, heikko tuuli",
   };
 }
-
 export type AgeGroup = "vauva" | "taapero" | "koululainen";
 
 export interface ClothingItem {
@@ -102,9 +105,70 @@ const warmGear: Record<AgeGroup, ClothingItem[]> = {
 };
 
 export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGroup): ClothingItem[] {
-  if (weather.temperature <= 0) return coldSnowGear[ageGroup];
-  if (weather.condition === "rainy" || weather.temperature <= 12) return mildRainGear[ageGroup];
-  return warmGear[ageGroup];
+  const base: ClothingItem[] = [];
+  const temp = weather.temperature;
+
+  // Temperature-based logic
+  if (temp < -10) {
+    base.push({
+      name: "Kerrospukeutuminen",
+      emoji: "🧅",
+      description: "Merinovilla, välikerros ja paksu toppapuku",
+    });
+    base.push(...coldSnowGear[ageGroup]);
+  } else if (temp >= 0 && temp <= -0.001) {
+    // exactly 0 handled below
+    base.push(...coldSnowGear[ageGroup]);
+  } else if (temp <= 0) {
+    base.push({
+      name: "Toppapuku ja villasukat",
+      emoji: "🧥",
+      description: "Lämpö: 0 … –10 °C — paksu toppapuku ja villasukat",
+    });
+    base.push(...coldSnowGear[ageGroup].filter(
+      (i) => !["Toppahaalari", "Toppahousut", "Toppatakki", "Villasukat"].includes(i.name)
+    ));
+  } else if (temp >= 5 && temp <= 10) {
+    base.push({
+      name: "Välikausivaatteet",
+      emoji: "🍂",
+      description: "+5 … +10 °C — kevyt takki ja kerroksia",
+    });
+    base.push(...mildRainGear[ageGroup]);
+  } else if (temp < 5) {
+    base.push(...coldSnowGear[ageGroup]);
+  } else if (temp <= 12) {
+    base.push(...mildRainGear[ageGroup]);
+  } else {
+    base.push(...warmGear[ageGroup]);
+  }
+
+  // Rain probability add-on
+  if (weather.rainProbability > 40) {
+    const hasKura = base.some((i) => i.name.includes("Kurahousut"));
+    if (!hasKura) {
+      base.unshift({
+        name: "Kurahousut ja kurahanskat",
+        emoji: "🌧️",
+        description: "Sateen todennäköisyys yli 40 % — vedenpitävät varusteet mukaan!",
+      });
+    }
+  }
+
+  // Deduplicate by name
+  const seen = new Set<string>();
+  return base.filter((item) => {
+    if (seen.has(item.name)) return false;
+    seen.add(item.name);
+    return true;
+  });
+}
+
+export function getMorningSummary(weather: WeatherData): string | null {
+  if (weather.afternoonRain) {
+    return "Tänään klo 14 sataa, muista kurahousut päiväkotiin!";
+  }
+  return null;
 }
 
 export function getWeatherIcon(condition: WeatherCondition): string {
