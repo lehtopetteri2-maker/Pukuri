@@ -1,16 +1,43 @@
 import { WeatherData, getWeatherIcon } from "@/lib/weatherData";
-import { Droplets, Wind, MapPin, CloudRain } from "lucide-react";
+import { Droplets, Wind, MapPin, CloudRain, RefreshCw } from "lucide-react";
 
 interface WeatherCardProps {
   weather: WeatherData;
+  cacheAge?: number | null;
+  onRefresh?: () => void;
+  loading?: boolean;
 }
 
-export default function WeatherCard({ weather }: WeatherCardProps) {
+export default function WeatherCard({ weather, cacheAge, onRefresh, loading }: WeatherCardProps) {
+  const cacheLabel =
+    cacheAge === null || cacheAge === undefined
+      ? null
+      : cacheAge < 1
+        ? "Juuri päivitetty"
+        : `Päivitetty ${cacheAge} min sitten`;
+
   return (
     <div className="rounded-lg bg-card p-6 shadow-sm border border-border animate-fade-in">
-      <div className="flex items-center gap-2 text-muted-foreground mb-4">
-        <MapPin className="h-4 w-4" />
-        <span className="text-sm font-medium">{weather.city}, Suomi</span>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2 text-muted-foreground">
+          <MapPin className="h-4 w-4" />
+          <span className="text-sm font-medium">{weather.city}, Suomi</span>
+        </div>
+        <div className="flex items-center gap-2">
+          {cacheLabel && (
+            <span className="text-xs text-muted-foreground">{cacheLabel}</span>
+          )}
+          {onRefresh && (
+            <button
+              onClick={onRefresh}
+              disabled={loading}
+              title="Päivitä nyt"
+              className="p-1.5 rounded-md text-muted-foreground hover:text-primary hover:bg-muted transition-colors disabled:opacity-40"
+            >
+              <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="flex items-center justify-between">
