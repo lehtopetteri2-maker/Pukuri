@@ -2,6 +2,7 @@ import { useState, useCallback, useRef } from "react";
 import WeatherCard from "@/components/WeatherCard";
 import AgeGroupToggle from "@/components/AgeGroupToggle";
 import ClothingCard from "@/components/ClothingCard";
+import AiAnalysis from "@/components/AiAnalysis";
 import MorningSummary from "@/components/MorningSummary";
 import DaycareChecklist from "@/components/DaycareChecklist";
 import NightAlert from "@/components/NightAlert";
