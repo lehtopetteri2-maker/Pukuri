@@ -10,6 +10,7 @@ import TomorrowForecastCard from "@/components/TomorrowForecast";
 import WeeklySchedule from "@/components/WeeklySchedule";
 import ScheduleReminder from "@/components/ScheduleReminder";
 import { getMockWeather, getClothingRecommendation, getSavedCity, saveCity, AgeGroup } from "@/lib/weatherData";
+import FeedbackSection from "@/components/FeedbackSection";
 import { CloudSnow } from "lucide-react";
 
 const Index = () => {
