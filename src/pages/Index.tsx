@@ -14,70 +14,122 @@ import AffiliateSection from "@/components/AffiliateSection";
 import Footer from "@/components/Footer";
 import { getClothingRecommendation, getSavedCity, saveCity, AgeGroup, WeatherData } from "@/lib/weatherData";
 import { fetchWeatherData, fetchWeatherByCoords, TomorrowData } from "@/lib/weatherApi";
+import { getCachedWeather, isCacheFresh, getCacheAgeMinutes, saveWeatherCache } from "@/lib/weatherCache";
 import { getMockWeather } from "@/lib/weatherData";
 import FeedbackSection from "@/components/FeedbackSection";
 import { CloudSnow, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 
+function getInitialState(city: string) {
+  const cached = getCachedWeather(city);
+  if (cached) {
+    return { weather: cached.current, tomorrow: cached.tomorrow as TomorrowData | null, cacheAge: getCacheAgeMinutes(cached) };
+  }
+  return { weather: getMockWeather(city), tomorrow: null as TomorrowData | null, cacheAge: null as number | null };
+}
+
 const Index = () => {
-  const [city, setCity] = useState(getSavedCity);
+  const savedCity = getSavedCity();
+  const initial = getInitialState(savedCity);
+
+  const [city, setCity] = useState(savedCity);
   const [ageGroup, setAgeGroup] = useState<AgeGroup>("leikki-ikäinen");
-  const [weather, setWeather] = useState<WeatherData>(getMockWeather(city));
-  const [tomorrow, setTomorrow] = useState<TomorrowData | null>(null);
+  const [weather, setWeather] = useState<WeatherData>(initial.weather);
+  const [tomorrow, setTomorrow] = useState<TomorrowData | null>(initial.tomorrow);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [cacheAge, setCacheAge] = useState<number | null>(initial.cacheAge);
   const scheduleRef = useRef<HTMLDivElement>(null);
 
   const clothing = getClothingRecommendation(weather, ageGroup);
 
-  const loadWeather = useCallback(async (cityName: string) => {
+  const applyResult = useCallback((data: { current: WeatherData; tomorrow: TomorrowData; fromApi: boolean }) => {
+    setWeather(data.current);
+    setTomorrow(data.tomorrow);
+    setCity(data.current.city);
+    saveCity(data.current.city);
+    saveWeatherCache(data.current.city, data.current, data.tomorrow, data.fromApi);
+    setCacheAge(0);
+    if (!data.fromApi) {
+      toast.info("API ei ole vielä käytettävissä — näytetään testisäätiedot.");
+    }
+  }, []);
+
+  const loadWeather = useCallback(async (cityName: string, force = false) => {
+    // Check cache first (unless forced)
+    if (!force) {
+      const cached = getCachedWeather(cityName);
+      if (cached && isCacheFresh(cached)) {
+        console.log(`[Säävahti] Käytetään välimuistia (${getCacheAgeMinutes(cached)} min sitten)`);
+        setWeather(cached.current);
+        setTomorrow(cached.tomorrow);
+        setCity(cached.city);
+        setCacheAge(getCacheAgeMinutes(cached));
+        return;
+      }
+    }
+
     setLoading(true);
     setError(null);
     try {
       const data = await fetchWeatherData(cityName);
-      setWeather(data.current);
-      setTomorrow(data.tomorrow);
-      setCity(data.current.city);
-      saveCity(data.current.city);
-      if (!data.fromApi) {
-        toast.info("API ei ole vielä käytettävissä — näytetään testisäätiedot.");
-      }
+      applyResult(data);
     } catch {
-      setError("Hups! Säätietoja ei löytynyt. Tarkista kirjoitusasu.");
-      toast.error("Säätietoja ei löytynyt. Tarkista kirjoitusasu.");
+      // If fetch fails, try to use stale cache
+      const stale = getCachedWeather(cityName);
+      if (stale) {
+        setWeather(stale.current);
+        setTomorrow(stale.tomorrow);
+        setCacheAge(getCacheAgeMinutes(stale));
+        toast.warning("Ei yhteyttä, näytetään viimeisin tallennettu sää.");
+      } else {
+        setError("Hups! Säätietoja ei löytynyt. Tarkista kirjoitusasu.");
+        toast.error("Säätietoja ei löytynyt. Tarkista kirjoitusasu.");
+      }
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [applyResult]);
 
   const loadWeatherByCoords = useCallback(async (lat: number, lon: number) => {
     setLoading(true);
     setError(null);
     try {
       const data = await fetchWeatherByCoords(lat, lon);
-      setWeather(data.current);
-      setTomorrow(data.tomorrow);
-      setCity(data.current.city);
-      saveCity(data.current.city);
-      if (!data.fromApi) {
-        toast.info("API ei ole vielä käytettävissä — näytetään testisäätiedot.");
-      }
+      applyResult(data);
     } catch {
-      setError("Sijaintiin perustuvia säätietoja ei löytynyt.");
       toast.error("Sijaintiin perustuvia säätietoja ei löytynyt.");
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [applyResult]);
 
-  // Load weather on mount
+  // Load weather on mount — only fetch if cache is stale
   useEffect(() => {
-    loadWeather(city);
+    const cached = getCachedWeather(savedCity);
+    if (cached && isCacheFresh(cached)) {
+      console.log("[Säävahti] Käynnistys: välimuisti on tuore, ei haeta uutta");
+    } else {
+      loadWeather(savedCity, true);
+    }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Update cache age every minute
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const cached = getCachedWeather(city);
+      if (cached) setCacheAge(getCacheAgeMinutes(cached));
+    }, 60000);
+    return () => clearInterval(interval);
+  }, [city]);
 
   const handleCityChange = useCallback((newCity: string) => {
     loadWeather(newCity);
   }, [loadWeather]);
+
+  const handleForceRefresh = useCallback(() => {
+    loadWeather(city, true);
+  }, [loadWeather, city]);
 
   const handleGeolocate = useCallback(() => {
     if (!navigator.geolocation) {
@@ -136,7 +188,12 @@ const Index = () => {
         <MorningSummary weather={weather} />
         <ScheduleReminder ageGroup={ageGroup} onOpen={scrollToSchedule} />
         <NightAlert weather={weather} />
-        <WeatherCard weather={weather} />
+        <WeatherCard
+          weather={weather}
+          cacheAge={cacheAge}
+          onRefresh={handleForceRefresh}
+          loading={loading}
+        />
         <TomorrowForecastCard weather={weather} ageGroup={ageGroup} tomorrow={tomorrow} />
 
         <AiAnalysis weather={weather} ageGroup={ageGroup} />
