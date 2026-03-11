@@ -9,6 +9,8 @@ import LocationSearch from "@/components/LocationSearch";
 import TomorrowForecastCard from "@/components/TomorrowForecast";
 import WeeklySchedule from "@/components/WeeklySchedule";
 import ScheduleReminder from "@/components/ScheduleReminder";
+import AffiliateSection from "@/components/AffiliateSection";
+import Footer from "@/components/Footer";
 import { getMockWeather, getClothingRecommendation, getSavedCity, saveCity, AgeGroup } from "@/lib/weatherData";
 import FeedbackSection from "@/components/FeedbackSection";
 import { CloudSnow } from "lucide-react";
