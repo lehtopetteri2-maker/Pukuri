@@ -90,27 +90,55 @@ const mildRainGear: Record<AgeGroup, ClothingItem[]> = {
     { name: "Ohut pipo", emoji: "🧢", description: "Puuvillapipo" },
   ],
   taapero: [
-    { name: "Kurahousut", emoji: "👖", description: "Vedenpitävät kuravaatteet" },
-    { name: "Sadetakki", emoji: "🌧️", description: "Vedenpitävä takki" },
-    { name: "Kumisaappaat", emoji: "🥾", description: "Kumisaappaat" },
+    { name: "Välikausihousut", emoji: "👖", description: "Joustavat välikausihousut" },
+    { name: "Kuoritakki", emoji: "🧥", description: "Tuulenpitävä kuoritakki" },
+    { name: "Välikausikengät", emoji: "🥾", description: "Vettähylkivät välikausikengät" },
     { name: "Välikerrasto", emoji: "👕", description: "Fleece tai villainen" },
-    { name: "Ohut pipo", emoji: "🧢", description: "Ohut pipo tai lippalakki" },
+    { name: "Ohut pipo", emoji: "🧢", description: "Ohut pipo" },
   ],
   "leikki-ikäinen": [
-    { name: "Kurahousut", emoji: "👖", description: "Sadehousut" },
-    { name: "Sadetakki", emoji: "🌧️", description: "Vedenpitävä takki" },
-    { name: "Kumisaappaat", emoji: "🥾", description: "Kumisaappaat" },
+    { name: "Välikausihousut", emoji: "👖", description: "Joustavat välikausihousut" },
+    { name: "Kuoritakki", emoji: "🧥", description: "Tuulenpitävä kuoritakki" },
+    { name: "Välikausikengät", emoji: "🥾", description: "Vettähylkivät välikausikengät" },
     { name: "Välikerrasto", emoji: "👕", description: "Fleece tai villainen" },
     { name: "Ohut pipo", emoji: "🧢", description: "Ohut pipo" },
   ],
   koululainen: [
-    { name: "Kurahousut", emoji: "👖", description: "Sadehousut" },
-    { name: "Sadetakki", emoji: "🌧️", description: "Vedenpitävä takki" },
-    { name: "Kumisaappaat", emoji: "🥾", description: "Kumisaappaat" },
+    { name: "Välikausihousut", emoji: "👖", description: "Joustavat välikausihousut" },
+    { name: "Kuoritakki", emoji: "🧥", description: "Tuulenpitävä kuoritakki" },
+    { name: "Välikausikengät", emoji: "🥾", description: "Vettähylkivät kengät" },
     { name: "Huppari", emoji: "👕", description: "Fleece tai huppari" },
   ],
 };
 
+/** +12…+18 °C — lämmin kevät */
+const warmSpringGear: Record<AgeGroup, ClothingItem[]> = {
+  vauva: [
+    { name: "Body", emoji: "👶", description: "Ohut puuvillabody" },
+    { name: "Ohut haalari", emoji: "👕", description: "Kevyt ulkohaalari" },
+    { name: "Ohut pipo", emoji: "🧢", description: "Puuvillapipo" },
+  ],
+  taapero: [
+    { name: "Collegehousut", emoji: "👖", description: "Joustavat collegehousut" },
+    { name: "Pitkähihainen paita", emoji: "👕", description: "Kevyt pitkähihainen" },
+    { name: "Kevyt takki", emoji: "🧥", description: "Kevyt takki tai liivi" },
+    { name: "Lenkkarit", emoji: "👟", description: "Kevyet kengät" },
+  ],
+  "leikki-ikäinen": [
+    { name: "Collegehousut", emoji: "👖", description: "Collegehousut tai farkut" },
+    { name: "Pitkähihainen paita", emoji: "👕", description: "Kevyt pitkähihainen" },
+    { name: "Kevyt takki", emoji: "🧥", description: "Kevyt takki tai liivi" },
+    { name: "Lenkkarit", emoji: "👟", description: "Kevyet kengät" },
+  ],
+  koululainen: [
+    { name: "Farkut", emoji: "👖", description: "Farkut tai collegehousut" },
+    { name: "Pitkähihainen paita", emoji: "👕", description: "Kevyt pitkähihainen" },
+    { name: "Kevyt takki", emoji: "🧥", description: "Kevyt takki tai liivi" },
+    { name: "Lenkkarit", emoji: "👟", description: "Kevyet kengät" },
+  ],
+};
+
+/** Yli +18 °C — kesä */
 const warmGear: Record<AgeGroup, ClothingItem[]> = {
   vauva: [
     { name: "Body", emoji: "👶", description: "Ohut puuvillabody" },
@@ -125,13 +153,13 @@ const warmGear: Record<AgeGroup, ClothingItem[]> = {
   ],
   "leikki-ikäinen": [
     { name: "T-paita", emoji: "👕", description: "Kevyt paita" },
-    { name: "Shortsit", emoji: "🩳", description: "Kevyet shortsit" },
+    { name: "Shortsit", emoji: "🩳", description: "Shortsit tai hame" },
     { name: "Sandaalit", emoji: "👡", description: "Avoimet kengät" },
     { name: "Lippalakki", emoji: "🧢", description: "Aurinkosuoja" },
   ],
   koululainen: [
     { name: "T-paita", emoji: "👕", description: "T-paita" },
-    { name: "Shortsit", emoji: "🩳", description: "Shortsit" },
+    { name: "Shortsit", emoji: "🩳", description: "Shortsit tai hame" },
     { name: "Lenkkarit", emoji: "👟", description: "Kevyet kengät" },
     { name: "Lippalakki", emoji: "🧢", description: "Aurinkosuoja" },
   ],
@@ -149,9 +177,6 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
       description: "Merinovilla, välikerros ja paksu toppapuku",
     });
     base.push(...coldSnowGear[ageGroup]);
-  } else if (temp >= 0 && temp <= -0.001) {
-    // exactly 0 handled below
-    base.push(...coldSnowGear[ageGroup]);
   } else if (temp <= 0) {
     base.push({
       name: "Toppapuku ja villasukat",
@@ -161,23 +186,46 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
     base.push(...coldSnowGear[ageGroup].filter(
       (i) => !["Toppahaalari", "Toppahousut", "Toppatakki", "Villasukat"].includes(i.name)
     ));
-  } else if (temp >= 5 && temp <= 10) {
-    base.push({
-      name: "Välikausivaatteet",
-      emoji: "🍂",
-      description: "+5 … +10 °C — kevyt takki ja kerroksia",
-    });
-    base.push(...mildRainGear[ageGroup]);
   } else if (temp < 5) {
     base.push(...coldSnowGear[ageGroup]);
   } else if (temp <= 12) {
+    // +5…+12 °C — välikausi
+    base.push({
+      name: "Välikausivaatteet",
+      emoji: "🍂",
+      description: "+5 … +12 °C — kuoritakki ja kerroksia",
+    });
     base.push(...mildRainGear[ageGroup]);
+    // Tuulilisä
+    if (weather.windSpeed > 5) {
+      base.push({ name: "Tuubihuivi", emoji: "🧣", description: "Tuuli yli 5 m/s — tuubihuivi suojaa" });
+    }
+  } else if (temp <= 18) {
+    // +12…+18 °C — lämmin kevät
+    base.push(...warmSpringGear[ageGroup]);
+    if (weather.condition === "sunny") {
+      const hasHat = base.some((i) => i.name.includes("Lippalakki") || i.name.includes("Aurinkohattu"));
+      if (!hasHat) {
+        base.push({ name: "Lippalakki", emoji: "🧢", description: "Aurinkoisella säällä suojaksi" });
+      }
+    }
   } else {
+    // Yli +18 °C — kesä
     base.push(...warmGear[ageGroup]);
+    if (weather.uvi !== undefined && weather.uvi >= 3) {
+      base.push({ name: "Aurinkorasva", emoji: "🧴", description: "Suojaa iho UV-säteilyltä" });
+    }
   }
 
-  // Rain probability add-on
-  if (weather.rainProbability > 40) {
+  // Kura-erikoistilanne: sade + yli +10 °C → kevyet kuravarusteet
+  if (weather.rainProbability > 40 && temp > 10) {
+    // Remove heavy rain gear, add light versions
+    const lightRain = [
+      { name: "Vuorettomat kurahousut", emoji: "🌧️", description: "Kevyet sadehousut ilman vuorta" },
+      { name: "Kumisaappaat", emoji: "🥾", description: "Kumisaappaat ohuilla sukilla" },
+    ];
+    base.unshift(...lightRain);
+  } else if (weather.rainProbability > 40) {
     const hasKura = base.some((i) => i.name.includes("Kurahousut"));
     if (!hasKura) {
       base.unshift({
@@ -194,7 +242,9 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
     if (!hasHat) {
       base.push({ name: "Lippis/Hattu", emoji: "🧢", description: "Korkea UV — suojaa pää auringolta" });
     }
-    base.push({ name: "Aurinkolasit", emoji: "🕶️", description: "UV-suoja silmille" });
+    if (!base.some((i) => i.name === "Aurinkolasit")) {
+      base.push({ name: "Aurinkolasit", emoji: "🕶️", description: "UV-suoja silmille" });
+    }
   }
 
   // Deduplicate by name
