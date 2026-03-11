@@ -1,5 +1,5 @@
 import { WeatherData, getWeatherIcon } from "@/lib/weatherData";
-import { Droplets, Wind, MapPin } from "lucide-react";
+import { Droplets, Wind, MapPin, CloudRain } from "lucide-react";
 
 interface WeatherCardProps {
   weather: WeatherData;
