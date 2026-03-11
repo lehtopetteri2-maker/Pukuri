@@ -67,8 +67,8 @@ const Index = () => {
         </div>
 
         <ClothingCard key={`${city}-${ageGroup}`} items={clothing} />
-        <AffiliateSection />
         <DaycareChecklist ageGroup={ageGroup} />
+        <AffiliateSection />
 
         <FeedbackSection />
 
