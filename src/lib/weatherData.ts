@@ -6,6 +6,8 @@ export interface WeatherData {
   condition: WeatherCondition;
   windSpeed: number;
   humidity: number;
+  rainProbability: number;
+  afternoonRain: boolean;
   city: string;
   description: string;
 }
@@ -17,11 +19,12 @@ export function getMockWeather(): WeatherData {
     condition: "snowy",
     windSpeed: 12,
     humidity: 85,
+    rainProbability: 65,
+    afternoonRain: true,
     city: "Helsinki",
     description: "Lumisadetta, heikko tuuli",
   };
 }
-
 export type AgeGroup = "vauva" | "taapero" | "koululainen";
 
 export interface ClothingItem {
