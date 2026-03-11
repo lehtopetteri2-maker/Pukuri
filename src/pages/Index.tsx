@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import WeatherCard from "@/components/WeatherCard";
 import AgeGroupToggle from "@/components/AgeGroupToggle";
 import ClothingCard from "@/components/ClothingCard";
@@ -12,17 +12,14 @@ import WeeklySchedule from "@/components/WeeklySchedule";
 import ScheduleReminder from "@/components/ScheduleReminder";
 import AffiliateSection from "@/components/AffiliateSection";
 import Footer from "@/components/Footer";
-import FeedbackSection from "@/components/FeedbackSection";
-import BottomNav, { TabId } from "@/components/BottomNav";
 import { getMockWeather, getClothingRecommendation, getSavedCity, saveCity, AgeGroup } from "@/lib/weatherData";
-import { CloudSnow, ChevronDown } from "lucide-react";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import FeedbackSection from "@/components/FeedbackSection";
+import { CloudSnow } from "lucide-react";
 
 const Index = () => {
   const [city, setCity] = useState(getSavedCity);
   const [ageGroup, setAgeGroup] = useState<AgeGroup>("leikki-ikäinen");
-  const [tab, setTab] = useState<TabId>("koti");
-  const [tomorrowOpen, setTomorrowOpen] = useState(false);
+  const scheduleRef = useRef<HTMLDivElement>(null);
 
   const weather = getMockWeather(city);
   const clothing = getClothingRecommendation(weather, ageGroup);
@@ -32,10 +29,14 @@ const Index = () => {
     saveCity(newCity);
   }, []);
 
+  const scrollToSchedule = useCallback(() => {
+    scheduleRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, []);
+
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen bg-background">
       <header className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-10">
-        <div className="max-w-lg mx-auto px-4 py-3 flex items-center gap-3">
+        <div className="max-w-lg mx-auto px-4 py-4 flex items-center gap-3">
           <div className="h-9 w-9 rounded-lg bg-primary flex items-center justify-center">
             <CloudSnow className="h-5 w-5 text-primary-foreground" />
           </div>
@@ -46,85 +47,40 @@ const Index = () => {
         </div>
       </header>
 
-      <main className="max-w-lg mx-auto px-4 py-4 space-y-4">
-        {/* ─── KOTI ─── */}
-        {tab === "koti" && (
-          <>
-            <MorningSummary weather={weather} />
-            <NightAlert weather={weather} />
-            <WeatherCard weather={weather} />
+      <main className="max-w-lg mx-auto px-4 py-6 space-y-5">
+        <LocationSearch currentCity={city} onSelectCity={handleCityChange} />
 
-            {/* Collapsible tomorrow forecast */}
-            <Collapsible open={tomorrowOpen} onOpenChange={setTomorrowOpen}>
-              <CollapsibleTrigger className="w-full flex items-center justify-between rounded-lg bg-night text-night-foreground px-5 py-3.5 shadow-sm">
-                <span className="text-sm font-display font-700 uppercase tracking-wide text-night-muted">
-                  🌙 Huomisen ennuste
-                </span>
-                <ChevronDown
-                  className={`h-4 w-4 text-night-muted transition-transform duration-200 ${
-                    tomorrowOpen ? "rotate-180" : ""
-                  }`}
-                />
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <div className="mt-2">
-                  <TomorrowForecastCard weather={weather} ageGroup={ageGroup} />
-                </div>
-              </CollapsibleContent>
-            </Collapsible>
+        <div ref={scheduleRef}>
+          <WeeklySchedule ageGroup={ageGroup} />
+        </div>
 
-            <AiAnalysis weather={weather} />
+        <MorningSummary weather={weather} />
+        <ScheduleReminder ageGroup={ageGroup} onOpen={scrollToSchedule} />
+        <NightAlert weather={weather} />
+        <WeatherCard weather={weather} />
+        <TomorrowForecastCard weather={weather} ageGroup={ageGroup} />
 
-            <div className="space-y-3">
-              <h2 className="text-sm font-display font-700 text-muted-foreground uppercase tracking-wide">
-                Lapsen ikäryhmä
-              </h2>
-              <AgeGroupToggle selected={ageGroup} onChange={setAgeGroup} />
-            </div>
+        <AiAnalysis weather={weather} />
 
-            <ClothingCard key={`${city}-${ageGroup}`} items={clothing} />
+        <div className="space-y-3">
+          <h2 className="text-sm font-display font-700 text-muted-foreground uppercase tracking-wide">
+            Lapsen ikäryhmä
+          </h2>
+          <AgeGroupToggle selected={ageGroup} onChange={setAgeGroup} />
+        </div>
 
-            <p className="text-center text-xs text-muted-foreground">
-              💡 Muista tarkistaa tuulenpuuskat ennen ulkoilua!
-            </p>
-          </>
-        )}
+        <ClothingCard key={`${city}-${ageGroup}`} items={clothing} />
+        <DaycareChecklist ageGroup={ageGroup} />
+        <AffiliateSection />
 
-        {/* ─── REPPU ─── */}
-        {tab === "reppu" && (
-          <>
-            <ScheduleReminder ageGroup={ageGroup} onOpen={() => {}} />
-            <WeeklySchedule ageGroup={ageGroup} />
-            <DaycareChecklist ageGroup={ageGroup} />
-          </>
-        )}
+        <FeedbackSection />
 
-        {/* ─── KAUPPA ─── */}
-        {tab === "kauppa" && (
-          <>
-            <AffiliateSection />
-            <FeedbackSection />
-          </>
-        )}
-
-        {/* ─── ASETUKSET ─── */}
-        {tab === "asetukset" && (
-          <>
-            <div className="space-y-3">
-              <h2 className="text-sm font-display font-700 text-muted-foreground uppercase tracking-wide">
-                Lapsen ikäryhmä
-              </h2>
-              <AgeGroupToggle selected={ageGroup} onChange={setAgeGroup} />
-            </div>
-
-            <LocationSearch currentCity={city} onSelectCity={handleCityChange} />
-
-            <Footer />
-          </>
-        )}
+        <p className="text-center text-xs text-muted-foreground">
+          💡 Muista tarkistaa tuulenpuuskat ennen ulkoilua!
+        </p>
       </main>
 
-      <BottomNav activeTab={tab} onChange={setTab} />
+      <Footer />
     </div>
   );
 };
