@@ -2,6 +2,7 @@ import { useState, useCallback, useRef } from "react";
 import WeatherCard from "@/components/WeatherCard";
 import AgeGroupToggle from "@/components/AgeGroupToggle";
 import ClothingCard from "@/components/ClothingCard";
+import AiAnalysis from "@/components/AiAnalysis";
 import MorningSummary from "@/components/MorningSummary";
 import DaycareChecklist from "@/components/DaycareChecklist";
 import NightAlert from "@/components/NightAlert";
@@ -58,6 +59,8 @@ const Index = () => {
         <NightAlert weather={weather} />
         <WeatherCard weather={weather} />
         <TomorrowForecastCard weather={weather} ageGroup={ageGroup} />
+
+        <AiAnalysis weather={weather} />
 
         <div className="space-y-3">
           <h2 className="text-sm font-display font-700 text-muted-foreground uppercase tracking-wide">
