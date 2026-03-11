@@ -10,6 +10,7 @@ export interface WeatherData {
   afternoonRain: boolean;
   city: string;
   description: string;
+  uvi?: number;
 }
 
 export type AgeGroup = "vauva" | "taapero" | "leikki-ikäinen" | "koululainen";
