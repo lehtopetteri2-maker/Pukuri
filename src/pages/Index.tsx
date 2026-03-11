@@ -2,6 +2,7 @@ import { useState } from "react";
 import WeatherCard from "@/components/WeatherCard";
 import AgeGroupToggle from "@/components/AgeGroupToggle";
 import ClothingCard from "@/components/ClothingCard";
+import MorningSummary from "@/components/MorningSummary";
 import { getMockWeather, getClothingRecommendation, AgeGroup } from "@/lib/weatherData";
 import { CloudSnow } from "lucide-react";
 
