@@ -55,6 +55,11 @@ export default {
         sky: "hsl(var(--sky))",
         "mint-light": "hsl(var(--mint-light))",
         "sky-light": "hsl(var(--sky-light))",
+        night: {
+          DEFAULT: "hsl(var(--night))",
+          foreground: "hsl(var(--night-foreground))",
+          muted: "hsl(var(--night-muted))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",

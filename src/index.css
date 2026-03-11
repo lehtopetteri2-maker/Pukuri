@@ -40,6 +40,9 @@
     --sky: 204 70% 78%;
     --mint-light: 162 35% 92%;
     --sky-light: 204 60% 94%;
+    --night: 220 45% 18%;
+    --night-foreground: 210 30% 92%;
+    --night-muted: 215 25% 45%;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;

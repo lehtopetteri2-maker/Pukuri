@@ -6,6 +6,7 @@ import MorningSummary from "@/components/MorningSummary";
 import DaycareChecklist from "@/components/DaycareChecklist";
 import NightAlert from "@/components/NightAlert";
 import LocationSearch from "@/components/LocationSearch";
+import TomorrowForecastCard from "@/components/TomorrowForecast";
 import { getMockWeather, getClothingRecommendation, getSavedCity, saveCity, AgeGroup } from "@/lib/weatherData";
 import { CloudSnow } from "lucide-react";
 
@@ -49,6 +50,7 @@ const Index = () => {
         </div>
 
         <ClothingCard key={`${city}-${ageGroup}`} items={clothing} />
+        <TomorrowForecastCard weather={weather} ageGroup={ageGroup} />
         <DaycareChecklist ageGroup={ageGroup} />
 
         <p className="text-center text-xs text-muted-foreground pb-4">
