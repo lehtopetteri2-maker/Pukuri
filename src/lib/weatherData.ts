@@ -12,25 +12,88 @@ export interface WeatherData {
   description: string;
 }
 
-export function getMockWeather(): WeatherData {
-  return {
-    temperature: -3,
-    feelsLike: -8,
-    condition: "snowy",
-    windSpeed: 12,
-    humidity: 85,
-    rainProbability: 65,
-    afternoonRain: true,
-    city: "Helsinki",
-    description: "Lumisadetta, heikko tuuli",
-  };
-}
-export type AgeGroup = "vauva" | "taapero" | "koululainen";
+const cityWeather: Record<string, WeatherData> = {
+  Helsinki: {
+    temperature: -3, feelsLike: -8, condition: "snowy", windSpeed: 12,
+    humidity: 85, rainProbability: 65, afternoonRain: true,
+    city: "Helsinki", description: "Lumisadetta, heikko tuuli",
+  },
+  Espoo: {
+    temperature: -2, feelsLike: -7, condition: "cloudy", windSpeed: 10,
+    humidity: 80, rainProbability: 45, afternoonRain: true,
+    city: "Espoo", description: "Pilvistä, ajoittain lumikuuroja",
+  },
+  Tampere: {
+    temperature: -5, feelsLike: -11, condition: "snowy", windSpeed: 14,
+    humidity: 90, rainProbability: 70, afternoonRain: true,
+    city: "Tampere", description: "Runsasta lumisadetta",
+  },
+  Turku: {
+    temperature: 1, feelsLike: -3, condition: "rainy", windSpeed: 8,
+    humidity: 88, rainProbability: 80, afternoonRain: true,
+    city: "Turku", description: "Tihkusadetta, kosteaa",
+  },
+  Oulu: {
+    temperature: -12, feelsLike: -20, condition: "snowy", windSpeed: 18,
+    humidity: 78, rainProbability: 30, afternoonRain: false,
+    city: "Oulu", description: "Kireä pakkanen, selkeää",
+  },
+  Rovaniemi: {
+    temperature: -18, feelsLike: -26, condition: "snowy", windSpeed: 6,
+    humidity: 75, rainProbability: 10, afternoonRain: false,
+    city: "Rovaniemi", description: "Kova pakkanen, tyyntä",
+  },
+  Jyväskylä: {
+    temperature: -6, feelsLike: -12, condition: "cloudy", windSpeed: 11,
+    humidity: 82, rainProbability: 40, afternoonRain: false,
+    city: "Jyväskylä", description: "Pilvistä, heikkoa lumisadetta",
+  },
+  Kuopio: {
+    temperature: -8, feelsLike: -14, condition: "snowy", windSpeed: 9,
+    humidity: 84, rainProbability: 55, afternoonRain: true,
+    city: "Kuopio", description: "Lumisadetta iltapäivällä",
+  },
+  Lahti: {
+    temperature: -4, feelsLike: -9, condition: "cloudy", windSpeed: 7,
+    humidity: 79, rainProbability: 35, afternoonRain: false,
+    city: "Lahti", description: "Puolipilvistä",
+  },
+  Vaasa: {
+    temperature: -1, feelsLike: -6, condition: "windy", windSpeed: 20,
+    humidity: 86, rainProbability: 50, afternoonRain: true,
+    city: "Vaasa", description: "Tuulista, lumikuuroja",
+  },
+  Joensuu: {
+    temperature: -10, feelsLike: -17, condition: "snowy", windSpeed: 5,
+    humidity: 81, rainProbability: 25, afternoonRain: false,
+    city: "Joensuu", description: "Pakkasta, selkeää",
+  },
+  Pori: {
+    temperature: 2, feelsLike: -2, condition: "rainy", windSpeed: 15,
+    humidity: 92, rainProbability: 85, afternoonRain: true,
+    city: "Pori", description: "Vesisadetta, tuulista",
+  },
+};
 
-export interface ClothingItem {
-  name: string;
-  emoji: string;
-  description: string;
+export const FINNISH_CITIES = Object.keys(cityWeather);
+
+export function getMockWeather(city?: string): WeatherData {
+  const key = city && cityWeather[city] ? city : "Helsinki";
+  return { ...cityWeather[key] };
+}
+
+export function searchCities(query: string): string[] {
+  if (!query.trim()) return FINNISH_CITIES;
+  const q = query.toLowerCase();
+  return FINNISH_CITIES.filter((c) => c.toLowerCase().includes(q));
+}
+
+export function getSavedCity(): string {
+  return localStorage.getItem("saavahti-city") || "Helsinki";
+}
+
+export function saveCity(city: string): void {
+  localStorage.setItem("saavahti-city", city);
 }
 
 const coldSnowGear: Record<AgeGroup, ClothingItem[]> = {
