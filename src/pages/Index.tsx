@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback } from "react";
 import WeatherCard from "@/components/WeatherCard";
 import AgeGroupToggle from "@/components/AgeGroupToggle";
 import ClothingCard from "@/components/ClothingCard";
@@ -12,14 +12,17 @@ import WeeklySchedule from "@/components/WeeklySchedule";
 import ScheduleReminder from "@/components/ScheduleReminder";
 import AffiliateSection from "@/components/AffiliateSection";
 import Footer from "@/components/Footer";
-import { getMockWeather, getClothingRecommendation, getSavedCity, saveCity, AgeGroup } from "@/lib/weatherData";
 import FeedbackSection from "@/components/FeedbackSection";
-import { CloudSnow } from "lucide-react";
+import BottomNav, { TabId } from "@/components/BottomNav";
+import { getMockWeather, getClothingRecommendation, getSavedCity, saveCity, AgeGroup } from "@/lib/weatherData";
+import { CloudSnow, ChevronDown } from "lucide-react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 const Index = () => {
   const [city, setCity] = useState(getSavedCity);
   const [ageGroup, setAgeGroup] = useState<AgeGroup>("leikki-ikäinen");
-  const scheduleRef = useRef<HTMLDivElement>(null);
+  const [tab, setTab] = useState<TabId>("koti");
+  const [tomorrowOpen, setTomorrowOpen] = useState(false);
 
   const weather = getMockWeather(city);
   const clothing = getClothingRecommendation(weather, ageGroup);
@@ -29,14 +32,10 @@ const Index = () => {
     saveCity(newCity);
   }, []);
 
-  const scrollToSchedule = useCallback(() => {
-    scheduleRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, []);
-
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20">
       <header className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-10">
-        <div className="max-w-lg mx-auto px-4 py-4 flex items-center gap-3">
+        <div className="max-w-lg mx-auto px-4 py-3 flex items-center gap-3">
           <div className="h-9 w-9 rounded-lg bg-primary flex items-center justify-center">
             <CloudSnow className="h-5 w-5 text-primary-foreground" />
           </div>
@@ -47,40 +46,85 @@ const Index = () => {
         </div>
       </header>
 
-      <main className="max-w-lg mx-auto px-4 py-6 space-y-5">
-        <LocationSearch currentCity={city} onSelectCity={handleCityChange} />
+      <main className="max-w-lg mx-auto px-4 py-4 space-y-4">
+        {/* ─── KOTI ─── */}
+        {tab === "koti" && (
+          <>
+            <MorningSummary weather={weather} />
+            <NightAlert weather={weather} />
+            <WeatherCard weather={weather} />
 
-        <div ref={scheduleRef}>
-          <WeeklySchedule ageGroup={ageGroup} />
-        </div>
+            {/* Collapsible tomorrow forecast */}
+            <Collapsible open={tomorrowOpen} onOpenChange={setTomorrowOpen}>
+              <CollapsibleTrigger className="w-full flex items-center justify-between rounded-lg bg-night text-night-foreground px-5 py-3.5 shadow-sm">
+                <span className="text-sm font-display font-700 uppercase tracking-wide text-night-muted">
+                  🌙 Huomisen ennuste
+                </span>
+                <ChevronDown
+                  className={`h-4 w-4 text-night-muted transition-transform duration-200 ${
+                    tomorrowOpen ? "rotate-180" : ""
+                  }`}
+                />
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="mt-2">
+                  <TomorrowForecastCard weather={weather} ageGroup={ageGroup} />
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
 
-        <MorningSummary weather={weather} />
-        <ScheduleReminder ageGroup={ageGroup} onOpen={scrollToSchedule} />
-        <NightAlert weather={weather} />
-        <WeatherCard weather={weather} />
-        <TomorrowForecastCard weather={weather} ageGroup={ageGroup} />
+            <AiAnalysis weather={weather} />
 
-        <AiAnalysis weather={weather} />
+            <div className="space-y-3">
+              <h2 className="text-sm font-display font-700 text-muted-foreground uppercase tracking-wide">
+                Lapsen ikäryhmä
+              </h2>
+              <AgeGroupToggle selected={ageGroup} onChange={setAgeGroup} />
+            </div>
 
-        <div className="space-y-3">
-          <h2 className="text-sm font-display font-700 text-muted-foreground uppercase tracking-wide">
-            Lapsen ikäryhmä
-          </h2>
-          <AgeGroupToggle selected={ageGroup} onChange={setAgeGroup} />
-        </div>
+            <ClothingCard key={`${city}-${ageGroup}`} items={clothing} />
 
-        <ClothingCard key={`${city}-${ageGroup}`} items={clothing} />
-        <DaycareChecklist ageGroup={ageGroup} />
-        <AffiliateSection />
+            <p className="text-center text-xs text-muted-foreground">
+              💡 Muista tarkistaa tuulenpuuskat ennen ulkoilua!
+            </p>
+          </>
+        )}
 
-        <FeedbackSection />
+        {/* ─── REPPU ─── */}
+        {tab === "reppu" && (
+          <>
+            <ScheduleReminder ageGroup={ageGroup} onOpen={() => {}} />
+            <WeeklySchedule ageGroup={ageGroup} />
+            <DaycareChecklist ageGroup={ageGroup} />
+          </>
+        )}
 
-        <p className="text-center text-xs text-muted-foreground">
-          💡 Muista tarkistaa tuulenpuuskat ennen ulkoilua!
-        </p>
+        {/* ─── KAUPPA ─── */}
+        {tab === "kauppa" && (
+          <>
+            <AffiliateSection />
+            <FeedbackSection />
+          </>
+        )}
+
+        {/* ─── ASETUKSET ─── */}
+        {tab === "asetukset" && (
+          <>
+            <div className="space-y-3">
+              <h2 className="text-sm font-display font-700 text-muted-foreground uppercase tracking-wide">
+                Lapsen ikäryhmä
+              </h2>
+              <AgeGroupToggle selected={ageGroup} onChange={setAgeGroup} />
+            </div>
+
+            <LocationSearch currentCity={city} onSelectCity={handleCityChange} />
+
+            <Footer />
+          </>
+        )}
       </main>
 
-      <Footer />
+      <BottomNav activeTab={tab} onChange={setTab} />
     </div>
   );
 };
