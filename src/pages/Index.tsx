@@ -1,12 +1,48 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import WeatherCard from "@/components/WeatherCard";
+import AgeGroupToggle from "@/components/AgeGroupToggle";
+import ClothingCard from "@/components/ClothingCard";
+import { getMockWeather, getClothingRecommendation, AgeGroup } from "@/lib/weatherData";
+import { CloudSnow } from "lucide-react";
+
+const weather = getMockWeather();
 
 const Index = () => {
+  const [ageGroup, setAgeGroup] = useState<AgeGroup>("taapero");
+  const clothing = getClothingRecommendation(weather, ageGroup);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-10">
+        <div className="max-w-lg mx-auto px-4 py-4 flex items-center gap-3">
+          <div className="h-9 w-9 rounded-lg bg-primary flex items-center justify-center">
+            <CloudSnow className="h-5 w-5 text-primary-foreground" />
+          </div>
+          <div>
+            <h1 className="text-lg font-display font-800 text-foreground leading-tight">Säävahti</h1>
+            <p className="text-xs text-muted-foreground">Lasten pukeutumisavustaja</p>
+          </div>
+        </div>
+      </header>
+
+      {/* Content */}
+      <main className="max-w-lg mx-auto px-4 py-6 space-y-5">
+        <WeatherCard weather={weather} />
+
+        <div className="space-y-3">
+          <h2 className="text-sm font-display font-700 text-muted-foreground uppercase tracking-wide">
+            Lapsen ikäryhmä
+          </h2>
+          <AgeGroupToggle selected={ageGroup} onChange={setAgeGroup} />
+        </div>
+
+        <ClothingCard key={ageGroup} items={clothing} />
+
+        <p className="text-center text-xs text-muted-foreground pb-4">
+          💡 Muista tarkistaa tuulenpuuskat ennen ulkoilua!
+        </p>
+      </main>
     </div>
   );
 };
