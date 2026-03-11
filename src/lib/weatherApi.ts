@@ -87,6 +87,7 @@ function parseCurrentWeather(d: any): WeatherData {
     afternoonRain: false,
     city: d.name,
     description: d.weather[0].description,
+    uvi: d.uvi ?? undefined,
   };
 }
 
