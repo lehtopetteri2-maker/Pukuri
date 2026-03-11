@@ -1,18 +1,25 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import WeatherCard from "@/components/WeatherCard";
 import AgeGroupToggle from "@/components/AgeGroupToggle";
 import ClothingCard from "@/components/ClothingCard";
 import MorningSummary from "@/components/MorningSummary";
 import DaycareChecklist from "@/components/DaycareChecklist";
 import NightAlert from "@/components/NightAlert";
-import { getMockWeather, getClothingRecommendation, AgeGroup } from "@/lib/weatherData";
+import LocationSearch from "@/components/LocationSearch";
+import { getMockWeather, getClothingRecommendation, getSavedCity, saveCity, AgeGroup } from "@/lib/weatherData";
 import { CloudSnow } from "lucide-react";
 
-const weather = getMockWeather();
-
 const Index = () => {
+  const [city, setCity] = useState(getSavedCity);
   const [ageGroup, setAgeGroup] = useState<AgeGroup>("taapero");
+
+  const weather = getMockWeather(city);
   const clothing = getClothingRecommendation(weather, ageGroup);
+
+  const handleCityChange = useCallback((newCity: string) => {
+    setCity(newCity);
+    saveCity(newCity);
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -29,6 +36,7 @@ const Index = () => {
       </header>
 
       <main className="max-w-lg mx-auto px-4 py-6 space-y-5">
+        <LocationSearch currentCity={city} onSelectCity={handleCityChange} />
         <MorningSummary weather={weather} />
         <NightAlert weather={weather} />
         <WeatherCard weather={weather} />
@@ -40,7 +48,7 @@ const Index = () => {
           <AgeGroupToggle selected={ageGroup} onChange={setAgeGroup} />
         </div>
 
-        <ClothingCard key={ageGroup} items={clothing} />
+        <ClothingCard key={`${city}-${ageGroup}`} items={clothing} />
         <DaycareChecklist ageGroup={ageGroup} />
 
         <p className="text-center text-xs text-muted-foreground pb-4">
