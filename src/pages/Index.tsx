@@ -3,6 +3,8 @@ import WeatherCard from "@/components/WeatherCard";
 import AgeGroupToggle from "@/components/AgeGroupToggle";
 import ClothingCard from "@/components/ClothingCard";
 import MorningSummary from "@/components/MorningSummary";
+import DaycareChecklist from "@/components/DaycareChecklist";
+import NightAlert from "@/components/NightAlert";
 import { getMockWeather, getClothingRecommendation, AgeGroup } from "@/lib/weatherData";
 import { CloudSnow } from "lucide-react";
 
@@ -14,7 +16,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
       <header className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-lg mx-auto px-4 py-4 flex items-center gap-3">
           <div className="h-9 w-9 rounded-lg bg-primary flex items-center justify-center">
@@ -27,9 +28,9 @@ const Index = () => {
         </div>
       </header>
 
-      {/* Content */}
       <main className="max-w-lg mx-auto px-4 py-6 space-y-5">
         <MorningSummary weather={weather} />
+        <NightAlert weather={weather} />
         <WeatherCard weather={weather} />
 
         <div className="space-y-3">
@@ -40,6 +41,7 @@ const Index = () => {
         </div>
 
         <ClothingCard key={ageGroup} items={clothing} />
+        <DaycareChecklist ageGroup={ageGroup} />
 
         <p className="text-center text-xs text-muted-foreground pb-4">
           💡 Muista tarkistaa tuulenpuuskat ennen ulkoilua!
