@@ -50,6 +50,7 @@ const Index = () => {
         </div>
 
         <ClothingCard key={`${city}-${ageGroup}`} items={clothing} />
+        <TomorrowForecastCard weather={weather} ageGroup={ageGroup} />
         <DaycareChecklist ageGroup={ageGroup} />
 
         <p className="text-center text-xs text-muted-foreground pb-4">
