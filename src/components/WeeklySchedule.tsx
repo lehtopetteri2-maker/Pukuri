@@ -165,7 +165,14 @@ export default function WeeklySchedule({ ageGroup }: WeeklyScheduleProps) {
           Lisää kuva lukujärjestyksestä tai päiväkodin viikko-ohjelmasta
         </p>
 
-        {image ? (
+        {isUploading ? (
+          <div className="flex flex-col items-center justify-center gap-3 p-8 rounded-md border-2 border-dashed border-primary/30 bg-primary/5">
+            <Loader2 className="h-6 w-6 text-primary animate-spin" />
+            <span className="text-sm font-display font-600 text-muted-foreground">
+              Tallennetaan...
+            </span>
+          </div>
+        ) : image ? (
           <div className="space-y-3">
             {/* Thumbnail */}
             <div
@@ -185,7 +192,6 @@ export default function WeeklySchedule({ ageGroup }: WeeklyScheduleProps) {
               <span className="absolute bottom-2 right-2 text-[10px] bg-card/80 text-muted-foreground px-2 py-0.5 rounded-full backdrop-blur-sm">
                 Katso isona
               </span>
-              {/* Change photo icon overlay */}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -237,7 +243,6 @@ export default function WeeklySchedule({ ageGroup }: WeeklyScheduleProps) {
           ref={fileInputRef}
           type="file"
           accept="image/*"
-          capture="environment"
           onChange={handleFileChange}
           className="hidden"
         />
