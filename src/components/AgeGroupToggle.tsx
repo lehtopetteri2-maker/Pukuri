@@ -8,7 +8,8 @@ interface AgeGroupToggleProps {
 const groups: { value: AgeGroup; label: string; emoji: string; ages: string }[] = [
   { value: "vauva", label: "Vauva", emoji: "👶", ages: "0–1 v" },
   { value: "taapero", label: "Taapero", emoji: "🧒", ages: "1–3 v" },
-  { value: "koululainen", label: "Koululainen", emoji: "🎒", ages: "4–10 v" },
+  { value: "leikki-ikäinen", label: "Leikki-ikäinen", emoji: "🎨", ages: "3–6 v" },
+  { value: "koululainen", label: "Koululainen", emoji: "🎒", ages: "7–10 v" },
 ];
 
 export default function AgeGroupToggle({ selected, onChange }: AgeGroupToggleProps) {

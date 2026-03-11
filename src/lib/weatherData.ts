@@ -12,7 +12,7 @@ export interface WeatherData {
   description: string;
 }
 
-export type AgeGroup = "vauva" | "taapero" | "koululainen";
+export type AgeGroup = "vauva" | "taapero" | "leikki-ikäinen" | "koululainen";
 
 export interface ClothingItem {
   name: string;

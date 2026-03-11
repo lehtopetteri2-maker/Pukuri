@@ -15,6 +15,7 @@ const checklistByAge: Record<AgeGroup, ChecklistItem[]> = {
     { id: "varasukat", label: "Varasukat", emoji: "🧦" },
     { id: "varaBody", label: "Varabody", emoji: "👶" },
     { id: "unilelu", label: "Unilelu", emoji: "🧸" },
+    { id: "aurinkorasva", label: "Aurinkorasva", emoji: "☀️" },
   ],
   taapero: [
     { id: "varahanskat", label: "Varahanskat", emoji: "🧤" },
@@ -23,13 +24,24 @@ const checklistByAge: Record<AgeGroup, ChecklistItem[]> = {
     { id: "vaippapaketti", label: "Vaippapaketti", emoji: "🧷" },
     { id: "vesipullo", label: "Vesipullo", emoji: "💧" },
     { id: "unilelu", label: "Unilelu", emoji: "🧸" },
+    { id: "aurinkorasva", label: "Aurinkorasva", emoji: "☀️" },
+  ],
+  "leikki-ikäinen": [
+    { id: "varahanskat", label: "Varahanskat", emoji: "🧤" },
+    { id: "varasukat", label: "Varasukat", emoji: "🧦" },
+    { id: "varaHousut", label: "Varahousut", emoji: "👖" },
+    { id: "vesipullo", label: "Vesipullo", emoji: "💧" },
+    { id: "välipala", label: "Välipala", emoji: "🍎" },
+    { id: "luistimet", label: "Luistimet", emoji: "⛸️" },
+    { id: "aurinkorasva", label: "Aurinkorasva", emoji: "☀️" },
   ],
   koululainen: [
     { id: "varahanskat", label: "Varahanskat", emoji: "🧤" },
     { id: "varasukat", label: "Varasukat", emoji: "🧦" },
-    { id: "valipala", label: "Välipala", emoji: "🍎" },
+    { id: "välipala", label: "Välipala", emoji: "🍎" },
     { id: "vesipullo", label: "Vesipullo", emoji: "💧" },
     { id: "avaimet", label: "Avaimet", emoji: "🔑" },
+    { id: "luistimet", label: "Luistimet", emoji: "⛸️" },
   ],
 };
 
