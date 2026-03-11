@@ -1,21 +1,24 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Snowflake, Heart } from "lucide-react";
+import { useLanguage } from "@/lib/i18n";
 
 export default function AffiliateSection() {
+  const { t } = useLanguage();
+
   const brands = [
     {
       name: "Reima",
       icon: <Snowflake className="h-5 w-5 text-primary" />,
-      description: "Säänkestävät ulkovaatteet ja asusteet",
-      cta: "Tutustu kauden uutuuksiin",
+      description: t("affiliate.reima.desc"),
+      cta: t("affiliate.reima.cta"),
       accent: "from-primary/8 to-secondary/10 border-primary/15 hover:border-primary/30",
     },
     {
       name: "Lindex",
       icon: <Heart className="h-5 w-5 text-primary" />,
-      description: "Kestävät ja pehmeät arkivaatteet lapsille",
-      cta: "Katso päivän tarjoukset",
+      description: t("affiliate.lindex.desc"),
+      cta: t("affiliate.lindex.cta"),
       accent: "from-secondary/10 to-accent/15 border-secondary/20 hover:border-secondary/40",
     },
   ];
@@ -23,7 +26,7 @@ export default function AffiliateSection() {
   return (
     <div className="space-y-3 animate-fade-in">
       <h3 className="text-sm font-display font-700 text-muted-foreground uppercase tracking-wide">
-        Suosittelemme laadukkaita varusteita
+        {t("affiliate.title")}
       </h3>
 
       <div className="grid gap-3">
@@ -54,9 +57,7 @@ export default function AffiliateSection() {
       </div>
 
       <p className="text-[11px] text-muted-foreground/70 leading-relaxed px-1">
-        Säävahti on riippumaton palvelu. Suositukset on valittu helpottamaan perheiden arkea ja ne voivat
-        sisältää mainoslinkkejä. Linkkien kautta tehdyistä ostoksista saatava komissio käytetään sovelluksen
-        ylläpitoon ja kehitykseen.
+        {t("affiliate.disclaimer")}
       </p>
     </div>
   );

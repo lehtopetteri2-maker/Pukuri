@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Sparkles, RefreshCw } from "lucide-react";
 import { WeatherData, AgeGroup } from "@/lib/weatherData";
+import { useLanguage, TranslationKey } from "@/lib/i18n";
 import {
   Accordion,
   AccordionContent,
@@ -13,69 +14,56 @@ interface AiAnalysisProps {
   ageGroup?: AgeGroup;
 }
 
-function generateAnalysis(weather: WeatherData, ageGroup?: AgeGroup): string[] {
-  const tips: string[] = [];
-  const ageLabel = ageGroup 
-    ? ageGroup === "vauva" ? "vauvalle" 
-      : ageGroup === "taapero" ? "taaperolle" 
-      : ageGroup === "leikki-ikäinen" ? "leikki-ikäiselle" 
-      : "koululaiselle"
-    : "";
-
-  if (weather.rainProbability > 40 || weather.afternoonRain) {
-    tips.push(
-      "🌧️ Huomataan lähestyvä sadealue klo 14. Suosittelen kuravarusteita jo aamusta, jotta ulkoilu ei keskeydy."
-    );
-  }
-
-  if (weather.windSpeed >= 7) {
-    tips.push(
-      `💨 Tänään on kova tuuli (${weather.windSpeed} m/s). Vaikka mittari näyttää ${weather.temperature > 0 ? "+" : ""}${weather.temperature}°C, viima tuntuu pakkaselta. Valitse tuulenpitävä kuorikerros.`
-    );
-  } else if (weather.windSpeed >= 4) {
-    tips.push(
-      `💨 Kohtalainen tuuli (${weather.windSpeed} m/s) viilentää tuntuvasti. Tuulenpitävä kerros on hyvä valinta.`
-    );
-  }
-
-  const feelsLikeDiff = Math.abs(weather.temperature - weather.feelsLike);
-  if (feelsLikeDiff >= 4) {
-    tips.push(
-      `🌡️ Aamu on kylmä (${weather.feelsLike > 0 ? "+" : ""}${weather.feelsLike}°C tuntuu), mutta iltapäivällä lämpötila nousee (${weather.temperature > 0 ? "+" : ""}${weather.temperature}°C). Kerrospukeutuminen on tänään avainasemassa.`
-    );
-  }
-
-  if (weather.uvi !== undefined && weather.uvi >= 3) {
-    tips.push(
-      `☀️ UV-indeksi on korkea (${weather.uvi}). Aurinko paistaa voimakkaasti. Suojaa lapsen iho aurinkorasvalla, vaikka tuntuisi viileältä. Lippis ja aurinkolasit mukaan${ageLabel ? ` ${ageLabel}` : ""}!`
-    );
-  } else if (weather.condition === "sunny" && weather.temperature > 15) {
-    tips.push(
-      "☀️ Korkea UV-indeksi. Muista aurinkorasva ja lippis suojaksi."
-    );
-  }
-
-  if (tips.length === 0) {
-    tips.push(
-      `✅ Tänään on rauhallinen sääpäivä (${weather.temperature > 0 ? "+" : ""}${weather.temperature}°C, ${weather.description.toLowerCase()}). Normaalit kauden vaatteet riittävät hyvin.`
-    );
-  }
-
-  return tips;
-}
-
 export default function AiAnalysis({ weather, ageGroup }: AiAnalysisProps) {
+  const { t } = useLanguage();
   const [tips, setTips] = useState<string[]>([]);
   const [animating, setAnimating] = useState(false);
 
   useEffect(() => {
     setAnimating(true);
     const timer = setTimeout(() => {
-      setTips(generateAnalysis(weather, ageGroup));
+      const newTips: string[] = [];
+      const ageLabel = ageGroup ? t(`ai.ageLabel.${ageGroup}` as TranslationKey) : "";
+
+      if (weather.rainProbability > 40 || weather.afternoonRain) {
+        newTips.push(t("ai.rainTip"));
+      }
+
+      if (weather.windSpeed >= 7) {
+        newTips.push(t("ai.hardWindTip", {
+          speed: weather.windSpeed,
+          temp: `${weather.temperature > 0 ? "+" : ""}${weather.temperature}`,
+        }));
+      } else if (weather.windSpeed >= 4) {
+        newTips.push(t("ai.moderateWindTip", { speed: weather.windSpeed }));
+      }
+
+      const feelsLikeDiff = Math.abs(weather.temperature - weather.feelsLike);
+      if (feelsLikeDiff >= 4) {
+        newTips.push(t("ai.layeringTip", {
+          feelsLike: `${weather.feelsLike > 0 ? "+" : ""}${weather.feelsLike}`,
+          temp: `${weather.temperature > 0 ? "+" : ""}${weather.temperature}`,
+        }));
+      }
+
+      if (weather.uvi !== undefined && weather.uvi >= 3) {
+        newTips.push(t("ai.uvTip", { uvi: weather.uvi, age: ageLabel }));
+      } else if (weather.condition === "sunny" && weather.temperature > 15) {
+        newTips.push(t("ai.sunnyUvTip"));
+      }
+
+      if (newTips.length === 0) {
+        newTips.push(t("ai.calmDay", {
+          temp: `${weather.temperature > 0 ? "+" : ""}${weather.temperature}`,
+          desc: weather.description.toLowerCase(),
+        }));
+      }
+
+      setTips(newTips);
       setAnimating(false);
     }, 600);
     return () => clearTimeout(timer);
-  }, [weather.city, weather.temperature, weather.windSpeed, weather.rainProbability, ageGroup]);
+  }, [weather.city, weather.temperature, weather.windSpeed, weather.rainProbability, ageGroup, t]);
 
   return (
     <div className="rounded-lg border border-sky/20 bg-gradient-to-br from-sky/10 via-card to-accent/20 shadow-sm overflow-hidden">
@@ -88,11 +76,11 @@ export default function AiAnalysis({ weather, ageGroup }: AiAnalysisProps) {
               </div>
               <div className="flex flex-col items-start text-left">
                 <h2 className="text-sm font-display font-700 text-foreground uppercase tracking-wide">
-                  Säävahdin analyysi
+                  {t("ai.title")}
                 </h2>
                 {ageGroup && (
                   <span className="text-xs text-muted-foreground">
-                    Ikäryhmä: {ageGroup}
+                    {t("ai.ageGroup")}: {t(`age.${ageGroup}` as TranslationKey)}
                   </span>
                 )}
               </div>
@@ -103,7 +91,7 @@ export default function AiAnalysis({ weather, ageGroup }: AiAnalysisProps) {
               }`}
             >
               <RefreshCw className={`h-3 w-3 ${animating ? "animate-spin" : ""}`} />
-              <span className="hidden sm:inline">{animating ? "Analysoidaan..." : "Päivitetty"}</span>
+              <span className="hidden sm:inline">{animating ? t("ai.analyzing") : t("ai.updated")}</span>
             </div>
           </AccordionTrigger>
           <AccordionContent className="px-5 pb-5">

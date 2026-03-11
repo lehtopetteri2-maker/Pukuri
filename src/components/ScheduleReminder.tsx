@@ -1,4 +1,5 @@
 import { AgeGroup } from "@/lib/weatherData";
+import { useLanguage } from "@/lib/i18n";
 
 interface ScheduleReminderProps {
   ageGroup: AgeGroup;
@@ -8,6 +9,7 @@ interface ScheduleReminderProps {
 const STORAGE_KEY_PREFIX = "saavahti-viikko-ohjelma-";
 
 export default function ScheduleReminder({ ageGroup, onOpen }: ScheduleReminderProps) {
+  const { t } = useLanguage();
   const hasImage = !!localStorage.getItem(STORAGE_KEY_PREFIX + ageGroup);
   if (!hasImage) return null;
 
@@ -18,7 +20,7 @@ export default function ScheduleReminder({ ageGroup, onOpen }: ScheduleReminderP
     >
       <span className="text-lg">📋</span>
       <span className="text-sm font-display font-600 text-accent-foreground">
-        Tarkista päivän ohjelma kuvasta
+        {t("scheduleReminder.text")}
       </span>
     </button>
   );

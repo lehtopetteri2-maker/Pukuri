@@ -13,6 +13,7 @@ import ScheduleReminder from "@/components/ScheduleReminder";
 import AffiliateSection from "@/components/AffiliateSection";
 import UvAlert from "@/components/UvAlert";
 import Footer from "@/components/Footer";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { getClothingRecommendation, getSavedCity, saveCity, AgeGroup, WeatherData } from "@/lib/weatherData";
 import { fetchWeatherData, fetchWeatherByCoords, TomorrowData } from "@/lib/weatherApi";
 import { getCachedWeather, isCacheFresh, getCacheAgeMinutes, saveWeatherCache } from "@/lib/weatherCache";
@@ -20,6 +21,7 @@ import { getMockWeather } from "@/lib/weatherData";
 import FeedbackSection from "@/components/FeedbackSection";
 import { CloudSnow, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
+import { useLanguage } from "@/lib/i18n";
 
 function getInitialState(city: string) {
   const cached = getCachedWeather(city);
@@ -30,6 +32,7 @@ function getInitialState(city: string) {
 }
 
 const Index = () => {
+  const { t } = useLanguage();
   const savedCity = getSavedCity();
   const initial = getInitialState(savedCity);
 
@@ -52,16 +55,14 @@ const Index = () => {
     saveWeatherCache(data.current.city, data.current, data.tomorrow, data.fromApi);
     setCacheAge(0);
     if (!data.fromApi) {
-      toast.info("API ei ole vielä käytettävissä — näytetään testisäätiedot.");
+      toast.info(t("location.testData"));
     }
-  }, []);
+  }, [t]);
 
   const loadWeather = useCallback(async (cityName: string, force = false) => {
-    // Check cache first (unless forced)
     if (!force) {
       const cached = getCachedWeather(cityName);
       if (cached && isCacheFresh(cached)) {
-        console.log(`[Säävahti] Käytetään välimuistia (${getCacheAgeMinutes(cached)} min sitten)`);
         setWeather(cached.current);
         setTomorrow(cached.tomorrow);
         setCity(cached.city);
@@ -76,21 +77,20 @@ const Index = () => {
       const data = await fetchWeatherData(cityName);
       applyResult(data);
     } catch {
-      // If fetch fails, try to use stale cache
       const stale = getCachedWeather(cityName);
       if (stale) {
         setWeather(stale.current);
         setTomorrow(stale.tomorrow);
         setCacheAge(getCacheAgeMinutes(stale));
-        toast.warning("Ei yhteyttä, näytetään viimeisin tallennettu sää.");
+        toast.warning(t("location.noConnection"));
       } else {
-        setError("Hups! Säätietoja ei löytynyt. Tarkista kirjoitusasu.");
-        toast.error("Säätietoja ei löytynyt. Tarkista kirjoitusasu.");
+        setError(t("location.notFound"));
+        toast.error(t("location.notFound"));
       }
     } finally {
       setLoading(false);
     }
-  }, [applyResult]);
+  }, [applyResult, t]);
 
   const loadWeatherByCoords = useCallback(async (lat: number, lon: number) => {
     setLoading(true);
@@ -99,23 +99,21 @@ const Index = () => {
       const data = await fetchWeatherByCoords(lat, lon);
       applyResult(data);
     } catch {
-      toast.error("Sijaintiin perustuvia säätietoja ei löytynyt.");
+      toast.error(t("location.coordsNotFound"));
     } finally {
       setLoading(false);
     }
-  }, [applyResult]);
+  }, [applyResult, t]);
 
-  // Load weather on mount — only fetch if cache is stale
   useEffect(() => {
     const cached = getCachedWeather(savedCity);
     if (cached && isCacheFresh(cached)) {
-      console.log("[Säävahti] Käynnistys: välimuisti on tuore, ei haeta uutta");
+      // cache fresh
     } else {
       loadWeather(savedCity, true);
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Update cache age every minute
   useEffect(() => {
     const interval = setInterval(() => {
       const cached = getCachedWeather(city);
@@ -134,7 +132,7 @@ const Index = () => {
 
   const handleGeolocate = useCallback(() => {
     if (!navigator.geolocation) {
-      toast.error("Selaimesi ei tue paikannusta.");
+      toast.error(t("location.geoNotSupported"));
       return;
     }
     setLoading(true);
@@ -144,10 +142,10 @@ const Index = () => {
       },
       () => {
         setLoading(false);
-        toast.error("Paikannus epäonnistui. Tarkista selaimen asetukset.");
+        toast.error(t("location.geoError"));
       }
     );
-  }, [loadWeatherByCoords]);
+  }, [loadWeatherByCoords, t]);
 
   const scrollToSchedule = useCallback(() => {
     scheduleRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -160,10 +158,11 @@ const Index = () => {
           <div className="h-9 w-9 rounded-lg bg-primary flex items-center justify-center">
             <CloudSnow className="h-5 w-5 text-primary-foreground" />
           </div>
-          <div>
-            <h1 className="text-lg font-display font-800 text-foreground leading-tight">Säävahti</h1>
-            <p className="text-xs text-muted-foreground">Lasten pukeutumisavustaja</p>
+          <div className="flex-1">
+            <h1 className="text-lg font-display font-800 text-foreground leading-tight">{t("header.title")}</h1>
+            <p className="text-xs text-muted-foreground">{t("header.subtitle")}</p>
           </div>
+          <LanguageSwitcher />
         </div>
       </header>
 
@@ -203,7 +202,7 @@ const Index = () => {
 
         <div className="space-y-3">
           <h2 className="text-sm font-display font-700 text-muted-foreground uppercase tracking-wide">
-            Lapsen ikäryhmä
+            {t("age.title")}
           </h2>
           <AgeGroupToggle selected={ageGroup} onChange={setAgeGroup} />
         </div>
@@ -215,7 +214,7 @@ const Index = () => {
         <FeedbackSection />
 
         <p className="text-center text-xs text-muted-foreground">
-          💡 Muista tarkistaa tuulenpuuskat ennen ulkoilua!
+          {t("misc.windTip")}
         </p>
       </main>
 
