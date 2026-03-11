@@ -10,6 +10,7 @@ export interface WeatherData {
   afternoonRain: boolean;
   city: string;
   description: string;
+  uvi?: number;
 }
 
 export type AgeGroup = "vauva" | "taapero" | "leikki-ikäinen" | "koululainen";
@@ -185,6 +186,15 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
         description: "Sateen todennäköisyys yli 40 % — vedenpitävät varusteet mukaan!",
       });
     }
+  }
+
+  // UV-index add-on
+  if (weather.uvi !== undefined && weather.uvi >= 3) {
+    const hasHat = base.some((i) => i.name.includes("Lippalakki") || i.name.includes("Aurinkohattu") || i.name.includes("hattu"));
+    if (!hasHat) {
+      base.push({ name: "Lippis/Hattu", emoji: "🧢", description: "Korkea UV — suojaa pää auringolta" });
+    }
+    base.push({ name: "Aurinkolasit", emoji: "🕶️", description: "UV-suoja silmille" });
   }
 
   // Deduplicate by name

@@ -45,7 +45,11 @@ function generateAnalysis(weather: WeatherData, ageGroup?: AgeGroup): string[] {
     );
   }
 
-  if (weather.condition === "sunny" && weather.temperature > 15) {
+  if (weather.uvi !== undefined && weather.uvi >= 3) {
+    tips.push(
+      `☀️ UV-indeksi on korkea (${weather.uvi}). Aurinko paistaa voimakkaasti. Suojaa lapsen iho aurinkorasvalla, vaikka tuntuisi viileältä. Lippis ja aurinkolasit mukaan${ageLabel ? ` ${ageLabel}` : ""}!`
+    );
+  } else if (weather.condition === "sunny" && weather.temperature > 15) {
     tips.push(
       "☀️ Korkea UV-indeksi. Muista aurinkorasva ja lippis suojaksi."
     );
