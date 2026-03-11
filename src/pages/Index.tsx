@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import WeatherCard from "@/components/WeatherCard";
 import AgeGroupToggle from "@/components/AgeGroupToggle";
 import ClothingCard from "@/components/ClothingCard";
@@ -7,12 +7,15 @@ import DaycareChecklist from "@/components/DaycareChecklist";
 import NightAlert from "@/components/NightAlert";
 import LocationSearch from "@/components/LocationSearch";
 import TomorrowForecastCard from "@/components/TomorrowForecast";
+import WeeklySchedule from "@/components/WeeklySchedule";
+import ScheduleReminder from "@/components/ScheduleReminder";
 import { getMockWeather, getClothingRecommendation, getSavedCity, saveCity, AgeGroup } from "@/lib/weatherData";
 import { CloudSnow } from "lucide-react";
 
 const Index = () => {
   const [city, setCity] = useState(getSavedCity);
   const [ageGroup, setAgeGroup] = useState<AgeGroup>("leikki-ikäinen");
+  const scheduleRef = useRef<HTMLDivElement>(null);
 
   const weather = getMockWeather(city);
   const clothing = getClothingRecommendation(weather, ageGroup);
@@ -20,6 +23,10 @@ const Index = () => {
   const handleCityChange = useCallback((newCity: string) => {
     setCity(newCity);
     saveCity(newCity);
+  }, []);
+
+  const scrollToSchedule = useCallback(() => {
+    scheduleRef.current?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
   return (
@@ -39,6 +46,7 @@ const Index = () => {
       <main className="max-w-lg mx-auto px-4 py-6 space-y-5">
         <LocationSearch currentCity={city} onSelectCity={handleCityChange} />
         <MorningSummary weather={weather} />
+        <ScheduleReminder ageGroup={ageGroup} onOpen={scrollToSchedule} />
         <NightAlert weather={weather} />
         <WeatherCard weather={weather} />
         <TomorrowForecastCard weather={weather} ageGroup={ageGroup} />
@@ -52,6 +60,10 @@ const Index = () => {
 
         <ClothingCard key={`${city}-${ageGroup}`} items={clothing} />
         <DaycareChecklist ageGroup={ageGroup} />
+
+        <div ref={scheduleRef}>
+          <WeeklySchedule ageGroup={ageGroup} />
+        </div>
 
         <p className="text-center text-xs text-muted-foreground pb-4">
           💡 Muista tarkistaa tuulenpuuskat ennen ulkoilua!
