@@ -41,6 +41,7 @@ const Index = () => {
         <MorningSummary weather={weather} />
         <NightAlert weather={weather} />
         <WeatherCard weather={weather} />
+        <TomorrowForecastCard weather={weather} ageGroup={ageGroup} />
 
         <div className="space-y-3">
           <h2 className="text-sm font-display font-700 text-muted-foreground uppercase tracking-wide">
@@ -50,7 +51,6 @@ const Index = () => {
         </div>
 
         <ClothingCard key={`${city}-${ageGroup}`} items={clothing} />
-        <TomorrowForecastCard weather={weather} ageGroup={ageGroup} />
         <DaycareChecklist ageGroup={ageGroup} />
 
         <p className="text-center text-xs text-muted-foreground pb-4">
