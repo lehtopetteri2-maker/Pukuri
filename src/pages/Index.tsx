@@ -39,6 +39,9 @@ const Index = () => {
       setTomorrow(data.tomorrow);
       setCity(data.current.city);
       saveCity(data.current.city);
+      if (!data.fromApi) {
+        toast.info("API ei ole vielä käytettävissä — näytetään testisäätiedot.");
+      }
     } catch {
       setError("Hups! Säätietoja ei löytynyt. Tarkista kirjoitusasu.");
       toast.error("Säätietoja ei löytynyt. Tarkista kirjoitusasu.");
@@ -56,6 +59,9 @@ const Index = () => {
       setTomorrow(data.tomorrow);
       setCity(data.current.city);
       saveCity(data.current.city);
+      if (!data.fromApi) {
+        toast.info("API ei ole vielä käytettävissä — näytetään testisäätiedot.");
+      }
     } catch {
       setError("Sijaintiin perustuvia säätietoja ei löytynyt.");
       toast.error("Sijaintiin perustuvia säätietoja ei löytynyt.");
