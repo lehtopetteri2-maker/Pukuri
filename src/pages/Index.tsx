@@ -29,6 +29,7 @@ const Index = () => {
 
       {/* Content */}
       <main className="max-w-lg mx-auto px-4 py-6 space-y-5">
+        <MorningSummary weather={weather} />
         <WeatherCard weather={weather} />
 
         <div className="space-y-3">
