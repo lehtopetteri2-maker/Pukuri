@@ -1,28 +1,70 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { AgeGroup } from "@/lib/weatherData";
-import { Camera, ImagePlus, Maximize2, X, RefreshCw } from "lucide-react";
+import { Camera, ImagePlus, Maximize2, X, RefreshCw, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 interface WeeklyScheduleProps {
   ageGroup: AgeGroup;
 }
 
 const STORAGE_KEY_PREFIX = "saavahti-viikko-ohjelma-";
+const MAX_WIDTH = 1200;
 
 function getStoredImage(ageGroup: AgeGroup): string | null {
-  return localStorage.getItem(STORAGE_KEY_PREFIX + ageGroup);
+  try {
+    return localStorage.getItem(STORAGE_KEY_PREFIX + ageGroup);
+  } catch {
+    return null;
+  }
 }
 
 function storeImage(ageGroup: AgeGroup, dataUrl: string): void {
-  localStorage.setItem(STORAGE_KEY_PREFIX + ageGroup, dataUrl);
+  try {
+    localStorage.setItem(STORAGE_KEY_PREFIX + ageGroup, dataUrl);
+  } catch (error) {
+    console.error("Error storing image:", error);
+    throw error;
+  }
 }
 
 function removeImage(ageGroup: AgeGroup): void {
   localStorage.removeItem(STORAGE_KEY_PREFIX + ageGroup);
 }
 
+function compressImage(file: File, maxWidth: number): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return reject(new Error("Canvas context not available"));
+
+        let width = img.width;
+        let height = img.height;
+        if (width > maxWidth) {
+          height *= maxWidth / width;
+          width = maxWidth;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL("image/jpeg", 0.8));
+      };
+      img.onerror = reject;
+      img.src = event.target?.result as string;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
 export default function WeeklySchedule({ ageGroup }: WeeklyScheduleProps) {
   const [image, setImage] = useState<string | null>(() => getStoredImage(ageGroup));
   const [fullscreen, setFullscreen] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [scale, setScale] = useState(1);
   const [translate, setTranslate] = useState({ x: 0, y: 0 });
   const lastDistRef = useRef<number | null>(null);
@@ -42,17 +84,22 @@ export default function WeeklySchedule({ ageGroup }: WeeklyScheduleProps) {
   }, [fullscreen]);
 
   const handleFileChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
       if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        const dataUrl = reader.result as string;
-        storeImage(ageGroup, dataUrl);
-        setImage(dataUrl);
-      };
-      reader.readAsDataURL(file);
-      e.target.value = "";
+      setIsUploading(true);
+      try {
+        const compressed = await compressImage(file, MAX_WIDTH);
+        storeImage(ageGroup, compressed);
+        setImage(compressed);
+        toast.success("Kuva tallennettu!");
+      } catch (error) {
+        console.error("Image upload failed:", error);
+        toast.error("Hups! Kuva on liian suuri tai tallennus epäonnistui. Yritä pienemmällä kuvalla.");
+      } finally {
+        setIsUploading(false);
+        e.target.value = "";
+      }
     },
     [ageGroup],
   );
@@ -118,7 +165,14 @@ export default function WeeklySchedule({ ageGroup }: WeeklyScheduleProps) {
           Lisää kuva lukujärjestyksestä tai päiväkodin viikko-ohjelmasta
         </p>
 
-        {image ? (
+        {isUploading ? (
+          <div className="flex flex-col items-center justify-center gap-3 p-8 rounded-md border-2 border-dashed border-primary/30 bg-primary/5">
+            <Loader2 className="h-6 w-6 text-primary animate-spin" />
+            <span className="text-sm font-display font-600 text-muted-foreground">
+              Tallennetaan...
+            </span>
+          </div>
+        ) : image ? (
           <div className="space-y-3">
             {/* Thumbnail */}
             <div
@@ -138,7 +192,6 @@ export default function WeeklySchedule({ ageGroup }: WeeklyScheduleProps) {
               <span className="absolute bottom-2 right-2 text-[10px] bg-card/80 text-muted-foreground px-2 py-0.5 rounded-full backdrop-blur-sm">
                 Katso isona
               </span>
-              {/* Change photo icon overlay */}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -190,7 +243,6 @@ export default function WeeklySchedule({ ageGroup }: WeeklyScheduleProps) {
           ref={fileInputRef}
           type="file"
           accept="image/*"
-          capture="environment"
           onChange={handleFileChange}
           className="hidden"
         />
