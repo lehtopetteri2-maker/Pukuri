@@ -60,7 +60,7 @@ const Index = () => {
         <WeatherCard weather={weather} />
         <TomorrowForecastCard weather={weather} ageGroup={ageGroup} />
 
-        <AiAnalysis weather={weather} />
+        <AiAnalysis weather={weather} ageGroup={ageGroup} />
 
         <div className="space-y-3">
           <h2 className="text-sm font-display font-700 text-muted-foreground uppercase tracking-wide">
