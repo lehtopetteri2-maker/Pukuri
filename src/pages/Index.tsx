@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import WeatherCard from "@/components/WeatherCard";
 import AgeGroupToggle from "@/components/AgeGroupToggle";
 import ClothingCard from "@/components/ClothingCard";
@@ -12,22 +12,83 @@ import WeeklySchedule from "@/components/WeeklySchedule";
 import ScheduleReminder from "@/components/ScheduleReminder";
 import AffiliateSection from "@/components/AffiliateSection";
 import Footer from "@/components/Footer";
-import { getMockWeather, getClothingRecommendation, getSavedCity, saveCity, AgeGroup } from "@/lib/weatherData";
+import { getClothingRecommendation, getSavedCity, saveCity, AgeGroup, WeatherData } from "@/lib/weatherData";
+import { fetchWeatherData, fetchWeatherByCoords, TomorrowData } from "@/lib/weatherApi";
+import { getMockWeather } from "@/lib/weatherData";
 import FeedbackSection from "@/components/FeedbackSection";
-import { CloudSnow } from "lucide-react";
+import { CloudSnow, AlertCircle } from "lucide-react";
+import { toast } from "sonner";
 
 const Index = () => {
   const [city, setCity] = useState(getSavedCity);
   const [ageGroup, setAgeGroup] = useState<AgeGroup>("leikki-ikäinen");
+  const [weather, setWeather] = useState<WeatherData>(getMockWeather(city));
+  const [tomorrow, setTomorrow] = useState<TomorrowData | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const scheduleRef = useRef<HTMLDivElement>(null);
 
-  const weather = getMockWeather(city);
   const clothing = getClothingRecommendation(weather, ageGroup);
 
-  const handleCityChange = useCallback((newCity: string) => {
-    setCity(newCity);
-    saveCity(newCity);
+  const loadWeather = useCallback(async (cityName: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchWeatherData(cityName);
+      setWeather(data.current);
+      setTomorrow(data.tomorrow);
+      setCity(data.current.city);
+      saveCity(data.current.city);
+    } catch {
+      setError("Hups! Säätietoja ei löytynyt. Tarkista kirjoitusasu.");
+      toast.error("Säätietoja ei löytynyt. Tarkista kirjoitusasu.");
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  const loadWeatherByCoords = useCallback(async (lat: number, lon: number) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchWeatherByCoords(lat, lon);
+      setWeather(data.current);
+      setTomorrow(data.tomorrow);
+      setCity(data.current.city);
+      saveCity(data.current.city);
+    } catch {
+      setError("Sijaintiin perustuvia säätietoja ei löytynyt.");
+      toast.error("Sijaintiin perustuvia säätietoja ei löytynyt.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // Load weather on mount
+  useEffect(() => {
+    loadWeather(city);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleCityChange = useCallback((newCity: string) => {
+    loadWeather(newCity);
+  }, [loadWeather]);
+
+  const handleGeolocate = useCallback(() => {
+    if (!navigator.geolocation) {
+      toast.error("Selaimesi ei tue paikannusta.");
+      return;
+    }
+    setLoading(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        loadWeatherByCoords(pos.coords.latitude, pos.coords.longitude);
+      },
+      () => {
+        setLoading(false);
+        toast.error("Paikannus epäonnistui. Tarkista selaimen asetukset.");
+      }
+    );
+  }, [loadWeatherByCoords]);
 
   const scrollToSchedule = useCallback(() => {
     scheduleRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -48,7 +109,19 @@ const Index = () => {
       </header>
 
       <main className="max-w-lg mx-auto px-4 py-6 space-y-5">
-        <LocationSearch currentCity={city} onSelectCity={handleCityChange} />
+        <LocationSearch
+          currentCity={city}
+          onSelectCity={handleCityChange}
+          onGeolocate={handleGeolocate}
+          loading={loading}
+        />
+
+        {error && (
+          <div className="rounded-lg bg-destructive/10 border border-destructive/30 p-4 flex items-center gap-3 animate-fade-in">
+            <AlertCircle className="h-5 w-5 text-destructive shrink-0" />
+            <p className="text-sm text-destructive">{error}</p>
+          </div>
+        )}
 
         <div ref={scheduleRef}>
           <WeeklySchedule ageGroup={ageGroup} />
@@ -58,7 +131,7 @@ const Index = () => {
         <ScheduleReminder ageGroup={ageGroup} onOpen={scrollToSchedule} />
         <NightAlert weather={weather} />
         <WeatherCard weather={weather} />
-        <TomorrowForecastCard weather={weather} ageGroup={ageGroup} />
+        <TomorrowForecastCard weather={weather} ageGroup={ageGroup} tomorrow={tomorrow} />
 
         <AiAnalysis weather={weather} ageGroup={ageGroup} />
 
