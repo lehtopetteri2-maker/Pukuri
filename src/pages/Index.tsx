@@ -11,6 +11,7 @@ import TomorrowForecastCard from "@/components/TomorrowForecast";
 import WeeklySchedule from "@/components/WeeklySchedule";
 import ScheduleReminder from "@/components/ScheduleReminder";
 import AffiliateSection from "@/components/AffiliateSection";
+import UvAlert from "@/components/UvAlert";
 import Footer from "@/components/Footer";
 import { getClothingRecommendation, getSavedCity, saveCity, AgeGroup, WeatherData } from "@/lib/weatherData";
 import { fetchWeatherData, fetchWeatherByCoords, TomorrowData } from "@/lib/weatherApi";
