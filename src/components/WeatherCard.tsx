@@ -1,5 +1,6 @@
 import { WeatherData, getWeatherIcon } from "@/lib/weatherData";
 import { Droplets, Wind, MapPin, CloudRain, RefreshCw } from "lucide-react";
+import { useLanguage } from "@/lib/i18n";
 
 interface WeatherCardProps {
   weather: WeatherData;
@@ -9,19 +10,21 @@ interface WeatherCardProps {
 }
 
 export default function WeatherCard({ weather, cacheAge, onRefresh, loading }: WeatherCardProps) {
+  const { t } = useLanguage();
+
   const cacheLabel =
     cacheAge === null || cacheAge === undefined
       ? null
       : cacheAge < 1
-        ? "Juuri päivitetty"
-        : `Päivitetty ${cacheAge} min sitten`;
+        ? t("weather.justUpdated")
+        : t("weather.updatedAgo", { min: cacheAge });
 
   return (
     <div className="rounded-lg bg-card p-6 shadow-sm border border-border animate-fade-in">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2 text-muted-foreground">
           <MapPin className="h-4 w-4" />
-          <span className="text-sm font-medium">{weather.city}, Suomi</span>
+          <span className="text-sm font-medium">{weather.city}</span>
         </div>
         <div className="flex items-center gap-2">
           {cacheLabel && (
@@ -31,7 +34,7 @@ export default function WeatherCard({ weather, cacheAge, onRefresh, loading }: W
             <button
               onClick={onRefresh}
               disabled={loading}
-              title="Päivitä nyt"
+              title={t("weather.refreshNow")}
               className="p-1.5 rounded-md text-muted-foreground hover:text-primary hover:bg-muted transition-colors disabled:opacity-40"
             >
               <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
@@ -46,7 +49,7 @@ export default function WeatherCard({ weather, cacheAge, onRefresh, loading }: W
             {weather.temperature}°
           </div>
           <p className="text-sm text-muted-foreground mt-1">
-            Tuntuu kuin {weather.feelsLike}°
+            {t("weather.feelsLike")} {weather.feelsLike}°
           </p>
           <p className="text-sm text-foreground/80 mt-2 capitalize">{weather.description}</p>
         </div>
@@ -64,7 +67,7 @@ export default function WeatherCard({ weather, cacheAge, onRefresh, loading }: W
         </div>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <CloudRain className="h-4 w-4" />
-          <span>Sade {weather.rainProbability}%</span>
+          <span>{t("weather.rain")} {weather.rainProbability}%</span>
         </div>
       </div>
     </div>

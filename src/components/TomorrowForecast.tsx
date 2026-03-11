@@ -1,11 +1,8 @@
 import { WeatherData, AgeGroup, getWeatherIcon, getClothingRecommendation } from "@/lib/weatherData";
 import type { TomorrowData } from "@/lib/weatherApi";
-import {
-  getTomorrowForecast,
-  getTomorrowWarnings,
-  getTomorrowPrepItems,
-} from "@/lib/tomorrowWeather";
+import { getTomorrowForecast } from "@/lib/tomorrowWeather";
 import { AlertTriangle, Moon } from "lucide-react";
+import { useLanguage } from "@/lib/i18n";
 
 interface TomorrowForecastProps {
   weather: WeatherData;
@@ -14,7 +11,7 @@ interface TomorrowForecastProps {
 }
 
 export default function TomorrowForecastCard({ weather, ageGroup, tomorrow: apiTomorrow }: TomorrowForecastProps) {
-  // Use API data if available, otherwise fall back to mock
+  const { t } = useLanguage();
   const mockTomorrow = getTomorrowForecast(weather);
 
   const tempMin = apiTomorrow ? apiTomorrow.tempMin : mockTomorrow.tempMin;
@@ -22,7 +19,6 @@ export default function TomorrowForecastCard({ weather, ageGroup, tomorrow: apiT
   const rainProbability = apiTomorrow ? apiTomorrow.rainProbability : mockTomorrow.rainProbability;
   const condition = apiTomorrow ? apiTomorrow.condition : mockTomorrow.condition;
 
-  // Build a WeatherData for clothing recommendation
   const tomorrowWeather: WeatherData = apiTomorrow
     ? {
         temperature: apiTomorrow.avgTemp,
@@ -37,38 +33,38 @@ export default function TomorrowForecastCard({ weather, ageGroup, tomorrow: apiT
       }
     : mockTomorrow.weatherData;
 
-  const warnings = getTomorrowWarnings(weather, {
-    ...mockTomorrow,
-    weatherData: tomorrowWeather,
-    rainProbability,
-  });
+  // Warnings
+  const warnings: string[] = [];
+  if (tomorrowWeather.temperature < weather.temperature - 2) {
+    warnings.push(t("tomorrow.colderWarning"));
+  }
+  if (weather.rainProbability < 30 && rainProbability > 50) {
+    warnings.push(t("tomorrow.rainWarning"));
+  }
 
   const prepItems = getClothingRecommendation(tomorrowWeather, ageGroup).slice(0, 4);
 
   return (
     <div className="rounded-lg bg-night text-night-foreground p-6 shadow-md animate-fade-in">
-      {/* Header */}
       <div className="flex items-center gap-2 mb-4">
         <Moon className="h-4 w-4 text-night-muted" />
         <h2 className="text-sm font-display font-700 uppercase tracking-wide text-night-muted">
-          Huomisen sää — Ennuste
+          {t("tomorrow.title")}
         </h2>
       </div>
 
-      {/* Temp & condition */}
       <div className="flex items-center justify-between mb-4">
         <div>
           <div className="text-3xl font-display font-800 tracking-tight">
             {tempMin}° / {tempMax}°
           </div>
           <p className="text-sm text-night-muted mt-1">
-            Sateen todennäköisyys {rainProbability} %
+            {t("tomorrow.rainProb")} {rainProbability} %
           </p>
         </div>
         <span className="text-5xl">{getWeatherIcon(condition)}</span>
       </div>
 
-      {/* Warnings */}
       {warnings.length > 0 && (
         <div className="space-y-2 mb-4">
           {warnings.map((w, i) => (
@@ -83,11 +79,10 @@ export default function TomorrowForecastCard({ weather, ageGroup, tomorrow: apiT
         </div>
       )}
 
-      {/* Prep items */}
       {prepItems.length > 0 && (
         <div>
           <h3 className="text-xs font-display font-700 uppercase tracking-wide text-night-muted mb-2">
-            Valmistele huomiseksi — Poimi valmiiksi:
+            {t("tomorrow.prepTitle")}
           </h3>
           <div className="grid grid-cols-2 gap-2">
             {prepItems.map((item) => (

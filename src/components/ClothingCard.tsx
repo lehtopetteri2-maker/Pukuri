@@ -1,14 +1,17 @@
 import { ClothingItem } from "@/lib/weatherData";
+import { useLanguage } from "@/lib/i18n";
 
 interface ClothingCardProps {
   items: ClothingItem[];
 }
 
 export default function ClothingCard({ items }: ClothingCardProps) {
+  const { t } = useLanguage();
+
   return (
     <div className="rounded-lg bg-card p-6 shadow-sm border border-border animate-fade-in">
       <h2 className="text-lg font-display font-700 text-foreground mb-4">
-        🧥 Pukeutumissuositus
+        {t("clothing.title")}
       </h2>
       <div className="space-y-3">
         {items.map((item, i) => (
