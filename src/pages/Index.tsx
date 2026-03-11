@@ -67,14 +67,17 @@ const Index = () => {
         </div>
 
         <ClothingCard key={`${city}-${ageGroup}`} items={clothing} />
+        <AffiliateSection />
         <DaycareChecklist ageGroup={ageGroup} />
 
         <FeedbackSection />
 
-        <p className="text-center text-xs text-muted-foreground pb-4">
+        <p className="text-center text-xs text-muted-foreground">
           💡 Muista tarkistaa tuulenpuuskat ennen ulkoilua!
         </p>
       </main>
+
+      <Footer />
     </div>
   );
 };
