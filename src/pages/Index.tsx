@@ -6,6 +6,7 @@ import MorningSummary from "@/components/MorningSummary";
 import DaycareChecklist from "@/components/DaycareChecklist";
 import NightAlert from "@/components/NightAlert";
 import LocationSearch from "@/components/LocationSearch";
+import TomorrowForecastCard from "@/components/TomorrowForecast";
 import { getMockWeather, getClothingRecommendation, getSavedCity, saveCity, AgeGroup } from "@/lib/weatherData";
 import { CloudSnow } from "lucide-react";
 
