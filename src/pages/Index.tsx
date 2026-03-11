@@ -209,7 +209,7 @@ const Index = () => {
         </div>
 
         <ClothingCard key={`${city}-${ageGroup}`} items={clothing} />
-        <DaycareChecklist ageGroup={ageGroup} />
+        <DaycareChecklist ageGroup={ageGroup} weather={weather} />
         <AffiliateSection />
 
         <FeedbackSection />
