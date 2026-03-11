@@ -12,7 +12,7 @@ export interface WeatherData {
   description: string;
 }
 
-export type AgeGroup = "vauva" | "taapero" | "koululainen";
+export type AgeGroup = "vauva" | "taapero" | "leikki-ikäinen" | "koululainen";
 
 export interface ClothingItem {
   name: string;
@@ -122,6 +122,15 @@ const coldSnowGear: Record<AgeGroup, ClothingItem[]> = {
     { name: "Kauluri", emoji: "🧣", description: "Tuubihuivi tai kypärämyssy" },
     { name: "Pipo", emoji: "🎿", description: "Lämmin villapipo" },
   ],
+  "leikki-ikäinen": [
+    { name: "Toppahousut", emoji: "👖", description: "Talvihousut" },
+    { name: "Toppatakki", emoji: "🧥", description: "Talvitakki" },
+    { name: "Villakerrastot", emoji: "🧶", description: "Aluskerrastot" },
+    { name: "Talvisaappaat", emoji: "🥾", description: "Lämpimät saappaat" },
+    { name: "Hanskat", emoji: "🧤", description: "Sormikkaat tai lapaset" },
+    { name: "Pipo", emoji: "🎿", description: "Lämpimä pipo" },
+    { name: "Kauluri", emoji: "🧣", description: "Tuubihuivi" },
+  ],
   koululainen: [
     { name: "Toppahousut", emoji: "👖", description: "Talvihousut" },
     { name: "Toppatakki", emoji: "🧥", description: "Talvitakki" },
@@ -147,6 +156,13 @@ const mildRainGear: Record<AgeGroup, ClothingItem[]> = {
     { name: "Välikerrasto", emoji: "👕", description: "Fleece tai villainen" },
     { name: "Ohut pipo", emoji: "🧢", description: "Ohut pipo tai lippalakki" },
   ],
+  "leikki-ikäinen": [
+    { name: "Kurahousut", emoji: "👖", description: "Sadehousut" },
+    { name: "Sadetakki", emoji: "🌧️", description: "Vedenpitävä takki" },
+    { name: "Kumisaappaat", emoji: "🥾", description: "Kumisaappaat" },
+    { name: "Välikerrasto", emoji: "👕", description: "Fleece tai villainen" },
+    { name: "Ohut pipo", emoji: "🧢", description: "Ohut pipo" },
+  ],
   koululainen: [
     { name: "Kurahousut", emoji: "👖", description: "Sadehousut" },
     { name: "Sadetakki", emoji: "🌧️", description: "Vedenpitävä takki" },
@@ -166,6 +182,12 @@ const warmGear: Record<AgeGroup, ClothingItem[]> = {
     { name: "Shortsit", emoji: "🩳", description: "Kevyet shortsit" },
     { name: "Sandaalit", emoji: "👡", description: "Avoimet kengät" },
     { name: "Aurinkohattu", emoji: "👒", description: "Lippalakki tai hattu" },
+  ],
+  "leikki-ikäinen": [
+    { name: "T-paita", emoji: "👕", description: "Kevyt paita" },
+    { name: "Shortsit", emoji: "🩳", description: "Kevyet shortsit" },
+    { name: "Sandaalit", emoji: "👡", description: "Avoimet kengät" },
+    { name: "Lippalakki", emoji: "🧢", description: "Aurinkosuoja" },
   ],
   koululainen: [
     { name: "T-paita", emoji: "👕", description: "T-paita" },

@@ -11,7 +11,7 @@ import { CloudSnow } from "lucide-react";
 
 const Index = () => {
   const [city, setCity] = useState(getSavedCity);
-  const [ageGroup, setAgeGroup] = useState<AgeGroup>("taapero");
+  const [ageGroup, setAgeGroup] = useState<AgeGroup>("leikki-ikäinen");
 
   const weather = getMockWeather(city);
   const clothing = getClothingRecommendation(weather, ageGroup);
