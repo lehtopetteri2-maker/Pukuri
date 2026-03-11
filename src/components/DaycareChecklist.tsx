@@ -39,7 +39,16 @@ interface DaycareChecklistProps {
 
 export default function DaycareChecklist({ ageGroup }: DaycareChecklistProps) {
   const [checked, setChecked] = useState<Set<string>>(new Set());
-  const items = checklistByAge[ageGroup];
+
+  const isSummer = () => {
+    const month = new Date().getMonth(); // 0-indexed
+    return month >= 5 && month <= 7; // kesä (6), heinä (7), elo (8)
+  };
+
+  const baseItems = checklistByAge[ageGroup];
+  const items = isSummer()
+    ? [...baseItems, { id: "aurinkorasva", label: "Aurinkorasva", emoji: "☀️" }]
+    : baseItems;
   const allDone = items.every((i) => checked.has(i.id));
 
   const toggle = (id: string) => {
