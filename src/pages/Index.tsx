@@ -10,6 +10,7 @@ import TomorrowForecastCard from "@/components/TomorrowForecast";
 import WeeklySchedule from "@/components/WeeklySchedule";
 import ScheduleReminder from "@/components/ScheduleReminder";
 import { getMockWeather, getClothingRecommendation, getSavedCity, saveCity, AgeGroup } from "@/lib/weatherData";
+import FeedbackSection from "@/components/FeedbackSection";
 import { CloudSnow } from "lucide-react";
 
 const Index = () => {
@@ -65,6 +66,8 @@ const Index = () => {
 
         <ClothingCard key={`${city}-${ageGroup}`} items={clothing} />
         <DaycareChecklist ageGroup={ageGroup} />
+
+        <FeedbackSection />
 
         <p className="text-center text-xs text-muted-foreground pb-4">
           💡 Muista tarkistaa tuulenpuuskat ennen ulkoilua!
