@@ -1,23 +1,64 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { AgeGroup } from "@/lib/weatherData";
-import { Camera, ImagePlus, Maximize2, X, RefreshCw } from "lucide-react";
+import { Camera, ImagePlus, Maximize2, X, RefreshCw, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 interface WeeklyScheduleProps {
   ageGroup: AgeGroup;
 }
 
 const STORAGE_KEY_PREFIX = "saavahti-viikko-ohjelma-";
+const MAX_WIDTH = 1200;
 
 function getStoredImage(ageGroup: AgeGroup): string | null {
-  return localStorage.getItem(STORAGE_KEY_PREFIX + ageGroup);
+  try {
+    return localStorage.getItem(STORAGE_KEY_PREFIX + ageGroup);
+  } catch {
+    return null;
+  }
 }
 
 function storeImage(ageGroup: AgeGroup, dataUrl: string): void {
-  localStorage.setItem(STORAGE_KEY_PREFIX + ageGroup, dataUrl);
+  try {
+    localStorage.setItem(STORAGE_KEY_PREFIX + ageGroup, dataUrl);
+  } catch (error) {
+    console.error("Error storing image:", error);
+    throw error;
+  }
 }
 
 function removeImage(ageGroup: AgeGroup): void {
   localStorage.removeItem(STORAGE_KEY_PREFIX + ageGroup);
+}
+
+function compressImage(file: File, maxWidth: number): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return reject(new Error("Canvas context not available"));
+
+        let width = img.width;
+        let height = img.height;
+        if (width > maxWidth) {
+          height *= maxWidth / width;
+          width = maxWidth;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL("image/jpeg", 0.8));
+      };
+      img.onerror = reject;
+      img.src = event.target?.result as string;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
 }
 
 export default function WeeklySchedule({ ageGroup }: WeeklyScheduleProps) {
