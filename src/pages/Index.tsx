@@ -60,6 +60,8 @@ const Index = () => {
         <WeatherCard weather={weather} />
         <TomorrowForecastCard weather={weather} ageGroup={ageGroup} />
 
+        <AiAnalysis weather={weather} />
+
         <div className="space-y-3">
           <h2 className="text-sm font-display font-700 text-muted-foreground uppercase tracking-wide">
             Lapsen ikäryhmä
