@@ -67,6 +67,8 @@ const Index = () => {
         <ClothingCard key={`${city}-${ageGroup}`} items={clothing} />
         <DaycareChecklist ageGroup={ageGroup} />
 
+        <FeedbackSection />
+
         <p className="text-center text-xs text-muted-foreground pb-4">
           💡 Muista tarkistaa tuulenpuuskat ennen ulkoilua!
         </p>
