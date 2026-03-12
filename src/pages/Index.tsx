@@ -222,19 +222,14 @@ const Index = () => {
           <WeeklySchedule ageGroup={ageGroup} />
         </div>
 
-        <MorningSummary alerts={alerts} />
-        <ScheduleReminder ageGroup={ageGroup} onOpen={scrollToSchedule} />
-        <NightAlert weather={weather} alerts={alerts} />
         <WeatherCard
           weather={weather}
           cacheAge={cacheAge}
           onRefresh={handleForceRefresh}
           loading={loading}
         />
-        <TomorrowForecastCard weather={weather} ageGroup={ageGroup} tomorrow={tomorrow} />
 
-        <AiAnalysis weather={weather} ageGroup={ageGroup} />
-
+        <MorningSummary alerts={alerts} />
         <UvAlert weather={weather} />
 
         <div className="space-y-3">
@@ -245,6 +240,10 @@ const Index = () => {
         </div>
 
         <ClothingCard key={`${city}-${ageGroup}`} items={clothing} />
+
+        <TomorrowForecastCard weather={weather} ageGroup={ageGroup} tomorrow={tomorrow} />
+        <ScheduleReminder ageGroup={ageGroup} onOpen={scrollToSchedule} />
+        <NightAlert weather={weather} alerts={alerts} />
         <DaycareChecklist ageGroup={ageGroup} weather={weather} />
         <AffiliateSection />
 
