@@ -171,6 +171,10 @@ const translations = {
     fi: "Säävahti on riippumaton palvelu. Suositukset on valittu helpottamaan perheiden arkea ja ne voivat sisältää mainoslinkkejä. Linkkien kautta tehdyistä ostoksista saatava komissio käytetään sovelluksen ylläpitoon ja kehitykseen.",
     sv: "Väderpytten är en oberoende tjänst. Rekommendationerna är utvalda för att underlätta familjers vardag och kan innehålla annonslänkar. Provisionen från köp via länkarna används för appens underhåll och utveckling."
   },
+  "affiliate.adtraction": {
+    fi: "Tämä sivusto on vahvistettu Adtraction-verkostoon.",
+    sv: "Denna webbplats är verifierad i Adtraction-nätverket."
+  },
 
   // Feedback
   "feedback.title": { fi: "Anna palautetta", sv: "Ge feedback" },

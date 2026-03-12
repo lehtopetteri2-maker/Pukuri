@@ -51,8 +51,14 @@ export default function Footer() {
           </DialogHeader>
           <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
             <p>{t("footer.contactIntro")}</p>
-            <section><h3 className="font-display font-700 text-foreground mb-1">{t("footer.emailTitle")}</h3><p><a href="mailto:lehtopetteri@hotmail.com" className="text-primary underline hover:text-primary/80 transition-colors">lehtopetteri@hotmail.com</a></p></section>
-            <section><h3 className="font-display font-700 text-foreground mb-1">{t("footer.partnerTitle")}</h3><p>{t("footer.partnerDesc")}</p></section>
+            <section>
+              <h3 className="font-display font-700 text-foreground mb-1">{t("footer.emailTitle")}</h3>
+              <p><a href="mailto:lehtopetteri@hotmail.com" className="text-primary underline hover:text-primary/80 transition-colors">lehtopetteri@hotmail.com</a></p>
+            </section>
+            <section>
+              <h3 className="font-display font-700 text-foreground mb-1">{t("footer.partnerTitle")}</h3>
+              <p>{t("footer.partnerDesc")}</p>
+            </section>
           </div>
           <div className="pt-2"><Button variant="outline" className="w-full" onClick={() => setContactOpen(false)}>{t("footer.close")}</Button></div>
         </DialogContent>
