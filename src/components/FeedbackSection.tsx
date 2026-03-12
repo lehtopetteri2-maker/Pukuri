@@ -8,10 +8,9 @@ import { AgeGroup } from "@/lib/weatherData";
 import emailjs from "@emailjs/browser";
 
 // ─── EmailJS configuration ───────────────────────────────────
-// Replace these with your real EmailJS credentials:
-const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";   // e.g. "service_abc123"
-const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID"; // e.g. "template_xyz789"
-const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";    // e.g. "user_abcdef123456"
+const EMAILJS_SERVICE_ID = "service_xtocc7d";
+const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID"; // LISÄÄ TÄHÄN EMAILJS TEMPLATE ID
+const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";   // LISÄÄ TÄHÄN EMAILJS PUBLIC KEY
 // ──────────────────────────────────────────────────────────────
 
 interface FeedbackSectionProps {
@@ -31,22 +30,25 @@ const FeedbackSection = ({ ageGroup }: FeedbackSectionProps) => {
 
     setSending(true);
     try {
-      const ageLabel = ageGroup
+      const childInfo = ageGroup
         ? t(`age.${ageGroup}` as TranslationKey)
-        : "-";
+        : "Ei valittu";
 
-      await emailjs.send(
+      const templateParams = {
+        rating: `${"⭐".repeat(rating)} (${rating}/5)`,
+        message: text || "(ei tekstipalautetta)",
+        child_info: childInfo,
+        timestamp: new Date().toLocaleString("fi-FI"),
+      };
+
+      const response = await emailjs.send(
         EMAILJS_SERVICE_ID,
         EMAILJS_TEMPLATE_ID,
-        {
-          rating: `${"⭐".repeat(rating)} (${rating}/5)`,
-          message: text || "(ei tekstipalautetta)",
-          age_group: ageLabel,
-          timestamp: new Date().toLocaleString("fi-FI"),
-        },
+        templateParams,
         EMAILJS_PUBLIC_KEY
       );
 
+      console.log("EmailJS status:", response);
       setSubmitted(true);
       setRating(0);
       setText("");
@@ -54,7 +56,7 @@ const FeedbackSection = ({ ageGroup }: FeedbackSectionProps) => {
     } catch (err) {
       console.error("[Säävahti] EmailJS error:", err);
       import("sonner").then(({ toast }) =>
-        toast.error(t("feedback.error"))
+        toast.error("Lähetys epäonnistui. Tarkista asetukset tai kokeile myöhemmin uudelleen.")
       );
     } finally {
       setSending(false);
@@ -68,7 +70,7 @@ const FeedbackSection = ({ ageGroup }: FeedbackSectionProps) => {
       <Card className="border-primary/20 bg-primary/5">
         <CardContent className="p-6 text-center space-y-2">
           <MessageSquareHeart className="h-8 w-8 text-primary mx-auto" />
-          <p className="text-sm font-medium text-foreground">{t("feedback.thanks")}</p>
+          <p className="text-sm font-medium text-foreground">Kiitos palautteesta! Se auttaa kehittämään Säävahtia.</p>
           <p className="text-xs text-muted-foreground">{t("feedback.thanksDesc")}</p>
         </CardContent>
       </Card>
