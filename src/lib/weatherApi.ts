@@ -138,22 +138,20 @@ export async function fetchWeatherData(city: string): Promise<{
     tryFetchJson(`${BASE}/forecast?q=${encodeURIComponent(normalizedCity)}&units=metric&appid=${API_KEY}&lang=fi`, "Forecast"),
   ]);
 
-  // If API fails (401, network error etc.), use fallback mock data
-  if (!weatherJson) {
-    console.log(`[Säävahti] Käytetään testisäätietoja kaupungille: ${normalizedCity}`);
-    const mock = getMockWeather(normalizedCity);
-    return { current: mock, tomorrow: getMockTomorrow(mock), forecastList: [], fromApi: false };
+  if (!weatherJson || !forecastJson) {
+    throw new Error("Säädatan haku epäonnistui");
   }
 
   const current = parseCurrentWeather(weatherJson);
+  const forecast = parseForecast(forecastJson);
+  current.afternoonRain = forecast.afternoonRain;
 
-  if (forecastJson) {
-    const forecast = parseForecast(forecastJson);
-    current.afternoonRain = forecast.afternoonRain;
-    return { current, tomorrow: forecast.tomorrow, forecastList: forecastJson.list ?? [], fromApi: true };
-  }
-
-  return { current, tomorrow: getMockTomorrow(current), forecastList: [], fromApi: true };
+  return {
+    current,
+    tomorrow: forecast.tomorrow,
+    forecastList: forecastJson.list ?? [],
+    fromApi: true,
+  };
 }
 
 export async function fetchWeatherByCoords(lat: number, lon: number): Promise<{
