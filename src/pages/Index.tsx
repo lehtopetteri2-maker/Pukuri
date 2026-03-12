@@ -74,6 +74,7 @@ const Index = () => {
       if (cached && isCacheFresh(cached)) {
         setWeather(cached.current);
         setTomorrow(cached.tomorrow);
+        setForecastList(cached.forecastList ?? []);
         setCity(cached.city);
         setCacheAge(getCacheAgeMinutes(cached));
         return;
