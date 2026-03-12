@@ -176,10 +176,10 @@ const translations = {
   "feedback.title": { fi: "Anna palautetta", sv: "Ge feedback" },
   "feedback.placeholder": { fi: "Mitä voisimme parantaa?", sv: "Vad kan vi förbättra?" },
   "feedback.send": { fi: "Lähetä palaute", sv: "Skicka feedback" },
-  "feedback.thanks": { fi: "Kiitos palautteestasi!", sv: "Tack för din feedback!" },
+  "feedback.sending": { fi: "Lähetetään...", sv: "Skickar..." },
+  "feedback.thanks": { fi: "Kiitos! Palautteesi on vastaanotettu.", sv: "Tack! Din feedback har mottagits." },
   "feedback.thanksDesc": { fi: "Autat meitä tekemään Säävahdista paremman.", sv: "Du hjälper oss att göra Väderpytten bättre." },
-  "feedback.emailSubject": { fi: "Säävahti-sovelluksen palaute", sv: "Feedback om Väderpytten-appen" },
-  "feedback.emailBody": { fi: "Tähtiarvosana: {stars} ({rating}/5)\n\nPalaute:\n{text}", sv: "Stjärnbetyg: {stars} ({rating}/5)\n\nFeedback:\n{text}" },
+  "feedback.error": { fi: "Lähetys epäonnistui. Yritä uudelleen.", sv: "Sändningen misslyckades. Försök igen." },
 
   // Footer
   "footer.copyright": { fi: "© 2024 Säävahti", sv: "© 2024 Väderpytten" },
