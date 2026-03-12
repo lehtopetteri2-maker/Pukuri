@@ -1,6 +1,7 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { Search, MapPin, Loader2 } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
+import { cityWeather } from "@/lib/cityWeatherData";
 
 interface LocationSearchProps {
   currentCity: string;
@@ -8,6 +9,8 @@ interface LocationSearchProps {
   onGeolocate: () => void;
   loading: boolean;
 }
+
+const allCities = Object.keys(cityWeather);
 
 export default function LocationSearch({ currentCity, onSelectCity, onGeolocate, loading }: LocationSearchProps) {
   const { t } = useLanguage();
@@ -26,6 +29,14 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
+  const filtered = useMemo(() => {
+    if (!query.trim()) return [];
+    const q = query.trim().toLowerCase();
+    return allCities
+      .filter((c) => c.toLowerCase().startsWith(q))
+      .slice(0, 8);
+  }, [query]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (query.trim()) {
@@ -33,6 +44,12 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
       setQuery("");
       setOpen(false);
     }
+  };
+
+  const handleSelect = (city: string) => {
+    onSelectCity(city);
+    setQuery("");
+    setOpen(false);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -87,6 +104,22 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
             placeholder={t("location.searchPlaceholder")}
             className="w-full rounded-md border border-input bg-background pl-9 pr-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/30 transition-shadow"
           />
+
+          {open && filtered.length > 0 && (
+            <div className="absolute z-30 top-full left-0 right-0 mt-1 rounded-md border border-border bg-popover shadow-md overflow-hidden">
+              {filtered.map((city) => (
+                <button
+                  key={city}
+                  type="button"
+                  onClick={() => handleSelect(city)}
+                  className="w-full text-left px-3 py-2 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors flex items-center gap-2"
+                >
+                  <MapPin className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+                  {city}
+                </button>
+              ))}
+            </div>
+          )}
         </form>
       </div>
     </div>
