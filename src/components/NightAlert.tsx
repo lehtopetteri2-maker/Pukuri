@@ -48,7 +48,7 @@ export default function NightAlert({ weather, alerts }: NightAlertProps) {
   // Tomorrow rain
   if (alerts.tomorrowRain) {
     messages.push({
-      icon: <CloudRain className="h-4 w-4 text-blue-500 shrink-0 mt-0.5" />,
+      icon: <CloudRain className="h-4 w-4 text-primary shrink-0 mt-0.5" />,
       text: t("night.tomorrowRain"),
     });
   }

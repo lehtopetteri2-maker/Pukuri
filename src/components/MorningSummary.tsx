@@ -39,7 +39,7 @@ export default function MorningSummary({ alerts }: MorningSummaryProps) {
   // UV >= 3
   if (alerts.uvMax >= 3) {
     messages.push({
-      icon: <Sun className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" />,
+      icon: <Sun className="h-4 w-4 text-accent-foreground shrink-0 mt-0.5" />,
       text: t("morning.uvHigh"),
     });
   }
