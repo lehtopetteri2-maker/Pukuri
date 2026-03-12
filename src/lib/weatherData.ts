@@ -256,12 +256,6 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
   });
 }
 
-export function getMorningSummary(weather: WeatherData): string | null {
-  if (weather.afternoonRain) {
-    return "Tänään klo 14 sataa, muista kurahousut päiväkotiin!";
-  }
-  return null;
-}
 
 export function getWeatherIcon(condition: WeatherCondition): string {
   const icons: Record<WeatherCondition, string> = {

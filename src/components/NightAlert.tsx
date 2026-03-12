@@ -28,23 +28,6 @@ export default function NightAlert({ weather, alerts }: NightAlertProps) {
     });
   }
 
-  // Freezing tonight (original logic kept as fallback)
-  const tonightLow = weather.temperature - 7;
-  if (weather.temperature > 0 && tonightLow < 0) {
-    messages.push({
-      icon: <Thermometer className="h-4 w-4 text-destructive shrink-0 mt-0.5" />,
-      text: t("night.freezing", {
-        from: `${weather.temperature > 0 ? "+" : ""}${weather.temperature}`,
-        to: String(tonightLow),
-      }),
-    });
-  } else if (tonightLow < -15) {
-    messages.push({
-      icon: <Thermometer className="h-4 w-4 text-destructive shrink-0 mt-0.5" />,
-      text: t("night.hardFrost", { temp: String(tonightLow) }),
-    });
-  }
-
   // Tomorrow rain
   if (alerts.tomorrowRain) {
     messages.push({

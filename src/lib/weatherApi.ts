@@ -160,28 +160,29 @@ export async function fetchWeatherByCoords(lat: number, lon: number): Promise<{
   forecastList: any[];
   fromApi: boolean;
 }> {
-  const weatherJson = await tryFetchJson(
-    `${BASE}/weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}&lang=fi`,
-    "Coords"
-  );
+  const [weatherJson, forecastJson] = await Promise.all([
+    tryFetchJson(
+      `${BASE}/weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}&lang=fi`,
+      "Coords"
+    ),
+    tryFetchJson(
+      `${BASE}/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}&lang=fi`,
+      "Coords Forecast"
+    ),
+  ]);
 
-  if (!weatherJson) {
-    console.log("[Säävahti] GPS-haku epäonnistui, käytetään testisäätä");
-    const mock = getMockWeather("Helsinki");
-    return { current: mock, tomorrow: getMockTomorrow(mock), forecastList: [], fromApi: false };
+  if (!weatherJson || !forecastJson) {
+    throw new Error("Sijaintisäädatan haku epäonnistui");
   }
 
   const current = parseCurrentWeather(weatherJson);
-  const forecastJson = await tryFetchJson(
-    `${BASE}/forecast?q=${encodeURIComponent(current.city)}&units=metric&appid=${API_KEY}&lang=fi`,
-    "Coords Forecast"
-  );
+  const forecast = parseForecast(forecastJson);
+  current.afternoonRain = forecast.afternoonRain;
 
-  if (forecastJson) {
-    const forecast = parseForecast(forecastJson);
-    current.afternoonRain = forecast.afternoonRain;
-    return { current, tomorrow: forecast.tomorrow, forecastList: forecastJson.list ?? [], fromApi: true };
-  }
-
-  return { current, tomorrow: getMockTomorrow(current), forecastList: [], fromApi: true };
+  return {
+    current,
+    tomorrow: forecast.tomorrow,
+    forecastList: forecastJson.list ?? [],
+    fromApi: true,
+  };
 }
