@@ -41,6 +41,7 @@ const translations = {
   "morning.rainStart": { fi: "Sade alkaa klo {time}, muista kurahousut tänään!", sv: "Regn börjar kl {time}, kom ihåg regnbyxor idag!" },
   "morning.freezing": { fi: "Tie on liukas ja aamu on kylmä, valitse lämpimät kengät.", sv: "Vägen är hal och morgonen kall, välj varma skor." },
   "morning.uvHigh": { fi: "Aurinko on voimakasta tänään, muista aurinkorasva päiväkotiin.", sv: "Solen är stark idag, kom ihåg solskyddskräm till dagis." },
+  "morning.calmDay": { fi: "Sää on vakaa, nauti päivästä! Normaalit kauden vaatteet riittävät.", sv: "Vädret är stabilt, njut av dagen! Normala säsongskläder räcker." },
 
   // Night alert
   "night.title": { fi: "🌙 Ilta-muistutus", sv: "🌙 Kvällspåminnelse" },
