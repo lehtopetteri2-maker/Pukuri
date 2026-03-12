@@ -8,10 +8,9 @@ import { AgeGroup } from "@/lib/weatherData";
 import emailjs from "@emailjs/browser";
 
 // ─── EmailJS configuration ───────────────────────────────────
-// Replace these with your real EmailJS credentials:
-const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";   // e.g. "service_abc123"
-const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID"; // e.g. "template_xyz789"
-const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";    // e.g. "user_abcdef123456"
+const EMAILJS_SERVICE_ID = "service_xtocc7d";
+const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID"; // LISÄÄ TÄHÄN EMAILJS TEMPLATE ID
+const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";   // LISÄÄ TÄHÄN EMAILJS PUBLIC KEY
 // ──────────────────────────────────────────────────────────────
 
 interface FeedbackSectionProps {
