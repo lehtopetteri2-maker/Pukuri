@@ -30,22 +30,25 @@ const FeedbackSection = ({ ageGroup }: FeedbackSectionProps) => {
 
     setSending(true);
     try {
-      const ageLabel = ageGroup
+      const childInfo = ageGroup
         ? t(`age.${ageGroup}` as TranslationKey)
-        : "-";
+        : "Ei valittu";
 
-      await emailjs.send(
+      const templateParams = {
+        rating: `${"⭐".repeat(rating)} (${rating}/5)`,
+        message: text || "(ei tekstipalautetta)",
+        child_info: childInfo,
+        timestamp: new Date().toLocaleString("fi-FI"),
+      };
+
+      const response = await emailjs.send(
         EMAILJS_SERVICE_ID,
         EMAILJS_TEMPLATE_ID,
-        {
-          rating: `${"⭐".repeat(rating)} (${rating}/5)`,
-          message: text || "(ei tekstipalautetta)",
-          age_group: ageLabel,
-          timestamp: new Date().toLocaleString("fi-FI"),
-        },
+        templateParams,
         EMAILJS_PUBLIC_KEY
       );
 
+      console.log("EmailJS status:", response);
       setSubmitted(true);
       setRating(0);
       setText("");
@@ -53,7 +56,7 @@ const FeedbackSection = ({ ageGroup }: FeedbackSectionProps) => {
     } catch (err) {
       console.error("[Säävahti] EmailJS error:", err);
       import("sonner").then(({ toast }) =>
-        toast.error(t("feedback.error"))
+        toast.error("Lähetys epäonnistui. Tarkista asetukset tai kokeile myöhemmin uudelleen.")
       );
     } finally {
       setSending(false);
