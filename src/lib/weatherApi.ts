@@ -40,25 +40,6 @@ export interface TomorrowData {
   description: string;
 }
 
-/** Fallback mock tomorrow data derived from current weather */
-function getMockTomorrow(weather: WeatherData): TomorrowData {
-  let hash = 0;
-  for (let i = 0; i < weather.city.length; i++) {
-    hash = ((hash << 5) - hash + weather.city.charCodeAt(i)) | 0;
-  }
-  const shift = (hash % 7) - 3;
-  const avgTemp = weather.temperature + shift;
-  return {
-    tempMin: avgTemp - 2,
-    tempMax: avgTemp + 2,
-    condition: weather.condition,
-    rainProbability: Math.max(0, Math.min(100, weather.rainProbability + ((hash % 30) - 10))),
-    avgTemp,
-    avgWind: weather.windSpeed + ((hash % 3) - 1),
-    humidity: weather.humidity,
-    description: weather.description,
-  };
-}
 
 async function tryFetchJson(url: string, label: string): Promise<any | null> {
   try {
