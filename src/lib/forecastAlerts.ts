@@ -68,8 +68,12 @@ export function computeAlerts(
 
   let rainStartTime: string | null = null;
   let rainMm = 0;
+  let rainDuringDaycare = false;
   let morningFreezing = false;
   let morningMinTemp = 99;
+  let maxWindSpeed = 0;
+  let todayMaxTemp: number | null = null;
+  let todayHadRain = false;
 
   // Dynamic time window: from current hour to end of day
   const isAfterNoon = currentHour > 12;
