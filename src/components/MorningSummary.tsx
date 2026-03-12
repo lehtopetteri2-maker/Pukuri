@@ -1,5 +1,5 @@
 import { ForecastAlerts } from "@/lib/forecastAlerts";
-import { AlertTriangle, CloudRain, Thermometer, Sun, Loader2 } from "lucide-react";
+import { AlertTriangle, CloudRain, Thermometer, Sun, Loader2, CheckCircle2 } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 
 interface MorningSummaryProps {
@@ -20,7 +20,7 @@ export default function MorningSummary({ alerts }: MorningSummaryProps) {
 
   const messages: { icon: React.ReactNode; text: string }[] = [];
 
-  // Rain between 08-14
+  // Rain in remaining day
   if (alerts.rainStartTime) {
     messages.push({
       icon: <CloudRain className="h-4 w-4 text-primary shrink-0 mt-0.5" />,
@@ -44,7 +44,18 @@ export default function MorningSummary({ alerts }: MorningSummaryProps) {
     });
   }
 
-  if (messages.length === 0) return null;
+  // Default calm day message
+  if (messages.length === 0) {
+    return (
+      <div className="rounded-lg border border-border bg-card p-4 flex items-start gap-3 animate-fade-in">
+        <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+        <div>
+          <h3 className="text-sm font-display font-700 text-foreground">{t("morning.title")}</h3>
+          <p className="text-sm text-foreground/80 mt-1">{t("morning.calmDay")}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="rounded-lg border border-secondary bg-secondary/10 p-4 space-y-3 animate-fade-in">

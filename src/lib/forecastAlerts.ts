@@ -4,19 +4,19 @@
  */
 
 export interface ForecastAlerts {
-  // Morning (08–14): rain info
-  rainStartTime: string | null;       // e.g. "10:00"
-  rainMm: number;                     // total mm in 08-14 window
+  // Rain info for remaining day
+  rainStartTime: string | null;
+  rainMm: number;
   // Morning: freezing
-  morningFreezing: boolean;           // any temp < 0 between 06-09
+  morningFreezing: boolean;
   morningMinTemp: number;
   // UV
   uvMax: number;
   // Evening: tomorrow comparison
-  tomorrowMorningTemp: number | null; // temp around 07:00
+  tomorrowMorningTemp: number | null;
   tomorrowMaxTemp: number | null;
-  tomorrowColder: boolean;            // >5° colder than today
-  tomorrowRain: boolean;              // rain probability > 40%
+  tomorrowColder: boolean;
+  tomorrowRain: boolean;
   // Data loaded
   loaded: boolean;
 }
@@ -42,29 +42,40 @@ export function computeAlerts(
   uvi?: number
 ): ForecastAlerts {
   const now = new Date();
+  const currentHour = now.getHours();
   const todayDate = now.getDate();
   const tomorrowDate = new Date(now.getTime() + 86400000).getDate();
+
+  console.log("[Säävahti] Generoidaan suositukset...", {
+    forecastEntries: forecastList.length,
+    currentTemp,
+    uvi,
+    currentHour,
+  });
 
   let rainStartTime: string | null = null;
   let rainMm = 0;
   let morningFreezing = false;
   let morningMinTemp = 99;
 
-  // Scan today's entries
+  // Dynamic time window: from current hour to end of day
+  const rainWindowStart = Math.max(currentHour, 6);
+  const rainWindowEnd = 20; // until 20:00
+
   for (const entry of forecastList) {
     const d = new Date(entry.dt * 1000);
     if (d.getDate() !== todayDate) continue;
     const hour = d.getHours();
 
-    // Morning freezing check (06-09)
-    if (hour >= 6 && hour <= 9) {
+    // Morning freezing check (06-09) — only relevant if still morning
+    if (currentHour <= 10 && hour >= 6 && hour <= 9) {
       const temp = entry.main.temp;
       if (temp < morningMinTemp) morningMinTemp = temp;
       if (temp < 0) morningFreezing = true;
     }
 
-    // Rain between 08-14
-    if (hour >= 8 && hour <= 14) {
+    // Rain/snow in remaining day window
+    if (hour >= rainWindowStart && hour <= rainWindowEnd) {
       const rainAmount = entry.rain?.["3h"] ?? entry.rain?.["1h"] ?? 0;
       const snowAmount = entry.snow?.["3h"] ?? entry.snow?.["1h"] ?? 0;
       const totalPrecip = rainAmount + snowAmount;
@@ -73,6 +84,11 @@ export function computeAlerts(
         if (!rainStartTime) {
           rainStartTime = `${String(hour).padStart(2, "0")}:00`;
         }
+      }
+      // Also check pop (probability of precipitation)
+      const pop = entry.pop ?? 0;
+      if (pop > 0.5 && !rainStartTime) {
+        rainStartTime = `${String(hour).padStart(2, "0")}:00`;
       }
     }
   }
@@ -108,7 +124,7 @@ export function computeAlerts(
   const tomorrowColder =
     tomorrowMaxTemp !== null && currentTemp - tomorrowMaxTemp > 5;
 
-  return {
+  const alerts: ForecastAlerts = {
     rainStartTime,
     rainMm,
     morningFreezing,
@@ -120,4 +136,7 @@ export function computeAlerts(
     tomorrowRain,
     loaded: true,
   };
+
+  console.log("[Säävahti] Suositukset generoitu:", alerts);
+  return alerts;
 }
