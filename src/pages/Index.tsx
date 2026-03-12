@@ -23,12 +23,39 @@ import { CloudSnow, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import { useLanguage } from "@/lib/i18n";
 
+function createPlaceholderWeather(city: string): WeatherData {
+  return {
+    temperature: 0,
+    feelsLike: 0,
+    condition: "cloudy",
+    windSpeed: 0,
+    humidity: 0,
+    rainProbability: 0,
+    afternoonRain: false,
+    city,
+    description: "",
+  };
+}
+
 function getInitialState(city: string) {
   const cached = getCachedWeather(city);
-  if (cached) {
-    return { weather: cached.current, tomorrow: cached.tomorrow as TomorrowData | null, forecastList: cached.forecastList ?? [] as any[], cacheAge: getCacheAgeMinutes(cached) };
+  if (cached && Array.isArray(cached.forecastList)) {
+    return {
+      weather: cached.current,
+      tomorrow: cached.tomorrow as TomorrowData | null,
+      forecastList: cached.forecastList,
+      cacheAge: getCacheAgeMinutes(cached),
+      hasRealData: true,
+    };
   }
-  return { weather: getMockWeather(city), tomorrow: null as TomorrowData | null, forecastList: [] as any[], cacheAge: null as number | null };
+
+  return {
+    weather: createPlaceholderWeather(city),
+    tomorrow: null as TomorrowData | null,
+    forecastList: [] as any[],
+    cacheAge: null as number | null,
+    hasRealData: false,
+  };
 }
 
 const Index = () => {
