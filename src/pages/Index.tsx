@@ -41,7 +41,7 @@ const Index = () => {
   const [ageGroup, setAgeGroup] = useState<AgeGroup>("leikki-ikäinen");
   const [weather, setWeather] = useState<WeatherData>(initial.weather);
   const [tomorrow, setTomorrow] = useState<TomorrowData | null>(initial.tomorrow);
-  const [forecastList, setForecastList] = useState<any[]>([]);
+  const [forecastList, setForecastList] = useState<any[]>(initial.forecastList);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [cacheAge, setCacheAge] = useState<number | null>(initial.cacheAge);
