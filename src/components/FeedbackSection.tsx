@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Star, Send, MessageSquareHeart, Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,8 +9,8 @@ import emailjs from "@emailjs/browser";
 
 // ─── EmailJS configuration ───────────────────────────────────
 const EMAILJS_SERVICE_ID = "service_xtocc7d";
-const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID"; // LISÄÄ TÄHÄN EMAILJS TEMPLATE ID
-const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";   // LISÄÄ TÄHÄN EMAILJS PUBLIC KEY
+const EMAILJS_TEMPLATE_ID = "template_cewm9fd";
+const EMAILJS_PUBLIC_KEY = "h0dKeSIzygs76pRKA";
 // ──────────────────────────────────────────────────────────────
 
 interface FeedbackSectionProps {
@@ -25,27 +25,29 @@ const FeedbackSection = ({ ageGroup }: FeedbackSectionProps) => {
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
 
+  useEffect(() => {
+    emailjs.init(EMAILJS_PUBLIC_KEY);
+  }, []);
+
   const handleSend = async () => {
     if (rating === 0) return;
 
     setSending(true);
     try {
-      const childInfo = ageGroup
-        ? t(`age.${ageGroup}` as TranslationKey)
-        : "Ei valittu";
-
       const templateParams = {
         rating: `${"⭐".repeat(rating)} (${rating}/5)`,
         message: text || "(ei tekstipalautetta)",
-        child_info: childInfo,
+        child_name: "(ei annettu)",
+        child_age_group: ageGroup
+          ? t(`age.${ageGroup}` as TranslationKey)
+          : "Ei valittu",
         timestamp: new Date().toLocaleString("fi-FI"),
       };
 
       const response = await emailjs.send(
         EMAILJS_SERVICE_ID,
         EMAILJS_TEMPLATE_ID,
-        templateParams,
-        EMAILJS_PUBLIC_KEY
+        templateParams
       );
 
       console.log("EmailJS status:", response);
@@ -56,7 +58,9 @@ const FeedbackSection = ({ ageGroup }: FeedbackSectionProps) => {
     } catch (err) {
       console.error("[Säävahti] EmailJS error:", err);
       import("sonner").then(({ toast }) =>
-        toast.error("Lähetys epäonnistui. Tarkista asetukset tai kokeile myöhemmin uudelleen.")
+        toast.error(
+          "Lähetys epäonnistui. Tarkista yhteys tai yritä myöhemmin uudelleen."
+        )
       );
     } finally {
       setSending(false);
