@@ -1,6 +1,6 @@
 import { ForecastAlerts } from "@/lib/forecastAlerts";
 import { WeatherData } from "@/lib/weatherData";
-import { Thermometer, CloudRain } from "lucide-react";
+import { Thermometer, CloudRain, Wind, Droplets } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 
 interface NightAlertProps {
@@ -19,10 +19,23 @@ export default function NightAlert({ weather, alerts }: NightAlertProps) {
 
   // Tomorrow significantly colder
   if (alerts.tomorrowColder && alerts.tomorrowMaxTemp !== null) {
+    const todayTemp = alerts.todayMaxTemp ?? weather.temperature;
     messages.push({
       icon: <Thermometer className="h-4 w-4 text-destructive shrink-0 mt-0.5" />,
       text: t("night.tomorrowColder", {
-        today: String(weather.temperature),
+        today: String(todayTemp),
+        tomorrow: String(alerts.tomorrowMaxTemp),
+      }),
+    });
+  }
+
+  // Tomorrow significantly warmer
+  if (alerts.tomorrowWarmer && alerts.tomorrowMaxTemp !== null) {
+    const todayTemp = alerts.todayMaxTemp ?? weather.temperature;
+    messages.push({
+      icon: <Thermometer className="h-4 w-4 text-primary shrink-0 mt-0.5" />,
+      text: t("night.tomorrowWarmer", {
+        today: String(todayTemp),
         tomorrow: String(alerts.tomorrowMaxTemp),
       }),
     });
@@ -33,6 +46,14 @@ export default function NightAlert({ weather, alerts }: NightAlertProps) {
     messages.push({
       icon: <CloudRain className="h-4 w-4 text-primary shrink-0 mt-0.5" />,
       text: t("night.tomorrowRain"),
+    });
+  }
+
+  // Dry wet gear reminder if today had rain
+  if (alerts.todayHadRain) {
+    messages.push({
+      icon: <Droplets className="h-4 w-4 text-primary shrink-0 mt-0.5" />,
+      text: t("night.dryGear"),
     });
   }
 
