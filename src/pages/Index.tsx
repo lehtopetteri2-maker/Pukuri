@@ -68,15 +68,19 @@ const Index = () => {
   const [weather, setWeather] = useState<WeatherData>(initial.weather);
   const [tomorrow, setTomorrow] = useState<TomorrowData | null>(initial.tomorrow);
   const [forecastList, setForecastList] = useState<any[]>(initial.forecastList);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(!initial.hasRealData);
   const [error, setError] = useState<string | null>(null);
   const [cacheAge, setCacheAge] = useState<number | null>(initial.cacheAge);
   const scheduleRef = useRef<HTMLDivElement>(null);
 
   const alerts = useMemo(() => {
-    if (forecastList.length === 0) return emptyAlerts();
+    if (loading && forecastList.length === 0) return emptyAlerts();
+
+    console.log("Säädata saatu:", weather);
+    console.log("Generoidaan tekstit...");
+
     return computeAlerts(forecastList, weather.temperature, weather.uvi);
-  }, [forecastList, weather.temperature, weather.uvi]);
+  }, [weather, forecastList, loading]);
 
   const clothing = getClothingRecommendation(weather, ageGroup);
 
