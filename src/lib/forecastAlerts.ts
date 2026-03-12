@@ -32,13 +32,18 @@ export function emptyAlerts(): ForecastAlerts {
   return {
     rainStartTime: null,
     rainMm: 0,
+    rainDuringDaycare: false,
     morningFreezing: false,
     morningMinTemp: 0,
+    maxWindSpeed: 0,
     uvMax: 0,
+    todayMaxTemp: null,
     tomorrowMorningTemp: null,
     tomorrowMaxTemp: null,
     tomorrowColder: false,
+    tomorrowWarmer: false,
     tomorrowRain: false,
+    todayHadRain: false,
     loaded: false,
   };
 }
