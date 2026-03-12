@@ -3,6 +3,13 @@ import { Button } from "@/components/ui/button";
 import { ExternalLink, Snowflake, Heart } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 
+// ─── Adtraction Affiliate Links ──────────────────────────────
+// Replace these with your real Adtraction tracking links:
+const REIMA_AFFILIATE_URL = "https://www.reima.com/fi";      // TODO: Replace with Adtraction tracking URL
+const LINDEX_AFFILIATE_URL = "https://www.lindex.com/fi/";   // TODO: Replace with Adtraction tracking URL
+const ADTRACTION_CHANNEL_ID = "";  // TODO: Add your Adtraction channel ID here
+// ──────────────────────────────────────────────────────────────
+
 export default function AffiliateSection() {
   const { t } = useLanguage();
 
@@ -12,6 +19,7 @@ export default function AffiliateSection() {
       icon: <Snowflake className="h-5 w-5 text-primary" />,
       description: t("affiliate.reima.desc"),
       cta: t("affiliate.reima.cta"),
+      url: REIMA_AFFILIATE_URL,
       accent: "from-primary/8 to-secondary/10 border-primary/15 hover:border-primary/30",
     },
     {
@@ -19,6 +27,7 @@ export default function AffiliateSection() {
       icon: <Heart className="h-5 w-5 text-primary" />,
       description: t("affiliate.lindex.desc"),
       cta: t("affiliate.lindex.cta"),
+      url: LINDEX_AFFILIATE_URL,
       accent: "from-secondary/10 to-accent/15 border-secondary/20 hover:border-secondary/40",
     },
   ];
@@ -47,10 +56,12 @@ export default function AffiliateSection() {
             <Button
               variant="outline"
               className="w-full justify-between bg-card/80 hover:bg-card text-foreground"
-              onClick={() => console.log(`Affiliate: ${brand.name}`)}
+              asChild
             >
-              <span className="text-sm">{brand.cta}</span>
-              <ExternalLink className="h-3.5 w-3.5 opacity-50" />
+              <a href={brand.url} target="_blank" rel="noopener noreferrer">
+                <span className="text-sm">{brand.cta}</span>
+                <ExternalLink className="h-3.5 w-3.5 opacity-50" />
+              </a>
             </Button>
           </Card>
         ))}
