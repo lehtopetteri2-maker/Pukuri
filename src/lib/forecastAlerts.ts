@@ -102,6 +102,7 @@ export function computeAlerts(
   let tomorrowRain = false;
 
   for (const entry of forecastList) {
+    const d = new Date(entry.dt * 1000);
     const entryKey = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
     if (entryKey !== tomorrowKey) continue;
     const hour = d.getHours();
