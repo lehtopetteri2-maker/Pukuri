@@ -1,5 +1,4 @@
 import type { WeatherData, WeatherCondition } from "./weatherData";
-import { getMockWeather } from "./weatherData";
 
 const API_KEY = "247aa2ee8cccf0e1e53ea7ab0aeb4e7d";
 const BASE = "https://api.openweathermap.org/data/2.5";

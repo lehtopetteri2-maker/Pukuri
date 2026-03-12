@@ -43,8 +43,9 @@ export function computeAlerts(
 ): ForecastAlerts {
   const now = new Date();
   const currentHour = now.getHours();
-  const todayDate = now.getDate();
-  const tomorrowDate = new Date(now.getTime() + 86400000).getDate();
+  const todayKey = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+  const tomorrowDateObj = new Date(now.getTime() + 86400000);
+  const tomorrowKey = `${tomorrowDateObj.getFullYear()}-${tomorrowDateObj.getMonth() + 1}-${tomorrowDateObj.getDate()}`;
 
   console.log("[Säävahti] Generoidaan suositukset...", {
     forecastEntries: forecastList.length,

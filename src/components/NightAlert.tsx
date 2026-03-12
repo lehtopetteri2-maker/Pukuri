@@ -1,6 +1,6 @@
 import { ForecastAlerts } from "@/lib/forecastAlerts";
 import { WeatherData } from "@/lib/weatherData";
-import { Thermometer, CloudRain, Loader2 } from "lucide-react";
+import { Thermometer, CloudRain } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 
 interface NightAlertProps {
