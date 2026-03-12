@@ -174,6 +174,7 @@ export async function fetchWeatherData(city: string): Promise<{
 export async function fetchWeatherByCoords(lat: number, lon: number): Promise<{
   current: WeatherData;
   tomorrow: TomorrowData;
+  forecastList: any[];
   fromApi: boolean;
 }> {
   const weatherJson = await tryFetchJson(
@@ -184,7 +185,7 @@ export async function fetchWeatherByCoords(lat: number, lon: number): Promise<{
   if (!weatherJson) {
     console.log("[Säävahti] GPS-haku epäonnistui, käytetään testisäätä");
     const mock = getMockWeather("Helsinki");
-    return { current: mock, tomorrow: getMockTomorrow(mock), fromApi: false };
+    return { current: mock, tomorrow: getMockTomorrow(mock), forecastList: [], fromApi: false };
   }
 
   const current = parseCurrentWeather(weatherJson);
@@ -196,8 +197,8 @@ export async function fetchWeatherByCoords(lat: number, lon: number): Promise<{
   if (forecastJson) {
     const forecast = parseForecast(forecastJson);
     current.afternoonRain = forecast.afternoonRain;
-    return { current, tomorrow: forecast.tomorrow, fromApi: true };
+    return { current, tomorrow: forecast.tomorrow, forecastList: forecastJson.list ?? [], fromApi: true };
   }
 
-  return { current, tomorrow: getMockTomorrow(current), fromApi: true };
+  return { current, tomorrow: getMockTomorrow(current), forecastList: [], fromApi: true };
 }
