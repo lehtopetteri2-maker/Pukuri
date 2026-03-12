@@ -27,9 +27,9 @@ import { useLanguage } from "@/lib/i18n";
 function getInitialState(city: string) {
   const cached = getCachedWeather(city);
   if (cached) {
-    return { weather: cached.current, tomorrow: cached.tomorrow as TomorrowData | null, cacheAge: getCacheAgeMinutes(cached) };
+    return { weather: cached.current, tomorrow: cached.tomorrow as TomorrowData | null, forecastList: cached.forecastList ?? [] as any[], cacheAge: getCacheAgeMinutes(cached) };
   }
-  return { weather: getMockWeather(city), tomorrow: null as TomorrowData | null, cacheAge: null as number | null };
+  return { weather: getMockWeather(city), tomorrow: null as TomorrowData | null, forecastList: [] as any[], cacheAge: null as number | null };
 }
 
 const Index = () => {
