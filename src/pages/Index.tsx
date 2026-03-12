@@ -60,7 +60,8 @@ const Index = () => {
     setForecastList(data.forecastList);
     setCity(data.current.city);
     saveCity(data.current.city);
-    saveWeatherCache(data.current.city, data.current, data.tomorrow, data.fromApi);
+    saveWeatherCache(data.current.city, data.current, data.tomorrow, data.forecastList, data.fromApi);
+    console.log("[Säävahti] Säädata saatu:", { city: data.current.city, temp: data.current.temperature, forecastEntries: data.forecastList.length });
     setCacheAge(0);
     if (!data.fromApi) {
       toast.info(t("location.testData"));
