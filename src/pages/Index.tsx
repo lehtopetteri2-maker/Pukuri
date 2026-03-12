@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect, useMemo } from "react";
 import WeatherCard from "@/components/WeatherCard";
 import AgeGroupToggle from "@/components/AgeGroupToggle";
 import ClothingCard from "@/components/ClothingCard";
@@ -18,6 +18,7 @@ import { getClothingRecommendation, getSavedCity, saveCity, AgeGroup, WeatherDat
 import { fetchWeatherData, fetchWeatherByCoords, TomorrowData } from "@/lib/weatherApi";
 import { getCachedWeather, isCacheFresh, getCacheAgeMinutes, saveWeatherCache } from "@/lib/weatherCache";
 import { getMockWeather } from "@/lib/weatherData";
+import { ForecastAlerts, emptyAlerts, computeAlerts } from "@/lib/forecastAlerts";
 import FeedbackSection from "@/components/FeedbackSection";
 import { CloudSnow, AlertCircle } from "lucide-react";
 import { toast } from "sonner";

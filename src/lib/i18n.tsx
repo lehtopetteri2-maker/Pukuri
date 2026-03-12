@@ -37,12 +37,17 @@ const translations = {
 
   // Morning summary
   "morning.title": { fi: "☀️ Aamuyhteenveto", sv: "☀️ Morgonsammanfattning" },
-  "morning.afternoonRain": { fi: "Tänään klo 14 sataa, muista kurahousut päiväkotiin!", sv: "Det regnar idag kl 14, kom ihåg regnbyxor till dagis!" },
+  "morning.loading": { fi: "Haetaan päivän suosituksia...", sv: "Hämtar dagens rekommendationer..." },
+  "morning.rainStart": { fi: "Sade alkaa klo {time}, muista kurahousut tänään!", sv: "Regn börjar kl {time}, kom ihåg regnbyxor idag!" },
+  "morning.freezing": { fi: "Tie on liukas ja aamu on kylmä, valitse lämpimät kengät.", sv: "Vägen är hal och morgonen kall, välj varma skor." },
+  "morning.uvHigh": { fi: "Aurinko on voimakasta tänään, muista aurinkorasva päiväkotiin.", sv: "Solen är stark idag, kom ihåg solskyddskräm till dagis." },
 
   // Night alert
   "night.title": { fi: "🌙 Ilta-muistutus", sv: "🌙 Kvällspåminnelse" },
   "night.freezing": { fi: "Huomiseksi pakastuu ({from}° → {to}°), etsi toppahousut valmiiksi!", sv: "Det fryser i morgon ({from}° → {to}°), plocka fram täckbyxor!" },
   "night.hardFrost": { fi: "Yöllä kireä pakkanen ({temp}°), jätä vaatteet eteiseen valmiiksi!", sv: "Hård frost i natt ({temp}°), lägg kläderna i hallen!" },
+  "night.tomorrowColder": { fi: "Huomiseksi kylmenee huomattavasti ({today}° → {tomorrow}°)! Etsi paksummat vaatteet valmiiksi.", sv: "Det blir betydligt kallare i morgon ({today}° → {tomorrow}°)! Plocka fram varmare kläder." },
+  "night.tomorrowRain": { fi: "Huomenna tarvitaan kuravarusteita, tarkista että ne ovat repussa.", sv: "I morgon behövs regnutrustning, kontrollera att den finns i ryggsäcken." },
 
   // Age groups
   "age.title": { fi: "Lapsen ikäryhmä", sv: "Barnets åldersgrupp" },
