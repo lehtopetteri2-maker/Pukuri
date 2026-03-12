@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect, useMemo } from "react";
 import WeatherCard from "@/components/WeatherCard";
 import AgeGroupToggle from "@/components/AgeGroupToggle";
 import ClothingCard from "@/components/ClothingCard";
@@ -18,6 +18,7 @@ import { getClothingRecommendation, getSavedCity, saveCity, AgeGroup, WeatherDat
 import { fetchWeatherData, fetchWeatherByCoords, TomorrowData } from "@/lib/weatherApi";
 import { getCachedWeather, isCacheFresh, getCacheAgeMinutes, saveWeatherCache } from "@/lib/weatherCache";
 import { getMockWeather } from "@/lib/weatherData";
+import { ForecastAlerts, emptyAlerts, computeAlerts } from "@/lib/forecastAlerts";
 import FeedbackSection from "@/components/FeedbackSection";
 import { CloudSnow, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
@@ -40,16 +41,23 @@ const Index = () => {
   const [ageGroup, setAgeGroup] = useState<AgeGroup>("leikki-ikäinen");
   const [weather, setWeather] = useState<WeatherData>(initial.weather);
   const [tomorrow, setTomorrow] = useState<TomorrowData | null>(initial.tomorrow);
+  const [forecastList, setForecastList] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [cacheAge, setCacheAge] = useState<number | null>(initial.cacheAge);
   const scheduleRef = useRef<HTMLDivElement>(null);
 
+  const alerts = useMemo(() => {
+    if (forecastList.length === 0) return emptyAlerts();
+    return computeAlerts(forecastList, weather.temperature, weather.uvi);
+  }, [forecastList, weather.temperature, weather.uvi]);
+
   const clothing = getClothingRecommendation(weather, ageGroup);
 
-  const applyResult = useCallback((data: { current: WeatherData; tomorrow: TomorrowData; fromApi: boolean }) => {
+  const applyResult = useCallback((data: { current: WeatherData; tomorrow: TomorrowData; forecastList: any[]; fromApi: boolean }) => {
     setWeather(data.current);
     setTomorrow(data.tomorrow);
+    setForecastList(data.forecastList);
     setCity(data.current.city);
     saveCity(data.current.city);
     saveWeatherCache(data.current.city, data.current, data.tomorrow, data.fromApi);
@@ -185,9 +193,9 @@ const Index = () => {
           <WeeklySchedule ageGroup={ageGroup} />
         </div>
 
-        <MorningSummary weather={weather} />
+        <MorningSummary alerts={alerts} />
         <ScheduleReminder ageGroup={ageGroup} onOpen={scrollToSchedule} />
-        <NightAlert weather={weather} />
+        <NightAlert weather={weather} alerts={alerts} />
         <WeatherCard
           weather={weather}
           cacheAge={cacheAge}
