@@ -65,6 +65,7 @@ export function computeAlerts(
   const rainWindowEnd = isAfterNoon ? 20 : 14;
 
   for (const entry of forecastList) {
+    const d = new Date(entry.dt * 1000);
     const entryKey = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
     if (entryKey !== todayKey) continue;
     const hour = d.getHours();
