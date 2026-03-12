@@ -7,16 +7,23 @@ export interface ForecastAlerts {
   // Rain info for remaining day
   rainStartTime: string | null;
   rainMm: number;
+  rainDuringDaycare: boolean; // rain between 10-16
   // Morning: freezing
   morningFreezing: boolean;
   morningMinTemp: number;
+  // Wind
+  maxWindSpeed: number;
   // UV
   uvMax: number;
+  // Today max temp
+  todayMaxTemp: number | null;
   // Evening: tomorrow comparison
   tomorrowMorningTemp: number | null;
   tomorrowMaxTemp: number | null;
   tomorrowColder: boolean;
+  tomorrowWarmer: boolean;
   tomorrowRain: boolean;
+  todayHadRain: boolean;
   // Data loaded
   loaded: boolean;
 }
