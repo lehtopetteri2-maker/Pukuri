@@ -249,7 +249,7 @@ const Index = () => {
         <DaycareChecklist ageGroup={ageGroup} weather={weather} />
         <AffiliateSection />
 
-        <FeedbackSection />
+        <FeedbackSection ageGroup={ageGroup} />
 
         <p className="text-center text-xs text-muted-foreground">
           {t("misc.windTip")}
