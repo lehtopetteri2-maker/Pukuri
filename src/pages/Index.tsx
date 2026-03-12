@@ -2,6 +2,7 @@ import { useState, useCallback, useRef, useEffect, useMemo } from "react";
 import WeatherCard from "@/components/WeatherCard";
 import AgeGroupToggle from "@/components/AgeGroupToggle";
 import ClothingCard from "@/components/ClothingCard";
+import AiAnalysis from "@/components/AiAnalysis";
 import MorningSummary from "@/components/MorningSummary";
 import DaycareChecklist from "@/components/DaycareChecklist";
 import NightAlert from "@/components/NightAlert";
@@ -222,14 +223,19 @@ const Index = () => {
           <WeeklySchedule ageGroup={ageGroup} />
         </div>
 
+        <MorningSummary alerts={alerts} />
+        <ScheduleReminder ageGroup={ageGroup} onOpen={scrollToSchedule} />
+        <NightAlert weather={weather} alerts={alerts} />
         <WeatherCard
           weather={weather}
           cacheAge={cacheAge}
           onRefresh={handleForceRefresh}
           loading={loading}
         />
+        <TomorrowForecastCard weather={weather} ageGroup={ageGroup} tomorrow={tomorrow} />
 
-        <MorningSummary alerts={alerts} />
+        <AiAnalysis weather={weather} ageGroup={ageGroup} />
+
         <UvAlert weather={weather} />
 
         <div className="space-y-3">
@@ -240,10 +246,6 @@ const Index = () => {
         </div>
 
         <ClothingCard key={`${city}-${ageGroup}`} items={clothing} />
-
-        <TomorrowForecastCard weather={weather} ageGroup={ageGroup} tomorrow={tomorrow} />
-        <ScheduleReminder ageGroup={ageGroup} onOpen={scrollToSchedule} />
-        <NightAlert weather={weather} alerts={alerts} />
         <DaycareChecklist ageGroup={ageGroup} weather={weather} />
         <AffiliateSection />
 
