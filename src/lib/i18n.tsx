@@ -92,6 +92,16 @@ const translations = {
   "item.lamminkerrasto": { fi: "Lämmin kerrasto", sv: "Varmt underställ" },
   "item.luistimet": { fi: "Luistimet & kypärä", sv: "Skridskor & hjälm" },
 
+  // Weekdays
+  "weekday.0": { fi: "Sunnuntai", sv: "Söndag" },
+  "weekday.1": { fi: "Maanantai", sv: "Måndag" },
+  "weekday.2": { fi: "Tiistai", sv: "Tisdag" },
+  "weekday.3": { fi: "Keskiviikko", sv: "Onsdag" },
+  "weekday.4": { fi: "Torstai", sv: "Torsdag" },
+  "weekday.5": { fi: "Perjantai", sv: "Fredag" },
+  "weekday.6": { fi: "Lauantai", sv: "Lördag" },
+  "weather.today": { fi: "Tänään", sv: "Idag" },
+
   // Tomorrow forecast
   "tomorrow.title": { fi: "Huomisen sää — Ennuste", sv: "Morgondagens väder — Prognos" },
   "tomorrow.rainProb": { fi: "Sateen todennäköisyys", sv: "Regnchans" },

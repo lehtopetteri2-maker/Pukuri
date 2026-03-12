@@ -51,6 +51,9 @@ export default function TomorrowForecastCard({ weather, ageGroup, tomorrow: apiT
         <h2 className="text-sm font-display font-700 uppercase tracking-wide text-night-muted">
           {t("tomorrow.title")}
         </h2>
+        <span className="text-xs bg-night-foreground/10 px-2 py-0.5 rounded-full font-display font-600 text-night-muted">
+          {t(`weekday.${new Date(Date.now() + 86400000).getDay()}` as any)}
+        </span>
       </div>
 
       <div className="flex items-center justify-between mb-4">

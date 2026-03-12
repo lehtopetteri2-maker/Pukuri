@@ -25,6 +25,9 @@ export default function WeatherCard({ weather, cacheAge, onRefresh, loading }: W
         <div className="flex items-center gap-2 text-muted-foreground">
           <MapPin className="h-4 w-4" />
           <span className="text-sm font-medium">{weather.city}</span>
+          <span className="text-xs bg-muted px-2 py-0.5 rounded-full font-display font-600">
+            {t("weather.today")} · {t(`weekday.${new Date().getDay()}` as any)}
+          </span>
         </div>
         <div className="flex items-center gap-2">
           {cacheLabel && (
