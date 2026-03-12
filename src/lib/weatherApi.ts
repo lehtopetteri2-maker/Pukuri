@@ -71,15 +71,20 @@ function parseCurrentWeather(d: any): WeatherData {
   };
 }
 
+function getDateKey(date: Date): string {
+  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+}
+
 function parseForecast(d: any): { tomorrow: TomorrowData; afternoonRain: boolean } {
   const now = new Date();
-  const todayDate = now.getDate();
-  const tomorrowDate = new Date(now.getTime() + 86400000).getDate();
+  const todayKey = getDateKey(now);
+  const tomorrow = new Date(now.getTime() + 86400000);
+  const tomorrowKey = getDateKey(tomorrow);
 
   let afternoonRain = false;
   for (const entry of d.list) {
     const entryDate = new Date(entry.dt * 1000);
-    if (entryDate.getDate() === todayDate) {
+    if (getDateKey(entryDate) === todayKey) {
       const hour = entryDate.getHours();
       if (hour >= 12 && hour <= 18 && (entry.pop ?? 0) > 0.4) {
         afternoonRain = true;
@@ -89,7 +94,7 @@ function parseForecast(d: any): { tomorrow: TomorrowData; afternoonRain: boolean
   }
 
   const tomorrowEntries = d.list.filter((entry: any) => {
-    return new Date(entry.dt * 1000).getDate() === tomorrowDate;
+    return getDateKey(new Date(entry.dt * 1000)) === tomorrowKey;
   });
 
   if (tomorrowEntries.length === 0) {
