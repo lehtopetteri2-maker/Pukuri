@@ -19,6 +19,7 @@ export function getCachedWeather(city: string): WeatherCache | null {
     if (!raw) return null;
     const cache: WeatherCache = JSON.parse(raw);
     if (cache.city.toLowerCase() !== city.toLowerCase()) return null;
+    if (!Array.isArray((cache as Partial<WeatherCache>).forecastList)) return null;
     return cache;
   } catch {
     return null;

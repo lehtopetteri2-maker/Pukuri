@@ -1,5 +1,4 @@
 import type { WeatherData, WeatherCondition } from "./weatherData";
-import { getMockWeather } from "./weatherData";
 
 const API_KEY = "247aa2ee8cccf0e1e53ea7ab0aeb4e7d";
 const BASE = "https://api.openweathermap.org/data/2.5";
@@ -41,25 +40,6 @@ export interface TomorrowData {
   description: string;
 }
 
-/** Fallback mock tomorrow data derived from current weather */
-function getMockTomorrow(weather: WeatherData): TomorrowData {
-  let hash = 0;
-  for (let i = 0; i < weather.city.length; i++) {
-    hash = ((hash << 5) - hash + weather.city.charCodeAt(i)) | 0;
-  }
-  const shift = (hash % 7) - 3;
-  const avgTemp = weather.temperature + shift;
-  return {
-    tempMin: avgTemp - 2,
-    tempMax: avgTemp + 2,
-    condition: weather.condition,
-    rainProbability: Math.max(0, Math.min(100, weather.rainProbability + ((hash % 30) - 10))),
-    avgTemp,
-    avgWind: weather.windSpeed + ((hash % 3) - 1),
-    humidity: weather.humidity,
-    description: weather.description,
-  };
-}
 
 async function tryFetchJson(url: string, label: string): Promise<any | null> {
   try {
@@ -91,15 +71,20 @@ function parseCurrentWeather(d: any): WeatherData {
   };
 }
 
+function getDateKey(date: Date): string {
+  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+}
+
 function parseForecast(d: any): { tomorrow: TomorrowData; afternoonRain: boolean } {
   const now = new Date();
-  const todayDate = now.getDate();
-  const tomorrowDate = new Date(now.getTime() + 86400000).getDate();
+  const todayKey = getDateKey(now);
+  const tomorrow = new Date(now.getTime() + 86400000);
+  const tomorrowKey = getDateKey(tomorrow);
 
   let afternoonRain = false;
   for (const entry of d.list) {
     const entryDate = new Date(entry.dt * 1000);
-    if (entryDate.getDate() === todayDate) {
+    if (getDateKey(entryDate) === todayKey) {
       const hour = entryDate.getHours();
       if (hour >= 12 && hour <= 18 && (entry.pop ?? 0) > 0.4) {
         afternoonRain = true;
@@ -109,7 +94,7 @@ function parseForecast(d: any): { tomorrow: TomorrowData; afternoonRain: boolean
   }
 
   const tomorrowEntries = d.list.filter((entry: any) => {
-    return new Date(entry.dt * 1000).getDate() === tomorrowDate;
+    return getDateKey(new Date(entry.dt * 1000)) === tomorrowKey;
   });
 
   if (tomorrowEntries.length === 0) {
@@ -153,22 +138,20 @@ export async function fetchWeatherData(city: string): Promise<{
     tryFetchJson(`${BASE}/forecast?q=${encodeURIComponent(normalizedCity)}&units=metric&appid=${API_KEY}&lang=fi`, "Forecast"),
   ]);
 
-  // If API fails (401, network error etc.), use fallback mock data
-  if (!weatherJson) {
-    console.log(`[Säävahti] Käytetään testisäätietoja kaupungille: ${normalizedCity}`);
-    const mock = getMockWeather(normalizedCity);
-    return { current: mock, tomorrow: getMockTomorrow(mock), forecastList: [], fromApi: false };
+  if (!weatherJson || !forecastJson) {
+    throw new Error("Säädatan haku epäonnistui");
   }
 
   const current = parseCurrentWeather(weatherJson);
+  const forecast = parseForecast(forecastJson);
+  current.afternoonRain = forecast.afternoonRain;
 
-  if (forecastJson) {
-    const forecast = parseForecast(forecastJson);
-    current.afternoonRain = forecast.afternoonRain;
-    return { current, tomorrow: forecast.tomorrow, forecastList: forecastJson.list ?? [], fromApi: true };
-  }
-
-  return { current, tomorrow: getMockTomorrow(current), forecastList: [], fromApi: true };
+  return {
+    current,
+    tomorrow: forecast.tomorrow,
+    forecastList: forecastJson.list ?? [],
+    fromApi: true,
+  };
 }
 
 export async function fetchWeatherByCoords(lat: number, lon: number): Promise<{
@@ -177,28 +160,29 @@ export async function fetchWeatherByCoords(lat: number, lon: number): Promise<{
   forecastList: any[];
   fromApi: boolean;
 }> {
-  const weatherJson = await tryFetchJson(
-    `${BASE}/weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}&lang=fi`,
-    "Coords"
-  );
+  const [weatherJson, forecastJson] = await Promise.all([
+    tryFetchJson(
+      `${BASE}/weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}&lang=fi`,
+      "Coords"
+    ),
+    tryFetchJson(
+      `${BASE}/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}&lang=fi`,
+      "Coords Forecast"
+    ),
+  ]);
 
-  if (!weatherJson) {
-    console.log("[Säävahti] GPS-haku epäonnistui, käytetään testisäätä");
-    const mock = getMockWeather("Helsinki");
-    return { current: mock, tomorrow: getMockTomorrow(mock), forecastList: [], fromApi: false };
+  if (!weatherJson || !forecastJson) {
+    throw new Error("Sijaintisäädatan haku epäonnistui");
   }
 
   const current = parseCurrentWeather(weatherJson);
-  const forecastJson = await tryFetchJson(
-    `${BASE}/forecast?q=${encodeURIComponent(current.city)}&units=metric&appid=${API_KEY}&lang=fi`,
-    "Coords Forecast"
-  );
+  const forecast = parseForecast(forecastJson);
+  current.afternoonRain = forecast.afternoonRain;
 
-  if (forecastJson) {
-    const forecast = parseForecast(forecastJson);
-    current.afternoonRain = forecast.afternoonRain;
-    return { current, tomorrow: forecast.tomorrow, forecastList: forecastJson.list ?? [], fromApi: true };
-  }
-
-  return { current, tomorrow: getMockTomorrow(current), forecastList: [], fromApi: true };
+  return {
+    current,
+    tomorrow: forecast.tomorrow,
+    forecastList: forecastJson.list ?? [],
+    fromApi: true,
+  };
 }

@@ -17,19 +17,45 @@ import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { getClothingRecommendation, getSavedCity, saveCity, AgeGroup, WeatherData } from "@/lib/weatherData";
 import { fetchWeatherData, fetchWeatherByCoords, TomorrowData } from "@/lib/weatherApi";
 import { getCachedWeather, isCacheFresh, getCacheAgeMinutes, saveWeatherCache } from "@/lib/weatherCache";
-import { getMockWeather } from "@/lib/weatherData";
 import { ForecastAlerts, emptyAlerts, computeAlerts } from "@/lib/forecastAlerts";
 import FeedbackSection from "@/components/FeedbackSection";
 import { CloudSnow, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import { useLanguage } from "@/lib/i18n";
 
+function createPlaceholderWeather(city: string): WeatherData {
+  return {
+    temperature: 0,
+    feelsLike: 0,
+    condition: "cloudy",
+    windSpeed: 0,
+    humidity: 0,
+    rainProbability: 0,
+    afternoonRain: false,
+    city,
+    description: "",
+  };
+}
+
 function getInitialState(city: string) {
   const cached = getCachedWeather(city);
-  if (cached) {
-    return { weather: cached.current, tomorrow: cached.tomorrow as TomorrowData | null, forecastList: cached.forecastList ?? [] as any[], cacheAge: getCacheAgeMinutes(cached) };
+  if (cached && Array.isArray(cached.forecastList)) {
+    return {
+      weather: cached.current,
+      tomorrow: cached.tomorrow as TomorrowData | null,
+      forecastList: cached.forecastList,
+      cacheAge: getCacheAgeMinutes(cached),
+      hasRealData: true,
+    };
   }
-  return { weather: getMockWeather(city), tomorrow: null as TomorrowData | null, forecastList: [] as any[], cacheAge: null as number | null };
+
+  return {
+    weather: createPlaceholderWeather(city),
+    tomorrow: null as TomorrowData | null,
+    forecastList: [] as any[],
+    cacheAge: null as number | null,
+    hasRealData: false,
+  };
 }
 
 const Index = () => {
@@ -42,15 +68,19 @@ const Index = () => {
   const [weather, setWeather] = useState<WeatherData>(initial.weather);
   const [tomorrow, setTomorrow] = useState<TomorrowData | null>(initial.tomorrow);
   const [forecastList, setForecastList] = useState<any[]>(initial.forecastList);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(!initial.hasRealData);
   const [error, setError] = useState<string | null>(null);
   const [cacheAge, setCacheAge] = useState<number | null>(initial.cacheAge);
   const scheduleRef = useRef<HTMLDivElement>(null);
 
   const alerts = useMemo(() => {
-    if (forecastList.length === 0) return emptyAlerts();
+    if (loading && forecastList.length === 0) return emptyAlerts();
+
+    console.log("Säädata saatu:", weather);
+    console.log("Generoidaan tekstit...");
+
     return computeAlerts(forecastList, weather.temperature, weather.uvi);
-  }, [forecastList, weather.temperature, weather.uvi]);
+  }, [weather, forecastList, loading]);
 
   const clothing = getClothingRecommendation(weather, ageGroup);
 
@@ -63,10 +93,7 @@ const Index = () => {
     saveWeatherCache(data.current.city, data.current, data.tomorrow, data.forecastList, data.fromApi);
     console.log("[Säävahti] Säädata saatu:", { city: data.current.city, temp: data.current.temperature, forecastEntries: data.forecastList.length });
     setCacheAge(0);
-    if (!data.fromApi) {
-      toast.info(t("location.testData"));
-    }
-  }, [t]);
+  }, []);
 
   const loadWeather = useCallback(async (cityName: string, force = false) => {
     if (!force) {

@@ -43,8 +43,9 @@ export function computeAlerts(
 ): ForecastAlerts {
   const now = new Date();
   const currentHour = now.getHours();
-  const todayDate = now.getDate();
-  const tomorrowDate = new Date(now.getTime() + 86400000).getDate();
+  const todayKey = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+  const tomorrowDateObj = new Date(now.getTime() + 86400000);
+  const tomorrowKey = `${tomorrowDateObj.getFullYear()}-${tomorrowDateObj.getMonth() + 1}-${tomorrowDateObj.getDate()}`;
 
   console.log("[Säävahti] Generoidaan suositukset...", {
     forecastEntries: forecastList.length,
@@ -59,16 +60,18 @@ export function computeAlerts(
   let morningMinTemp = 99;
 
   // Dynamic time window: from current hour to end of day
-  const rainWindowStart = Math.max(currentHour, 6);
-  const rainWindowEnd = 20; // until 20:00
+  const isAfterNoon = currentHour > 12;
+  const rainWindowStart = isAfterNoon ? currentHour : 8;
+  const rainWindowEnd = isAfterNoon ? 20 : 14;
 
   for (const entry of forecastList) {
     const d = new Date(entry.dt * 1000);
-    if (d.getDate() !== todayDate) continue;
+    const entryKey = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+    if (entryKey !== todayKey) continue;
     const hour = d.getHours();
 
-    // Morning freezing check (06-09) — only relevant if still morning
-    if (currentHour <= 10 && hour >= 6 && hour <= 9) {
+    // Morning freezing check (06-09) — only before afternoon
+    if (!isAfterNoon && hour >= 6 && hour <= 9) {
       const temp = entry.main.temp;
       if (temp < morningMinTemp) morningMinTemp = temp;
       if (temp < 0) morningFreezing = true;
@@ -100,7 +103,8 @@ export function computeAlerts(
 
   for (const entry of forecastList) {
     const d = new Date(entry.dt * 1000);
-    if (d.getDate() !== tomorrowDate) continue;
+    const entryKey = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+    if (entryKey !== tomorrowKey) continue;
     const hour = d.getHours();
     const temp = entry.main.temp;
 

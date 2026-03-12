@@ -1,6 +1,6 @@
 import { ForecastAlerts } from "@/lib/forecastAlerts";
 import { WeatherData } from "@/lib/weatherData";
-import { Thermometer, CloudRain, Loader2 } from "lucide-react";
+import { Thermometer, CloudRain } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 
 interface NightAlertProps {
@@ -25,23 +25,6 @@ export default function NightAlert({ weather, alerts }: NightAlertProps) {
         today: String(weather.temperature),
         tomorrow: String(alerts.tomorrowMaxTemp),
       }),
-    });
-  }
-
-  // Freezing tonight (original logic kept as fallback)
-  const tonightLow = weather.temperature - 7;
-  if (weather.temperature > 0 && tonightLow < 0) {
-    messages.push({
-      icon: <Thermometer className="h-4 w-4 text-destructive shrink-0 mt-0.5" />,
-      text: t("night.freezing", {
-        from: `${weather.temperature > 0 ? "+" : ""}${weather.temperature}`,
-        to: String(tonightLow),
-      }),
-    });
-  } else if (tonightLow < -15) {
-    messages.push({
-      icon: <Thermometer className="h-4 w-4 text-destructive shrink-0 mt-0.5" />,
-      text: t("night.hardFrost", { temp: String(tonightLow) }),
     });
   }
 
