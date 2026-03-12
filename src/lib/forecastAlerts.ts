@@ -60,8 +60,9 @@ export function computeAlerts(
   let morningMinTemp = 99;
 
   // Dynamic time window: from current hour to end of day
-  const rainWindowStart = Math.max(currentHour, 6);
-  const rainWindowEnd = 20; // until 20:00
+  const isAfterNoon = currentHour > 12;
+  const rainWindowStart = isAfterNoon ? currentHour : 8;
+  const rainWindowEnd = isAfterNoon ? 20 : 14;
 
   for (const entry of forecastList) {
     const d = new Date(entry.dt * 1000);
