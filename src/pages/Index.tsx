@@ -91,6 +91,7 @@ const Index = () => {
       if (stale) {
         setWeather(stale.current);
         setTomorrow(stale.tomorrow);
+        setForecastList(stale.forecastList ?? []);
         setCacheAge(getCacheAgeMinutes(stale));
         toast.warning(t("location.noConnection"));
       } else {
