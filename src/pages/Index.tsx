@@ -41,10 +41,16 @@ const Index = () => {
   const [ageGroup, setAgeGroup] = useState<AgeGroup>("leikki-ikäinen");
   const [weather, setWeather] = useState<WeatherData>(initial.weather);
   const [tomorrow, setTomorrow] = useState<TomorrowData | null>(initial.tomorrow);
+  const [forecastList, setForecastList] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [cacheAge, setCacheAge] = useState<number | null>(initial.cacheAge);
   const scheduleRef = useRef<HTMLDivElement>(null);
+
+  const alerts = useMemo(() => {
+    if (forecastList.length === 0) return emptyAlerts();
+    return computeAlerts(forecastList, weather.temperature, weather.uvi);
+  }, [forecastList, weather.temperature, weather.uvi]);
 
   const clothing = getClothingRecommendation(weather, ageGroup);
 
