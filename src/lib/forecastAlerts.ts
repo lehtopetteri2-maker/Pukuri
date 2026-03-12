@@ -158,19 +158,27 @@ export function computeAlerts(
     }
   }
 
+  const todayRef = todayMaxTemp ?? currentTemp;
   const tomorrowColder =
-    tomorrowMaxTemp !== null && currentTemp - tomorrowMaxTemp > 5;
+    tomorrowMaxTemp !== null && todayRef - tomorrowMaxTemp > 5;
+  const tomorrowWarmer =
+    tomorrowMaxTemp !== null && tomorrowMaxTemp - todayRef > 5;
 
   const alerts: ForecastAlerts = {
     rainStartTime,
     rainMm,
+    rainDuringDaycare,
     morningFreezing,
     morningMinTemp: morningMinTemp === 99 ? currentTemp : Math.round(morningMinTemp),
+    maxWindSpeed: Math.round(maxWindSpeed),
     uvMax: uvi ?? 0,
+    todayMaxTemp,
     tomorrowMorningTemp,
     tomorrowMaxTemp,
     tomorrowColder,
+    tomorrowWarmer,
     tomorrowRain,
+    todayHadRain,
     loaded: true,
   };
 
