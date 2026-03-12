@@ -93,6 +93,16 @@ export function computeAlerts(
       if (temp < 0) morningFreezing = true;
     }
 
+    // Track wind speed
+    const wind = entry.wind?.speed ?? 0;
+    if (wind > maxWindSpeed) maxWindSpeed = wind;
+
+    // Track today max temp
+    const entryTemp = entry.main.temp;
+    if (todayMaxTemp === null || entryTemp > todayMaxTemp) {
+      todayMaxTemp = Math.round(entryTemp);
+    }
+
     // Rain/snow in remaining day window
     if (hour >= rainWindowStart && hour <= rainWindowEnd) {
       const rainAmount = entry.rain?.["3h"] ?? entry.rain?.["1h"] ?? 0;
@@ -100,14 +110,21 @@ export function computeAlerts(
       const totalPrecip = rainAmount + snowAmount;
       if (totalPrecip > 0.1) {
         rainMm += totalPrecip;
+        todayHadRain = true;
         if (!rainStartTime) {
           rainStartTime = `${String(hour).padStart(2, "0")}:00`;
+        }
+        if (hour >= 10 && hour <= 16) {
+          rainDuringDaycare = true;
         }
       }
       // Also check pop (probability of precipitation)
       const pop = entry.pop ?? 0;
       if (pop > 0.5 && !rainStartTime) {
         rainStartTime = `${String(hour).padStart(2, "0")}:00`;
+      }
+      if (pop > 0.5 && hour >= 10 && hour <= 16) {
+        rainDuringDaycare = true;
       }
     }
   }
