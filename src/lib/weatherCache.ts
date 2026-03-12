@@ -8,6 +8,7 @@ export interface WeatherCache {
   city: string;
   current: WeatherData;
   tomorrow: TomorrowData;
+  forecastList: any[];
   fromApi: boolean;
   timestamp: number;
 }
@@ -32,8 +33,8 @@ export function getCacheAgeMinutes(cache: WeatherCache): number {
   return Math.round((Date.now() - cache.timestamp) / 60000);
 }
 
-export function saveWeatherCache(city: string, current: WeatherData, tomorrow: TomorrowData, fromApi: boolean): void {
-  const cache: WeatherCache = { city, current, tomorrow, fromApi, timestamp: Date.now() };
+export function saveWeatherCache(city: string, current: WeatherData, tomorrow: TomorrowData, forecastList: any[], fromApi: boolean): void {
+  const cache: WeatherCache = { city, current, tomorrow, forecastList, fromApi, timestamp: Date.now() };
   try {
     localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
   } catch {

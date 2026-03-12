@@ -27,9 +27,9 @@ import { useLanguage } from "@/lib/i18n";
 function getInitialState(city: string) {
   const cached = getCachedWeather(city);
   if (cached) {
-    return { weather: cached.current, tomorrow: cached.tomorrow as TomorrowData | null, cacheAge: getCacheAgeMinutes(cached) };
+    return { weather: cached.current, tomorrow: cached.tomorrow as TomorrowData | null, forecastList: cached.forecastList ?? [] as any[], cacheAge: getCacheAgeMinutes(cached) };
   }
-  return { weather: getMockWeather(city), tomorrow: null as TomorrowData | null, cacheAge: null as number | null };
+  return { weather: getMockWeather(city), tomorrow: null as TomorrowData | null, forecastList: [] as any[], cacheAge: null as number | null };
 }
 
 const Index = () => {
@@ -41,7 +41,7 @@ const Index = () => {
   const [ageGroup, setAgeGroup] = useState<AgeGroup>("leikki-ikäinen");
   const [weather, setWeather] = useState<WeatherData>(initial.weather);
   const [tomorrow, setTomorrow] = useState<TomorrowData | null>(initial.tomorrow);
-  const [forecastList, setForecastList] = useState<any[]>([]);
+  const [forecastList, setForecastList] = useState<any[]>(initial.forecastList);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [cacheAge, setCacheAge] = useState<number | null>(initial.cacheAge);
@@ -60,7 +60,8 @@ const Index = () => {
     setForecastList(data.forecastList);
     setCity(data.current.city);
     saveCity(data.current.city);
-    saveWeatherCache(data.current.city, data.current, data.tomorrow, data.fromApi);
+    saveWeatherCache(data.current.city, data.current, data.tomorrow, data.forecastList, data.fromApi);
+    console.log("[Säävahti] Säädata saatu:", { city: data.current.city, temp: data.current.temperature, forecastEntries: data.forecastList.length });
     setCacheAge(0);
     if (!data.fromApi) {
       toast.info(t("location.testData"));
@@ -73,6 +74,7 @@ const Index = () => {
       if (cached && isCacheFresh(cached)) {
         setWeather(cached.current);
         setTomorrow(cached.tomorrow);
+        setForecastList(cached.forecastList ?? []);
         setCity(cached.city);
         setCacheAge(getCacheAgeMinutes(cached));
         return;
@@ -89,6 +91,7 @@ const Index = () => {
       if (stale) {
         setWeather(stale.current);
         setTomorrow(stale.tomorrow);
+        setForecastList(stale.forecastList ?? []);
         setCacheAge(getCacheAgeMinutes(stale));
         toast.warning(t("location.noConnection"));
       } else {
