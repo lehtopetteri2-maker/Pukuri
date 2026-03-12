@@ -1,25 +1,64 @@
 import { useState } from "react";
-import { Star, Send, MessageSquareHeart } from "lucide-react";
+import { Star, Send, MessageSquareHeart, Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { useLanguage } from "@/lib/i18n";
+import { useLanguage, TranslationKey } from "@/lib/i18n";
+import { AgeGroup } from "@/lib/weatherData";
+import emailjs from "@emailjs/browser";
 
-const FeedbackSection = () => {
+// ─── EmailJS configuration ───────────────────────────────────
+// Replace these with your real EmailJS credentials:
+const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";   // e.g. "service_abc123"
+const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID"; // e.g. "template_xyz789"
+const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";    // e.g. "user_abcdef123456"
+// ──────────────────────────────────────────────────────────────
+
+interface FeedbackSectionProps {
+  ageGroup?: AgeGroup;
+}
+
+const FeedbackSection = ({ ageGroup }: FeedbackSectionProps) => {
   const { t } = useLanguage();
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
   const [text, setText] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
 
-  const handleSend = () => {
-    const subject = encodeURIComponent(t("feedback.emailSubject"));
-    const body = encodeURIComponent(
-      t("feedback.emailBody", { stars: "⭐".repeat(rating), rating, text })
-    );
-    window.open(`mailto:lehtopetteri@hotmail.com?subject=${subject}&body=${body}`, "_self");
-    setSubmitted(true);
-    setTimeout(() => { setSubmitted(false); setRating(0); setText(""); }, 4000);
+  const handleSend = async () => {
+    if (rating === 0) return;
+
+    setSending(true);
+    try {
+      const ageLabel = ageGroup
+        ? t(`age.${ageGroup}` as TranslationKey)
+        : "-";
+
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          rating: `${"⭐".repeat(rating)} (${rating}/5)`,
+          message: text || "(ei tekstipalautetta)",
+          age_group: ageLabel,
+          timestamp: new Date().toLocaleString("fi-FI"),
+        },
+        EMAILJS_PUBLIC_KEY
+      );
+
+      setSubmitted(true);
+      setRating(0);
+      setText("");
+      setTimeout(() => setSubmitted(false), 5000);
+    } catch (err) {
+      console.error("[Säävahti] EmailJS error:", err);
+      import("sonner").then(({ toast }) =>
+        toast.error(t("feedback.error"))
+      );
+    } finally {
+      setSending(false);
+    }
   };
 
   const displayRating = hoveredRating || rating;
@@ -47,14 +86,48 @@ const FeedbackSection = () => {
       <CardContent className="space-y-4">
         <div className="flex gap-1 justify-center">
           {[1, 2, 3, 4, 5].map((star) => (
-            <button key={star} type="button" onClick={() => setRating(star)} onMouseEnter={() => setHoveredRating(star)} onMouseLeave={() => setHoveredRating(0)} className="p-1 transition-transform hover:scale-110">
-              <Star className={`h-7 w-7 transition-colors ${star <= displayRating ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground/30"}`} />
+            <button
+              key={star}
+              type="button"
+              onClick={() => setRating(star)}
+              onMouseEnter={() => setHoveredRating(star)}
+              onMouseLeave={() => setHoveredRating(0)}
+              className="p-1 transition-transform hover:scale-110"
+            >
+              <Star
+                className={`h-7 w-7 transition-colors ${
+                  star <= displayRating
+                    ? "fill-yellow-400 text-yellow-400"
+                    : "text-muted-foreground/30"
+                }`}
+              />
             </button>
           ))}
         </div>
-        <Textarea placeholder={t("feedback.placeholder")} value={text} onChange={(e) => setText(e.target.value)} className="resize-none text-sm" rows={3} />
-        <Button onClick={handleSend} disabled={rating === 0} className="w-full gap-2" size="sm">
-          <Send className="h-4 w-4" />{t("feedback.send")}
+        <Textarea
+          placeholder={t("feedback.placeholder")}
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          className="resize-none text-sm"
+          rows={3}
+        />
+        <Button
+          onClick={handleSend}
+          disabled={rating === 0 || sending}
+          className="w-full gap-2"
+          size="sm"
+        >
+          {sending ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" />
+              {t("feedback.sending")}
+            </>
+          ) : (
+            <>
+              <Send className="h-4 w-4" />
+              {t("feedback.send")}
+            </>
+          )}
         </Button>
       </CardContent>
     </Card>
