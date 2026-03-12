@@ -7,6 +7,7 @@ import { LanguageProvider } from "@/lib/i18n";
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
+
 const queryClient = new QueryClient();
 
 const App = () => (
