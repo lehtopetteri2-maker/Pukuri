@@ -54,9 +54,10 @@ const Index = () => {
 
   const clothing = getClothingRecommendation(weather, ageGroup);
 
-  const applyResult = useCallback((data: { current: WeatherData; tomorrow: TomorrowData; fromApi: boolean }) => {
+  const applyResult = useCallback((data: { current: WeatherData; tomorrow: TomorrowData; forecastList: any[]; fromApi: boolean }) => {
     setWeather(data.current);
     setTomorrow(data.tomorrow);
+    setForecastList(data.forecastList);
     setCity(data.current.city);
     saveCity(data.current.city);
     saveWeatherCache(data.current.city, data.current, data.tomorrow, data.fromApi);
