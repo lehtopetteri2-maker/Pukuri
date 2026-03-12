@@ -65,12 +65,12 @@ export function computeAlerts(
   const rainWindowEnd = isAfterNoon ? 20 : 14;
 
   for (const entry of forecastList) {
-    const d = new Date(entry.dt * 1000);
-    if (d.getDate() !== todayDate) continue;
+    const entryKey = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+    if (entryKey !== todayKey) continue;
     const hour = d.getHours();
 
-    // Morning freezing check (06-09) — only relevant if still morning
-    if (currentHour <= 10 && hour >= 6 && hour <= 9) {
+    // Morning freezing check (06-09) — only before afternoon
+    if (!isAfterNoon && hour >= 6 && hour <= 9) {
       const temp = entry.main.temp;
       if (temp < morningMinTemp) morningMinTemp = temp;
       if (temp < 0) morningFreezing = true;
