@@ -193,9 +193,9 @@ const Index = () => {
           <WeeklySchedule ageGroup={ageGroup} />
         </div>
 
-        <MorningSummary weather={weather} />
+        <MorningSummary alerts={alerts} />
         <ScheduleReminder ageGroup={ageGroup} onOpen={scrollToSchedule} />
-        <NightAlert weather={weather} />
+        <NightAlert weather={weather} alerts={alerts} />
         <WeatherCard
           weather={weather}
           cacheAge={cacheAge}
