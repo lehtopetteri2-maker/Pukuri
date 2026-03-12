@@ -1,5 +1,5 @@
 import { ForecastAlerts } from "@/lib/forecastAlerts";
-import { AlertTriangle, CloudRain, Thermometer, Sun, Loader2, CheckCircle2 } from "lucide-react";
+import { AlertTriangle, CloudRain, Thermometer, Sun, Wind, Loader2, CheckCircle2 } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 
 interface MorningSummaryProps {
@@ -20,12 +20,19 @@ export default function MorningSummary({ alerts }: MorningSummaryProps) {
 
   const messages: { icon: React.ReactNode; text: string }[] = [];
 
-  // Rain in remaining day
+  // Precise rain warning — daycare hours get special message
   if (alerts.rainStartTime) {
-    messages.push({
-      icon: <CloudRain className="h-4 w-4 text-primary shrink-0 mt-0.5" />,
-      text: t("morning.rainStart", { time: alerts.rainStartTime }),
-    });
+    if (alerts.rainDuringDaycare) {
+      messages.push({
+        icon: <CloudRain className="h-4 w-4 text-primary shrink-0 mt-0.5" />,
+        text: t("morning.rainDaycare", { time: alerts.rainStartTime }),
+      });
+    } else {
+      messages.push({
+        icon: <CloudRain className="h-4 w-4 text-primary shrink-0 mt-0.5" />,
+        text: t("morning.rainStart", { time: alerts.rainStartTime }),
+      });
+    }
   }
 
   // Morning freezing
@@ -33,6 +40,14 @@ export default function MorningSummary({ alerts }: MorningSummaryProps) {
     messages.push({
       icon: <Thermometer className="h-4 w-4 text-destructive shrink-0 mt-0.5" />,
       text: t("morning.freezing"),
+    });
+  }
+
+  // Wind chill warning > 5 m/s
+  if (alerts.maxWindSpeed > 5) {
+    messages.push({
+      icon: <Wind className="h-4 w-4 text-accent-foreground shrink-0 mt-0.5" />,
+      text: t("morning.windChill", { speed: alerts.maxWindSpeed }),
     });
   }
 

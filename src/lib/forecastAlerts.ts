@@ -7,16 +7,23 @@ export interface ForecastAlerts {
   // Rain info for remaining day
   rainStartTime: string | null;
   rainMm: number;
+  rainDuringDaycare: boolean; // rain between 10-16
   // Morning: freezing
   morningFreezing: boolean;
   morningMinTemp: number;
+  // Wind
+  maxWindSpeed: number;
   // UV
   uvMax: number;
+  // Today max temp
+  todayMaxTemp: number | null;
   // Evening: tomorrow comparison
   tomorrowMorningTemp: number | null;
   tomorrowMaxTemp: number | null;
   tomorrowColder: boolean;
+  tomorrowWarmer: boolean;
   tomorrowRain: boolean;
+  todayHadRain: boolean;
   // Data loaded
   loaded: boolean;
 }
@@ -25,13 +32,18 @@ export function emptyAlerts(): ForecastAlerts {
   return {
     rainStartTime: null,
     rainMm: 0,
+    rainDuringDaycare: false,
     morningFreezing: false,
     morningMinTemp: 0,
+    maxWindSpeed: 0,
     uvMax: 0,
+    todayMaxTemp: null,
     tomorrowMorningTemp: null,
     tomorrowMaxTemp: null,
     tomorrowColder: false,
+    tomorrowWarmer: false,
     tomorrowRain: false,
+    todayHadRain: false,
     loaded: false,
   };
 }
@@ -56,8 +68,12 @@ export function computeAlerts(
 
   let rainStartTime: string | null = null;
   let rainMm = 0;
+  let rainDuringDaycare = false;
   let morningFreezing = false;
   let morningMinTemp = 99;
+  let maxWindSpeed = 0;
+  let todayMaxTemp: number | null = null;
+  let todayHadRain = false;
 
   // Dynamic time window: from current hour to end of day
   const isAfterNoon = currentHour > 12;
@@ -77,6 +93,16 @@ export function computeAlerts(
       if (temp < 0) morningFreezing = true;
     }
 
+    // Track wind speed
+    const wind = entry.wind?.speed ?? 0;
+    if (wind > maxWindSpeed) maxWindSpeed = wind;
+
+    // Track today max temp
+    const entryTemp = entry.main.temp;
+    if (todayMaxTemp === null || entryTemp > todayMaxTemp) {
+      todayMaxTemp = Math.round(entryTemp);
+    }
+
     // Rain/snow in remaining day window
     if (hour >= rainWindowStart && hour <= rainWindowEnd) {
       const rainAmount = entry.rain?.["3h"] ?? entry.rain?.["1h"] ?? 0;
@@ -84,14 +110,21 @@ export function computeAlerts(
       const totalPrecip = rainAmount + snowAmount;
       if (totalPrecip > 0.1) {
         rainMm += totalPrecip;
+        todayHadRain = true;
         if (!rainStartTime) {
           rainStartTime = `${String(hour).padStart(2, "0")}:00`;
+        }
+        if (hour >= 10 && hour <= 16) {
+          rainDuringDaycare = true;
         }
       }
       // Also check pop (probability of precipitation)
       const pop = entry.pop ?? 0;
       if (pop > 0.5 && !rainStartTime) {
         rainStartTime = `${String(hour).padStart(2, "0")}:00`;
+      }
+      if (pop > 0.5 && hour >= 10 && hour <= 16) {
+        rainDuringDaycare = true;
       }
     }
   }
@@ -125,19 +158,27 @@ export function computeAlerts(
     }
   }
 
+  const todayRef = todayMaxTemp ?? currentTemp;
   const tomorrowColder =
-    tomorrowMaxTemp !== null && currentTemp - tomorrowMaxTemp > 5;
+    tomorrowMaxTemp !== null && todayRef - tomorrowMaxTemp > 5;
+  const tomorrowWarmer =
+    tomorrowMaxTemp !== null && tomorrowMaxTemp - todayRef > 5;
 
   const alerts: ForecastAlerts = {
     rainStartTime,
     rainMm,
+    rainDuringDaycare,
     morningFreezing,
     morningMinTemp: morningMinTemp === 99 ? currentTemp : Math.round(morningMinTemp),
+    maxWindSpeed: Math.round(maxWindSpeed),
     uvMax: uvi ?? 0,
+    todayMaxTemp,
     tomorrowMorningTemp,
     tomorrowMaxTemp,
     tomorrowColder,
+    tomorrowWarmer,
     tomorrowRain,
+    todayHadRain,
     loaded: true,
   };
 
