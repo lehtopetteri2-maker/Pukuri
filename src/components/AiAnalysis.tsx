@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
-import { Sparkles, RefreshCw } from "lucide-react";
+import { useState, useEffect, useMemo } from "react";
+import { Sparkles, RefreshCw, Lightbulb } from "lucide-react";
 import { WeatherData, AgeGroup } from "@/lib/weatherData";
+import { DualRecommendation } from "@/lib/dualRecommendation";
 import { useLanguage, TranslationKey } from "@/lib/i18n";
 import {
   Accordion,
@@ -12,9 +13,10 @@ import {
 interface AiAnalysisProps {
   weather: WeatherData;
   ageGroup?: AgeGroup;
+  dual?: DualRecommendation;
 }
 
-export default function AiAnalysis({ weather, ageGroup }: AiAnalysisProps) {
+export default function AiAnalysis({ weather, ageGroup, dual }: AiAnalysisProps) {
   const { t } = useLanguage();
   const [tips, setTips] = useState<string[]>([]);
   const [animating, setAnimating] = useState(false);
@@ -25,31 +27,49 @@ export default function AiAnalysis({ weather, ageGroup }: AiAnalysisProps) {
       const newTips: string[] = [];
       const ageLabel = ageGroup ? t(`ai.ageLabel.${ageGroup}` as TranslationKey) : "";
 
+      // 1. Mud Factor — ground still wet
+      if (dual?.mudFactor) {
+        newTips.push(t("ai.mudTip"));
+      }
+
+      // 2. Temperature gap (AM vs PM)
+      if (dual?.isDual) {
+        const amTemp = dual.morningTemp;
+        const pmTemp = dual.afternoonTemp;
+        newTips.push(t("ai.gapTip", {
+          amTemp: `${amTemp > 0 ? "+" : ""}${amTemp}`,
+          pmTemp: `${pmTemp > 0 ? "+" : ""}${pmTemp}`,
+        }));
+      }
+
+      // 3. Layering zone +2…+10 °C
+      const temp = weather.feelsLike ?? weather.temperature;
+      if (temp >= 2 && temp <= 10) {
+        newTips.push(t("ai.layerZoneTip"));
+      }
+
+      // 4. Wind chill > 6 m/s
+      if (weather.windSpeed > 6) {
+        newTips.push(t("ai.windChillTip", { speed: weather.windSpeed }));
+      }
+
+      // 5. UV reminder
+      if (weather.uvi !== undefined && weather.uvi > 3) {
+        newTips.push(t("ai.uvReminderTip", { uvi: weather.uvi }));
+      }
+
+      // 6. Rain approaching
       if (weather.rainProbability > 40 || weather.afternoonRain) {
         newTips.push(t("ai.rainTip"));
       }
 
-      if (weather.windSpeed >= 7) {
-        newTips.push(t("ai.hardWindTip", {
-          speed: weather.windSpeed,
-          temp: `${weather.temperature > 0 ? "+" : ""}${weather.temperature}`,
-        }));
-      } else if (weather.windSpeed >= 4) {
-        newTips.push(t("ai.moderateWindTip", { speed: weather.windSpeed }));
-      }
-
+      // 7. Feels-like gap (existing layering tip)
       const feelsLikeDiff = Math.abs(weather.temperature - weather.feelsLike);
-      if (feelsLikeDiff >= 4) {
+      if (feelsLikeDiff >= 4 && !dual?.isDual) {
         newTips.push(t("ai.layeringTip", {
           feelsLike: `${weather.feelsLike > 0 ? "+" : ""}${weather.feelsLike}`,
           temp: `${weather.temperature > 0 ? "+" : ""}${weather.temperature}`,
         }));
-      }
-
-      if (weather.uvi !== undefined && weather.uvi >= 3) {
-        newTips.push(t("ai.uvTip", { uvi: weather.uvi, age: ageLabel }));
-      } else if (weather.condition === "sunny" && weather.temperature > 15) {
-        newTips.push(t("ai.sunnyUvTip"));
       }
 
       if (newTips.length === 0) {
@@ -63,7 +83,13 @@ export default function AiAnalysis({ weather, ageGroup }: AiAnalysisProps) {
       setAnimating(false);
     }, 600);
     return () => clearTimeout(timer);
-  }, [weather.city, weather.temperature, weather.windSpeed, weather.rainProbability, ageGroup, t]);
+  }, [weather.city, weather.temperature, weather.windSpeed, weather.rainProbability, weather.uvi, ageGroup, dual, t]);
+
+  // Show attention icon if there are special tips (not just calm day)
+  const hasSpecialTips = useMemo(() => {
+    if (!dual) return weather.uvi !== undefined && weather.uvi > 3;
+    return dual.mudFactor || dual.isDual || dual.windWarning || (weather.uvi !== undefined && weather.uvi > 3);
+  }, [dual, weather.uvi]);
 
   return (
     <div className="rounded-lg border border-sky/20 bg-gradient-to-br from-sky/10 via-card to-accent/20 shadow-sm overflow-hidden">
@@ -75,8 +101,11 @@ export default function AiAnalysis({ weather, ageGroup }: AiAnalysisProps) {
                 <Sparkles className="h-4 w-4 text-sky-foreground" />
               </div>
               <div className="flex flex-col items-start text-left">
-                <h2 className="text-sm font-display font-700 text-foreground uppercase tracking-wide">
+                <h2 className="text-sm font-display font-700 text-foreground uppercase tracking-wide flex items-center gap-1.5">
                   {t("ai.title")}
+                  {hasSpecialTips && (
+                    <span className="text-base" title={t("ai.hasSpecialTip")}>💡</span>
+                  )}
                 </h2>
                 {ageGroup && (
                   <span className="text-xs text-muted-foreground">
@@ -99,7 +128,7 @@ export default function AiAnalysis({ weather, ageGroup }: AiAnalysisProps) {
               {tips.map((tip, i) => (
                 <p
                   key={i}
-                  className="text-sm text-foreground/90 leading-relaxed pl-1 border-l-2 border-sky/30 pl-3"
+                  className="text-sm text-foreground/90 leading-relaxed border-l-2 border-sky/30 pl-3"
                 >
                   {tip}
                 </p>

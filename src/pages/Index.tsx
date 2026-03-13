@@ -234,7 +234,7 @@ const Index = () => {
         />
         <TomorrowForecastCard weather={weather} ageGroup={ageGroup} tomorrow={tomorrow} />
 
-        <AiAnalysis weather={weather} ageGroup={ageGroup} />
+        <AiAnalysis weather={weather} ageGroup={ageGroup} dual={dual} />
 
         <UvAlert weather={weather} />
 
