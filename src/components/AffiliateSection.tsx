@@ -55,13 +55,13 @@ export default function AffiliateSection() {
               </div>
             </div>
             <Button
-              variant="outline"
-              className="w-full justify-between bg-card/80 hover:bg-card text-foreground"
+              variant={brand.variant}
+              className="w-full justify-between"
               asChild
             >
               <a href={brand.url} target="_blank" rel="noopener noreferrer">
                 <span className="text-sm">{brand.cta}</span>
-                <ExternalLink className="h-3.5 w-3.5 opacity-50" />
+                <ExternalLink className="h-3.5 w-3.5 opacity-70" />
               </a>
             </Button>
           </Card>
