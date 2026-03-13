@@ -245,7 +245,7 @@ const Index = () => {
           <AgeGroupToggle selected={ageGroup} onChange={setAgeGroup} />
         </div>
 
-        <ClothingCard key={`${city}-${ageGroup}`} items={clothing} />
+        <DualClothingCard key={`${city}-${ageGroup}`} dual={dual} />
         <DaycareChecklist ageGroup={ageGroup} weather={weather} />
         <AffiliateSection />
 
