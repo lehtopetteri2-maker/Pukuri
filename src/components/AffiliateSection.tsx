@@ -69,6 +69,10 @@ export default function AffiliateSection() {
       </div>
 
       <p className="text-[11px] text-muted-foreground/70 leading-relaxed px-1">
+        {t("affiliate.disclaimerLindex")}
+      </p>
+
+      <p className="text-[10px] text-muted-foreground/60 leading-relaxed px-1">
         {t("affiliate.disclaimer")}
       </p>
     </div>
