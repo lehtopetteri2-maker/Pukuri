@@ -1,11 +1,10 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, Snowflake, Heart } from "lucide-react";
+import { ExternalLink, Heart, Wind } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 
 // ─── Adtraction Affiliate Links ──────────────────────────────
-// Replace these with your real Adtraction tracking links:
-const REIMA_AFFILIATE_URL = "https://www.reima.com/fi";
+const POLARNOPYRET_AFFILIATE_URL = "https://at.polarnopyret.fi/t/t?a=1714248024&as=2056824469&t=2&tk=1";
 const LINDEX_AFFILIATE_URL = "https://do.lindex.com/t/t?a=1200829640&as=2056824469&t=2&tk=1";
 // ──────────────────────────────────────────────────────────────
 
@@ -14,12 +13,12 @@ export default function AffiliateSection() {
 
   const brands = [
     {
-      name: "Reima",
-      icon: <Snowflake className="h-5 w-5 text-primary" />,
-      description: t("affiliate.reima.desc"),
-      cta: t("affiliate.reima.cta"),
-      url: REIMA_AFFILIATE_URL,
-      variant: "outline" as const,
+      name: "Polarn O. Pyret",
+      icon: <Wind className="h-5 w-5 text-primary" />,
+      description: t("affiliate.polarnopyret.desc"),
+      cta: t("affiliate.polarnopyret.cta"),
+      url: POLARNOPYRET_AFFILIATE_URL,
+      variant: "default" as const,
       accent: "from-primary/8 to-secondary/10 border-primary/15 hover:border-primary/30",
     },
     {
@@ -28,7 +27,7 @@ export default function AffiliateSection() {
       description: t("affiliate.lindex.desc"),
       cta: t("affiliate.lindex.cta"),
       url: LINDEX_AFFILIATE_URL,
-      variant: "default" as const,
+      variant: "outline" as const,
       accent: "from-secondary/10 to-accent/15 border-secondary/20 hover:border-secondary/40",
     },
   ];

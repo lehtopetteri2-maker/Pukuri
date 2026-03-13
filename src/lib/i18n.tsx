@@ -168,8 +168,8 @@ const translations = {
 
   // Affiliate
   "affiliate.title": { fi: "Suosittelemme laadukkaita varusteita", sv: "Vi rekommenderar kvalitetsutrustning" },
-  "affiliate.reima.desc": { fi: "Säänkestävät ulkovaatteet ja asusteet", sv: "Väderbeständiga ytterkläder och accessoarer" },
-  "affiliate.reima.cta": { fi: "Tutustu kauden uutuuksiin", sv: "Se säsongens nyheter" },
+  "affiliate.polarnopyret.desc": { fi: "Polarn O. Pyret – Laatua, joka kestää lapselta toiselle", sv: "Polarn O. Pyret – Kvalitet som håller från barn till barn" },
+  "affiliate.polarnopyret.cta": { fi: "Tutustu ulkoilu- ja arkivaatteisiin", sv: "Upptäck ute- och vardagskläder" },
   "affiliate.lindex.desc": { fi: "Kestävät ja pehmeät arkivaatteet lapsille", sv: "Hållbara och mjuka vardagskläder för barn" },
   "affiliate.lindex.cta": { fi: "Katso päivän tarjoukset", sv: "Se dagens erbjudanden" },
   "affiliate.disclaimer": {
