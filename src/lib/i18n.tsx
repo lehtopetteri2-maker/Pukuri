@@ -13,7 +13,7 @@ function getSavedLanguage(): Language {
 const translations = {
   // Header
   "header.title": { fi: "Säävahti", sv: "Väderpytten" },
-  "header.subtitle": { fi: "Lasten pukeutumisavustaja", sv: "Barnens klädassistent" },
+  "header.subtitle": { fi: "Älykäs apu aamun varustevalintoihin", sv: "Smart hjälp med morgonens utrustningsval" },
 
   // Location search
   "location.weatherNow": { fi: "Sää nyt", sv: "Väder nu" },

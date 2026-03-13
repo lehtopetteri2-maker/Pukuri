@@ -20,6 +20,7 @@ import { getCachedWeather, isCacheFresh, getCacheAgeMinutes, saveWeatherCache } 
 import { ForecastAlerts, emptyAlerts, computeAlerts } from "@/lib/forecastAlerts";
 import FeedbackSection from "@/components/FeedbackSection";
 import { CloudSnow, AlertCircle } from "lucide-react";
+import logoImg from "@/assets/saavahti-logo.png";
 import { toast } from "sonner";
 import { useLanguage } from "@/lib/i18n";
 
@@ -193,12 +194,10 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <header className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-lg mx-auto px-4 py-4 flex items-center gap-3">
-          <div className="h-9 w-9 rounded-lg bg-primary flex items-center justify-center">
-            <CloudSnow className="h-5 w-5 text-primary-foreground" />
-          </div>
+          <img src={logoImg} alt="Säävahti" className="h-10 w-10 rounded-lg object-contain" />
           <div className="flex-1">
-            <h1 className="text-lg font-display font-800 text-foreground leading-tight">{t("header.title")}</h1>
-            <p className="text-xs text-muted-foreground">{t("header.subtitle")}</p>
+            <h1 className="text-xl font-display font-800 text-foreground leading-tight tracking-tight">{t("header.title")}</h1>
+            <p className="text-[11px] font-medium text-muted-foreground tracking-wide">{t("header.subtitle")}</p>
           </div>
           <LanguageSwitcher />
         </div>
