@@ -289,8 +289,8 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
       // Yli +12°C + aurinkoinen → lippis
       base[i] = { name: "Lippalakki", emoji: "🧢", description: "Aurinkoinen sää — lippis suojaa" };
     } else if (temp <= -5) {
-      // Kireä pakkanen → paksu tupsupipo
-      base[i] = { name: "Pipo", emoji: "🎿", description: "Paksu tupsupipo kovaan pakkaseen" };
+      // Kireä pakkanen → paksu pipo
+      base[i] = { name: "Pipo", emoji: "🎿", description: "Paksu pipo kovaan pakkaseen" };
     } else if (temp <= 12) {
       // Välikausi 0…+12°C tai lievä pakkanen → ohut pipo
       base[i] = { name: "Pipo", emoji: "🎿", description: "Ohut pipo viileään säähän" };
