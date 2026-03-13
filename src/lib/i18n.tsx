@@ -173,8 +173,8 @@ const translations = {
   "affiliate.lindex.desc": { fi: "Kestävät ja pehmeät arkivaatteet lapsille", sv: "Hållbara och mjuka vardagskläder för barn" },
   "affiliate.lindex.cta": { fi: "Katso päivän tarjoukset", sv: "Se dagens erbjudanden" },
   "affiliate.disclaimer": {
-    fi: "Säävahti on riippumaton palvelu. Suositukset on valittu helpottamaan perheiden arkea ja ne voivat sisältää mainoslinkkejä. Linkkien kautta tehdyistä ostoksista saatava komissio käytetään sovelluksen ylläpitoon ja kehitykseen.",
-    sv: "Väderpytten är en oberoende tjänst. Rekommendationerna är utvalda för att underlätta familjers vardag och kan innehålla annonslänkar. Provisionen från köp via länkarna används för appens underhåll och utveckling."
+    fi: "Säävahti suosittelee laadukkaita varusteita arkeen. Linkit ovat mainoslinkkejä, joiden kautta tuet sovelluksen kehitystä.",
+    sv: "Väderpytten rekommenderar kvalitetsutrustning för vardagen. Länkarna är annonslänkar som stöder utvecklingen av appen."
   },
   "affiliate.adtraction": {
     fi: "Tämä sivusto on vahvistettu Adtraction-verkostoon.",

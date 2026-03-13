@@ -5,9 +5,8 @@ import { useLanguage } from "@/lib/i18n";
 
 // ─── Adtraction Affiliate Links ──────────────────────────────
 // Replace these with your real Adtraction tracking links:
-const REIMA_AFFILIATE_URL = "https://www.reima.com/fi";      // TODO: Replace with Adtraction tracking URL
-const LINDEX_AFFILIATE_URL = "https://www.lindex.com/fi/";   // TODO: Replace with Adtraction tracking URL
-const ADTRACTION_CHANNEL_ID = "";  // TODO: Add your Adtraction channel ID here
+const REIMA_AFFILIATE_URL = "https://www.reima.com/fi";
+const LINDEX_AFFILIATE_URL = "https://do.lindex.com/t/t?a=1200829640&as=2056824469&t=2&tk=1";
 // ──────────────────────────────────────────────────────────────
 
 export default function AffiliateSection() {
@@ -20,6 +19,7 @@ export default function AffiliateSection() {
       description: t("affiliate.reima.desc"),
       cta: t("affiliate.reima.cta"),
       url: REIMA_AFFILIATE_URL,
+      variant: "outline" as const,
       accent: "from-primary/8 to-secondary/10 border-primary/15 hover:border-primary/30",
     },
     {
@@ -28,6 +28,7 @@ export default function AffiliateSection() {
       description: t("affiliate.lindex.desc"),
       cta: t("affiliate.lindex.cta"),
       url: LINDEX_AFFILIATE_URL,
+      variant: "default" as const,
       accent: "from-secondary/10 to-accent/15 border-secondary/20 hover:border-secondary/40",
     },
   ];
@@ -54,13 +55,13 @@ export default function AffiliateSection() {
               </div>
             </div>
             <Button
-              variant="outline"
-              className="w-full justify-between bg-card/80 hover:bg-card text-foreground"
+              variant={brand.variant}
+              className="w-full justify-between"
               asChild
             >
               <a href={brand.url} target="_blank" rel="noopener noreferrer">
                 <span className="text-sm">{brand.cta}</span>
-                <ExternalLink className="h-3.5 w-3.5 opacity-50" />
+                <ExternalLink className="h-3.5 w-3.5 opacity-70" />
               </a>
             </Button>
           </Card>
