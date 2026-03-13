@@ -70,7 +70,6 @@ export default function ClothingCard({ items }: ClothingCardProps) {
       </h2>
       <div className="space-y-3">
         {items.map((item, i) => (
-          return (
             <div
               key={item.name}
               className="flex items-center gap-3 p-3 rounded-md bg-mint-light/50 border border-primary/10"
@@ -86,8 +85,7 @@ export default function ClothingCard({ items }: ClothingCardProps) {
                 <div className="text-xs text-muted-foreground">{item.description}</div>
               </div>
             </div>
-          );
-        })}
+        ))}
       </div>
     </div>
   );
