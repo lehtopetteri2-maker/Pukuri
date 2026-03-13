@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from "react";
 import WeatherCard from "@/components/WeatherCard";
 import AgeGroupToggle from "@/components/AgeGroupToggle";
-import ClothingCard from "@/components/ClothingCard";
+import DualClothingCard from "@/components/DualClothingCard";
 import AiAnalysis from "@/components/AiAnalysis";
 import MorningSummary from "@/components/MorningSummary";
 import DaycareChecklist from "@/components/DaycareChecklist";
@@ -14,7 +14,8 @@ import AffiliateSection from "@/components/AffiliateSection";
 import UvAlert from "@/components/UvAlert";
 import Footer from "@/components/Footer";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import { getClothingRecommendation, getSavedCity, saveCity, AgeGroup, WeatherData } from "@/lib/weatherData";
+import { getSavedCity, saveCity, AgeGroup, WeatherData } from "@/lib/weatherData";
+import { computeDualRecommendation } from "@/lib/dualRecommendation";
 import { fetchWeatherData, fetchWeatherByCoords, TomorrowData } from "@/lib/weatherApi";
 import { getCachedWeather, isCacheFresh, getCacheAgeMinutes, saveWeatherCache } from "@/lib/weatherCache";
 import { ForecastAlerts, emptyAlerts, computeAlerts } from "@/lib/forecastAlerts";
@@ -83,7 +84,7 @@ const Index = () => {
     return computeAlerts(forecastList, weather.temperature, weather.uvi);
   }, [weather, forecastList, loading]);
 
-  const clothing = getClothingRecommendation(weather, ageGroup);
+  const dual = useMemo(() => computeDualRecommendation(weather, ageGroup, forecastList), [weather, ageGroup, forecastList]);
 
   const applyResult = useCallback((data: { current: WeatherData; tomorrow: TomorrowData; forecastList: any[]; fromApi: boolean }) => {
     setWeather(data.current);
@@ -244,7 +245,7 @@ const Index = () => {
           <AgeGroupToggle selected={ageGroup} onChange={setAgeGroup} />
         </div>
 
-        <ClothingCard key={`${city}-${ageGroup}`} items={clothing} />
+        <DualClothingCard key={`${city}-${ageGroup}`} dual={dual} />
         <DaycareChecklist ageGroup={ageGroup} weather={weather} />
         <AffiliateSection />
 
