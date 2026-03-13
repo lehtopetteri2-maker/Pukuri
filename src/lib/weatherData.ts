@@ -263,6 +263,25 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
     }
   }
 
+  // Dynaaminen pipo/lippis-logiikka lämpötilan mukaan
+  for (let i = 0; i < base.length; i++) {
+    const item = base[i];
+    const isPipo = item.name === "Pipo" || item.name === "Ohut pipo" || item.name === "Lippis/Hattu";
+    const isLippalakki = item.name === "Lippalakki";
+    if (!isPipo && !isLippalakki) continue;
+
+    if (temp > 12 && weather.condition === "sunny") {
+      // Yli +12°C + aurinkoinen → lippis
+      base[i] = { name: "Lippalakki", emoji: "🧢", description: "Aurinkoinen sää — lippis suojaa" };
+    } else if (temp <= -5) {
+      // Kireä pakkanen → paksu tupsupipo
+      base[i] = { name: "Pipo", emoji: "🎿", description: "Paksu tupsupipo kovaan pakkaseen" };
+    } else if (temp <= 12) {
+      // Välikausi 0…+12°C tai lievä pakkanen → ohut pipo
+      base[i] = { name: "Pipo", emoji: "🎿", description: "Ohut pipo viileään säähän" };
+    }
+  }
+
   // Deduplicate by name
   const seen = new Set<string>();
   return base.filter((item) => {
