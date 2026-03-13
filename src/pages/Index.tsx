@@ -20,6 +20,7 @@ import { getCachedWeather, isCacheFresh, getCacheAgeMinutes, saveWeatherCache } 
 import { ForecastAlerts, emptyAlerts, computeAlerts } from "@/lib/forecastAlerts";
 import FeedbackSection from "@/components/FeedbackSection";
 import { CloudSnow, AlertCircle } from "lucide-react";
+import logoImg from "@/assets/saavahti-logo.png";
 import { toast } from "sonner";
 import { useLanguage } from "@/lib/i18n";
 
