@@ -345,6 +345,12 @@ const translations = {
   "dual.mudWarning": { fi: "Vaikka nyt on poutaa, maa on vielä märkä yöllisen sateen jäljiltä.", sv: "Även om det är uppehåll nu är marken fortfarande blöt efter nattens regn.", en: "Even though it's dry now, the ground is still wet from overnight rain." },
   "dual.gapInfo": { fi: "Lämpötila muuttuu merkittävästi päivän aikana ({morning}°C → {afternoon}°C). Pakkaa iltapäivän varusteet reppuun!", sv: "Temperaturen förändras betydligt under dagen ({morning}°C → {afternoon}°C). Packa eftermiddagens kläder i ryggsäcken!", en: "Temperature changes significantly during the day ({morning}°C → {afternoon}°C). Pack afternoon outfit in the backpack!" },
 
+  // PWA install banner
+  "pwa.title": { fi: "Asenna Säävahti puhelimeesi", sv: "Installera Vädervakten på din telefon", en: "Install Säävahti on your phone" },
+  "pwa.instructionIos": { fi: "Paina selaimen \"Jaa\"-painiketta (📤) ja valitse \"Lisää kotivalikkoon\".", sv: "Tryck på webbläsarens \"Dela\"-knapp (📤) och välj \"Lägg till på hemskärmen\".", en: "Tap the browser's \"Share\" button (📤) and select \"Add to Home Screen\"." },
+  "pwa.instructionAndroid": { fi: "Paina selaimen valikkoa (⋮) ja valitse \"Lisää aloitusnäytölle\".", sv: "Tryck på webbläsarens meny (⋮) och välj \"Lägg till på startskärmen\".", en: "Tap the browser menu (⋮) and select \"Add to Home Screen\"." },
+  "pwa.close": { fi: "Sulje", sv: "Stäng", en: "Close" },
+
   // Share button
   "share.button": { fi: "Jaa puolison kanssa", sv: "Dela med partner", en: "Share with partner" },
   "share.messageIntro": { fi: "Säävahti-muistutus!", sv: "Vädervakten-påminnelse!", en: "Säävahti reminder!" },

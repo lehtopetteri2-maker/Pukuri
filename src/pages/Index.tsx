@@ -15,6 +15,7 @@ import AffiliateSection from "@/components/AffiliateSection";
 import UvAlert from "@/components/UvAlert";
 import Footer from "@/components/Footer";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import PwaInstallBanner from "@/components/PwaInstallBanner";
 import { getSavedCity, saveCity, AgeGroup, WeatherData } from "@/lib/weatherData";
 import { computeDualRecommendation } from "@/lib/dualRecommendation";
 import { fetchWeatherData, fetchWeatherByCoords, TomorrowData } from "@/lib/weatherApi";
@@ -206,6 +207,7 @@ const Index = () => {
       </header>
 
       <main className="max-w-lg mx-auto px-4 py-6 space-y-5">
+        <PwaInstallBanner />
         <LocationSearch
           currentCity={city}
           onSelectCity={handleCityChange}
