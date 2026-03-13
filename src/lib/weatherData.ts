@@ -219,6 +219,22 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
 
   // Sadevarusteet (rainProbability > 40 %)
   if (weather.rainProbability > 40) {
+    // Lämpötilan mukaan: alle +10°C -> + villasukat kumisaappaisiin
+    const kumisaappaatWithSocks = (temp: number): ClothingItem => {
+      if (temp < 10) {
+        return {
+          name: "Kumisaappaat + villasukat",
+          emoji: "🥾🧦",
+          description: "Kumisaappaat ja villasukat suojaavat kylmältä",
+        };
+      }
+      return {
+        name: "Kumisaappaat",
+        emoji: "🥾",
+        description: "Kumisaappaat ohuilla sukilla",
+      };
+    };
+
     if (ageGroup === "koululainen") {
       // Koululaisille (7–10 v): kuorivaatteet
       base.unshift(
@@ -228,40 +244,49 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
       );
     } else if (ageGroup === "taapero" || ageGroup === "leikki-ikäinen") {
       // Taapero & leikki-ikäinen: sadehaalari / kuravarusteet
+      const kumpparit = kumisaappaatWithSocks(temp);
       if (temp < 5) {
         base.unshift(
           { name: "Vuorellinen sadehaalari", emoji: "🌧️", description: "Vuorellinen sadehaalari tai kuravarusteet välikausipuvun päällä" },
           { name: "Kurahanskat", emoji: "🧤", description: "Vedenpitävät kurahanskat" },
-          { name: "Kumisaappaat", emoji: "🥾", description: "Lämpimät kumisaappaat paksuilla sukilla" },
+          { name: kumpparit.name, emoji: kumpparit.emoji, description: kumpparit.description },
         );
       } else if (temp > 15) {
         base.unshift(
           { name: "Ohuet kuravarusteet", emoji: "🌧️", description: "Ohuet kuravarusteet — kevyet ja ilmavat" },
           { name: "Kurahanskat", emoji: "🧤", description: "Kevyet kurahanskat" },
-          { name: "Kumisaappaat", emoji: "🥾", description: "Kumisaappaat ohuilla sukilla" },
+          { name: kumpparit.name, emoji: kumpparit.emoji, description: kumpparit.description },
         );
       } else {
         base.unshift(
           { name: "Sadehaalari tai kurahousut & sadetakki", emoji: "🌧️", description: "Kestää päiväkodin hiekkalaatikkoleikkejä" },
           { name: "Kurahanskat", emoji: "🧤", description: "Vedenpitävät kurahanskat" },
-          { name: "Kumisaappaat", emoji: "🥾", description: "Kumisaappaat" },
+          { name: kumpparit.name, emoji: kumpparit.emoji, description: kumpparit.description },
         );
       }
     } else {
       // Vauva: yksinkertaiset kuravarusteet
+      const kumpparit = kumisaappaatWithSocks(temp);
       if (temp > 10) {
         base.unshift(
           { name: "Vuorettomat kurahousut", emoji: "🌧️", description: "Kevyet sadehousut ilman vuorta" },
-          { name: "Kumisaappaat", emoji: "🥾", description: "Kumisaappaat ohuilla sukilla" },
+          { name: kumpparit.name, emoji: kumpparit.emoji, description: kumpparit.description },
         );
       } else {
         const hasKura = base.some((i) => i.name.includes("Kurahousut"));
         if (!hasKura) {
-          base.unshift({
-            name: "Kurahousut ja kurahanskat",
-            emoji: "🌧️",
-            description: "Sateen todennäköisyys yli 40 % — vedenpitävät varusteet mukaan!",
-          });
+          base.unshift(
+            {
+              name: "Kurahousut ja kurahanskat",
+              emoji: "🌧️",
+              description: "Sateen todennäköisyys yli 40 % — vedenpitävät varusteet mukaan!",
+            },
+            {
+              name: kumpparit.name,
+              emoji: kumpparit.emoji,
+              description: kumpparit.description,
+            },
+          );
         }
       }
     }

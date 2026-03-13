@@ -162,7 +162,12 @@ function applyActivityLevel(items: ClothingItem[], ageGroup: AgeGroup): Clothing
 }
 
 /** Add mud factor items if ground is wet */
-function applyMudFactor(items: ClothingItem[], recentRainMm: number, currentCondition: string): ClothingItem[] {
+function applyMudFactor(
+  items: ClothingItem[],
+  recentRainMm: number,
+  currentCondition: string,
+  temperature: number
+): ClothingItem[] {
   if (recentRainMm < 2) return items;
 
   const result = [...items];
@@ -171,11 +176,20 @@ function applyMudFactor(items: ClothingItem[], recentRainMm: number, currentCond
   );
 
   if (!hasWaterproof) {
-    result.push({
-      name: "Kumisaappaat",
-      emoji: "🥾",
-      description: "Maa on märkä yöllisen sateen jäljiltä",
-    });
+    // Alle +10°C -> lisätään villasukat kumisaappaisiin
+    const kumpparit: ClothingItem = temperature < 10
+      ? {
+          name: "Kumisaappaat + villasukat",
+          emoji: "🥾🧦",
+          description: "Kumisaappaat ja villasukat suojaavat kylmältä",
+        }
+      : {
+          name: "Kumisaappaat",
+          emoji: "🥾",
+          description: "Maa on märkä yöllisen sateen jäljiltä",
+        };
+
+    result.push(kumpparit);
     result.push({
       name: "Kurahousut",
       emoji: "🌧️",

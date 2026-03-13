@@ -238,6 +238,8 @@ const translations = {
   "cloth.vuorettomat.desc": { fi: "Kevyet sadehousut ilman vuorta", sv: "Lätta regnbyxor utan foder", en: "Light rain trousers without lining" },
   "cloth.kumisaappaat": { fi: "Kumisaappaat", sv: "Gummistövlar", en: "Rubber boots" },
   "cloth.kumisaappaat.desc": { fi: "Kumisaappaat ohuilla sukilla", sv: "Gummistövlar med tunna strumpor", en: "Rubber boots with thin socks" },
+  "cloth.kumisaappaat.wool": { fi: "+ villasukat", sv: "+ yllesockor", en: "+ wool socks" },
+  "cloth.kumisaappaat.wool.desc": { fi: "Kumisaappaat ja villasukat suojaavat kylmältä", sv: "Gummistövlar och ullstrumpor skyddar mot kylan", en: "Rubber boots and wool socks protect against cold" },
   "cloth.kurahousut": { fi: "Kurahousut ja kurahanskat", sv: "Regnbyxor och regnvantar", en: "Rain trousers and rain gloves" },
   "cloth.kurahousut.desc": { fi: "Sateen todennäköisyys yli 40 % — vedenpitävät varusteet mukaan!", sv: "Regnchans över 40 % — ta med vattentät utrustning!", en: "Rain probability over 40% — bring waterproof gear!" },
   "cloth.lippisUv": { fi: "Lippis/Hattu", sv: "Keps/Hatt", en: "Cap/Hat" },
