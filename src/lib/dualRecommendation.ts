@@ -162,7 +162,12 @@ function applyActivityLevel(items: ClothingItem[], ageGroup: AgeGroup): Clothing
 }
 
 /** Add mud factor items if ground is wet */
-function applyMudFactor(items: ClothingItem[], recentRainMm: number, currentCondition: string): ClothingItem[] {
+function applyMudFactor(
+  items: ClothingItem[],
+  recentRainMm: number,
+  currentCondition: string,
+  temperature: number
+): ClothingItem[] {
   if (recentRainMm < 2) return items;
 
   const result = [...items];
@@ -171,11 +176,20 @@ function applyMudFactor(items: ClothingItem[], recentRainMm: number, currentCond
   );
 
   if (!hasWaterproof) {
-    result.push({
-      name: "Kumisaappaat",
-      emoji: "🥾",
-      description: "Maa on märkä yöllisen sateen jäljiltä",
-    });
+    // Alle +10°C -> lisätään villasukat kumisaappaisiin
+    const kumpparit: ClothingItem = temperature < 10
+      ? {
+          name: "Kumisaappaat + villasukat",
+          emoji: "🥾🧦",
+          description: "Kumisaappaat ja villasukat suojaavat kylmältä",
+        }
+      : {
+          name: "Kumisaappaat",
+          emoji: "🥾",
+          description: "Maa on märkä yöllisen sateen jäljiltä",
+        };
+
+    result.push(kumpparit);
     result.push({
       name: "Kurahousut",
       emoji: "🌧️",
@@ -228,8 +242,8 @@ export function computeDualRecommendation(
   afternoonClothing = applyActivityLevel(afternoonClothing, ageGroup);
 
   // Mud factor
-  morningClothing = applyMudFactor(morningClothing, recentRainMm, weather.condition);
-  afternoonClothing = applyMudFactor(afternoonClothing, recentRainMm, weather.condition);
+  morningClothing = applyMudFactor(morningClothing, recentRainMm, weather.condition, weather.feelsLike);
+  afternoonClothing = applyMudFactor(afternoonClothing, recentRainMm, weather.condition, weather.feelsLike);
 
   // Wind warning: add windproof shell note
   if (windWarning) {
