@@ -84,7 +84,7 @@ const Index = () => {
     return computeAlerts(forecastList, weather.temperature, weather.uvi);
   }, [weather, forecastList, loading]);
 
-  const clothing = getClothingRecommendation(weather, ageGroup);
+  const dual = useMemo(() => computeDualRecommendation(weather, ageGroup, forecastList), [weather, ageGroup, forecastList]);
 
   const applyResult = useCallback((data: { current: WeatherData; tomorrow: TomorrowData; forecastList: any[]; fromApi: boolean }) => {
     setWeather(data.current);
