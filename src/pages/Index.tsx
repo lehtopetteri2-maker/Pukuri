@@ -15,6 +15,7 @@ import AffiliateSection from "@/components/AffiliateSection";
 import UvAlert from "@/components/UvAlert";
 import Footer from "@/components/Footer";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import PwaInstallBanner from "@/components/PwaInstallBanner";
 import { getSavedCity, saveCity, AgeGroup, WeatherData } from "@/lib/weatherData";
 import { computeDualRecommendation } from "@/lib/dualRecommendation";
 import { fetchWeatherData, fetchWeatherByCoords, TomorrowData } from "@/lib/weatherApi";
