@@ -105,8 +105,8 @@ const mildRainGear: Record<AgeGroup, ClothingItem[]> = {
   ],
   koululainen: [
     { name: "Välikausihousut", emoji: "👖", description: "Joustavat välikausihousut" },
-    { name: "Kuoritakki", emoji: "🧥", description: "Tuulenpitävä kuoritakki" },
-    { name: "Välikausikengät", emoji: "🥾", description: "Vettähylkivät kengät" },
+    { name: "Vedenpitävä kuoritakki", emoji: "🧥", description: "Vedenpitävä kuoritakki" },
+    { name: "Vettä hylkivät kengät", emoji: "👟", description: "Vettä hylkivät kengät" },
     { name: "Huppari", emoji: "👕", description: "Fleece tai huppari" },
   ],
 };
