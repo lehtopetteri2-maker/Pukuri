@@ -344,6 +344,11 @@ const translations = {
   "dual.windWarning": { fi: "Kova tuuli ({speed} m/s) lisää kylmyyden tuntua — valitse tuulenpitävä kuorikerros.", sv: "Stark vind ({speed} m/s) ökar kylkänslan — välj vindtätt skalplagg.", en: "Strong wind ({speed} m/s) increases wind chill — choose a windproof shell layer." },
   "dual.mudWarning": { fi: "Vaikka nyt on poutaa, maa on vielä märkä yöllisen sateen jäljiltä.", sv: "Även om det är uppehåll nu är marken fortfarande blöt efter nattens regn.", en: "Even though it's dry now, the ground is still wet from overnight rain." },
   "dual.gapInfo": { fi: "Lämpötila muuttuu merkittävästi päivän aikana ({morning}°C → {afternoon}°C). Pakkaa iltapäivän varusteet reppuun!", sv: "Temperaturen förändras betydligt under dagen ({morning}°C → {afternoon}°C). Packa eftermiddagens kläder i ryggsäcken!", en: "Temperature changes significantly during the day ({morning}°C → {afternoon}°C). Pack afternoon outfit in the backpack!" },
+
+  // Share button
+  "share.button": { fi: "Jaa puolison kanssa", sv: "Dela med partner", en: "Share with partner" },
+  "share.messageIntro": { fi: "Säävahti-muistutus!", sv: "Vädervakten-påminnelse!", en: "Säävahti reminder!" },
+  "share.rememberMud": { fi: "Muista kuravarusteet!", sv: "Kom ihåg smutskläderna!", en: "Remember mud gear!" },
 } as const;
 
 export type TranslationKey = keyof typeof translations;
