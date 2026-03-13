@@ -19,6 +19,7 @@ export default function AffiliateSection() {
       description: t("affiliate.reima.desc"),
       cta: t("affiliate.reima.cta"),
       url: REIMA_AFFILIATE_URL,
+      variant: "outline" as const,
       accent: "from-primary/8 to-secondary/10 border-primary/15 hover:border-primary/30",
     },
     {
