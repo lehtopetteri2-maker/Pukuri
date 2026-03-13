@@ -219,20 +219,36 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
 
   // Kura-erikoistilanne: sade + yli +10 °C → kevyet kuravarusteet
   if (weather.rainProbability > 40 && temp > 10) {
-    // Remove heavy rain gear, add light versions
-    const lightRain = [
-      { name: "Vuorettomat kurahousut", emoji: "🌧️", description: "Kevyet sadehousut ilman vuorta" },
-      { name: "Kumisaappaat", emoji: "🥾", description: "Kumisaappaat ohuilla sukilla" },
-    ];
-    base.unshift(...lightRain);
+    if (ageGroup === "koululainen") {
+      // Koululaisille (7–10 v): ei kurahousuja/sadehousuja, vaan kuorivaatteet
+      base.unshift(
+        { name: "Vedenpitävä kuoritakki", emoji: "🧥", description: "Vedenpitävä kuoritakki sateelta suojaan" },
+        { name: "Vedenpitävät ulkoiluhousut", emoji: "👖", description: "Vedenpitävät ulkoiluhousut sadesäälle" },
+        { name: "Vettä hylkivät kengät", emoji: "👟", description: "Vettä hylkivät kengät pitävät jalat kuivina" },
+      );
+    } else {
+      const lightRain = [
+        { name: "Vuorettomat kurahousut", emoji: "🌧️", description: "Kevyet sadehousut ilman vuorta" },
+        { name: "Kumisaappaat", emoji: "🥾", description: "Kumisaappaat ohuilla sukilla" },
+      ];
+      base.unshift(...lightRain);
+    }
   } else if (weather.rainProbability > 40) {
-    const hasKura = base.some((i) => i.name.includes("Kurahousut"));
-    if (!hasKura) {
-      base.unshift({
-        name: "Kurahousut ja kurahanskat",
-        emoji: "🌧️",
-        description: "Sateen todennäköisyys yli 40 % — vedenpitävät varusteet mukaan!",
-      });
+    if (ageGroup === "koululainen") {
+      base.unshift(
+        { name: "Vedenpitävä kuoritakki", emoji: "🧥", description: "Vedenpitävä kuoritakki sateelta suojaan" },
+        { name: "Vedenpitävät ulkoiluhousut", emoji: "👖", description: "Vedenpitävät ulkoiluhousut sadesäälle" },
+        { name: "Vettä hylkivät kengät", emoji: "👟", description: "Vettä hylkivät kengät pitävät jalat kuivina" },
+      );
+    } else {
+      const hasKura = base.some((i) => i.name.includes("Kurahousut"));
+      if (!hasKura) {
+        base.unshift({
+          name: "Kurahousut ja kurahanskat",
+          emoji: "🌧️",
+          description: "Sateen todennäköisyys yli 40 % — vedenpitävät varusteet mukaan!",
+        });
+      }
     }
   }
 
