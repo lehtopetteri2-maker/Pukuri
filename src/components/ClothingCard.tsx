@@ -69,8 +69,7 @@ export default function ClothingCard({ items }: ClothingCardProps) {
         {t("clothing.title")}
       </h2>
       <div className="space-y-3">
-        {items.map((item, i) => {
-          const customIcon = <HatIcon itemName={item.name} />;
+        {items.map((item, i) => (
           return (
             <div
               key={item.name}
