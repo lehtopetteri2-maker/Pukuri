@@ -77,7 +77,11 @@ export default function ClothingCard({ items }: ClothingCardProps) {
               className="flex items-center gap-3 p-3 rounded-md bg-mint-light/50 border border-primary/10"
               style={{ animationDelay: `${i * 60}ms` }}
             >
-              {customIcon || <span className="text-2xl">{item.emoji}</span>}
+              {isHatItem(item.name) ? (
+                <HatIcon itemName={item.name} />
+              ) : (
+                <span className="text-2xl">{item.emoji}</span>
+              )}
               <div>
                 <div className="font-display font-700 text-sm text-foreground">{item.name}</div>
                 <div className="text-xs text-muted-foreground">{item.description}</div>
