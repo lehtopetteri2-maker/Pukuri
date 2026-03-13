@@ -43,15 +43,17 @@ function CapIcon({ className = "" }: { className?: string }) {
   );
 }
 
-/** Resolve a custom icon for hat items, or return null to use default emoji */
+const HAT_NAMES = new Set(["Pipo", "Lippalakki", "Lippis/Hattu"]);
+
+function isHatItem(name: string): boolean {
+  return HAT_NAMES.has(name);
+}
+
 function HatIcon({ itemName }: { itemName: string }) {
   if (itemName === "Pipo") {
     return <BeanieIcon className="text-primary" />;
   }
-  if (itemName === "Lippalakki" || itemName === "Lippis/Hattu") {
-    return <CapIcon className="text-accent-foreground" />;
-  }
-  return null;
+  return <CapIcon className="text-accent-foreground" />;
 }
 
 interface ClothingCardProps {
