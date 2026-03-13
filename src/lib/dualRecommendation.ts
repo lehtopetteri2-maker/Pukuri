@@ -242,8 +242,8 @@ export function computeDualRecommendation(
   afternoonClothing = applyActivityLevel(afternoonClothing, ageGroup);
 
   // Mud factor
-  morningClothing = applyMudFactor(morningClothing, recentRainMm, weather.condition);
-  afternoonClothing = applyMudFactor(afternoonClothing, recentRainMm, weather.condition);
+  morningClothing = applyMudFactor(morningClothing, recentRainMm, weather.condition, weather.feelsLike);
+  afternoonClothing = applyMudFactor(afternoonClothing, recentRainMm, weather.condition, weather.feelsLike);
 
   // Wind warning: add windproof shell note
   if (windWarning) {
