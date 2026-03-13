@@ -13,12 +13,12 @@ export default function AffiliateSection() {
 
   const brands = [
     {
-      name: "Reima",
-      icon: <Snowflake className="h-5 w-5 text-primary" />,
-      description: t("affiliate.reima.desc"),
-      cta: t("affiliate.reima.cta"),
-      url: REIMA_AFFILIATE_URL,
-      variant: "outline" as const,
+      name: "Polarn O. Pyret",
+      icon: <Wind className="h-5 w-5 text-primary" />,
+      description: t("affiliate.polarnopyret.desc"),
+      cta: t("affiliate.polarnopyret.cta"),
+      url: POLARNOPYRET_AFFILIATE_URL,
+      variant: "default" as const,
       accent: "from-primary/8 to-secondary/10 border-primary/15 hover:border-primary/30",
     },
     {
@@ -27,7 +27,7 @@ export default function AffiliateSection() {
       description: t("affiliate.lindex.desc"),
       cta: t("affiliate.lindex.cta"),
       url: LINDEX_AFFILIATE_URL,
-      variant: "default" as const,
+      variant: "outline" as const,
       accent: "from-secondary/10 to-accent/15 border-secondary/20 hover:border-secondary/40",
     },
   ];
