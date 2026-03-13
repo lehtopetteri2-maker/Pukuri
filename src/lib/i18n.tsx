@@ -329,6 +329,13 @@ const translations = {
   "cloth.huppari": { fi: "Huppari", sv: "Hoodie", en: "Hoodie" },
   "cloth.huppari.desc": { fi: "Fleece tai huppari", sv: "Fleece eller hoodie", en: "Fleece or hoodie" },
   "cloth.välikausikengät2.desc": { fi: "Vettähylkivät kengät", sv: "Vattenavvisande skor", en: "Water-repellent shoes" },
+
+  // Dual recommendation
+  "dual.morning": { fi: "Aamun varustus", sv: "Morgonens utrustning", en: "Morning outfit" },
+  "dual.afternoon": { fi: "Iltapäivän varustus", sv: "Eftermiddagens utrustning", en: "Afternoon outfit" },
+  "dual.windWarning": { fi: "Kova tuuli ({speed} m/s) lisää kylmyyden tuntua — valitse tuulenpitävä kuorikerros.", sv: "Stark vind ({speed} m/s) ökar kylkänslan — välj vindtätt skalplagg.", en: "Strong wind ({speed} m/s) increases wind chill — choose a windproof shell layer." },
+  "dual.mudWarning": { fi: "Vaikka nyt on poutaa, maa on vielä märkä yöllisen sateen jäljiltä.", sv: "Även om det är uppehåll nu är marken fortfarande blöt efter nattens regn.", en: "Even though it's dry now, the ground is still wet from overnight rain." },
+  "dual.gapInfo": { fi: "Lämpötila muuttuu merkittävästi päivän aikana ({morning}°C → {afternoon}°C). Pakkaa iltapäivän varusteet reppuun!", sv: "Temperaturen förändras betydligt under dagen ({morning}°C → {afternoon}°C). Packa eftermiddagens kläder i ryggsäcken!", en: "Temperature changes significantly during the day ({morning}°C → {afternoon}°C). Pack afternoon outfit in the backpack!" },
 } as const;
 
 export type TranslationKey = keyof typeof translations;
