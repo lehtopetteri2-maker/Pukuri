@@ -6,6 +6,7 @@ export default function LanguageSwitcher() {
   const options: { value: Language; label: string; flag: string }[] = [
     { value: "fi", label: "FI", flag: "🇫🇮" },
     { value: "sv", label: "SV", flag: "🇸🇪" },
+    { value: "en", label: "EN", flag: "🇬🇧" },
   ];
 
   return (
@@ -14,7 +15,7 @@ export default function LanguageSwitcher() {
         <button
           key={opt.value}
           onClick={() => setLanguage(opt.value)}
-          className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-display font-700 transition-all ${
+          className={`flex items-center gap-1 px-2 py-1 rounded-md text-xs font-display font-700 transition-all ${
             lang === opt.value
               ? "bg-primary text-primary-foreground shadow-sm"
               : "text-muted-foreground hover:text-foreground"
