@@ -27,6 +27,7 @@ export default function AffiliateSection() {
       description: t("affiliate.lindex.desc"),
       cta: t("affiliate.lindex.cta"),
       url: LINDEX_AFFILIATE_URL,
+      variant: "default" as const,
       accent: "from-secondary/10 to-accent/15 border-secondary/20 hover:border-secondary/40",
     },
   ];
