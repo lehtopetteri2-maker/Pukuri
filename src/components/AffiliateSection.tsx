@@ -5,9 +5,8 @@ import { useLanguage } from "@/lib/i18n";
 
 // ─── Adtraction Affiliate Links ──────────────────────────────
 // Replace these with your real Adtraction tracking links:
-const REIMA_AFFILIATE_URL = "https://www.reima.com/fi";      // TODO: Replace with Adtraction tracking URL
-const LINDEX_AFFILIATE_URL = "https://www.lindex.com/fi/";   // TODO: Replace with Adtraction tracking URL
-const ADTRACTION_CHANNEL_ID = "";  // TODO: Add your Adtraction channel ID here
+const REIMA_AFFILIATE_URL = "https://www.reima.com/fi";
+const LINDEX_AFFILIATE_URL = "https://do.lindex.com/t/t?a=1200829640&as=2056824469&t=2&tk=1";
 // ──────────────────────────────────────────────────────────────
 
 export default function AffiliateSection() {
