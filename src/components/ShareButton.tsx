@@ -14,9 +14,9 @@ export default function ShareButton({ dual, ageGroup }: ShareButtonProps) {
 
   const buildMessage = () => {
     const ageName = t(`age.${ageGroup}` as TranslationKey);
-    const morningItems = dual.morningClothing.map((c) => `${c.emoji} ${c.name}`).join(", ");
+    const morningItems = dual.morningClothing.map((c) => `${c.emoji} ${translateClothingItem(c, lang).name}`).join(", ");
     const afternoonItems = dual.isDual
-      ? dual.afternoonClothing.map((c) => `${c.emoji} ${c.name}`).join(", ")
+      ? dual.afternoonClothing.map((c) => `${c.emoji} ${translateClothingItem(c, lang).name}`).join(", ")
       : "";
 
     let msg = `${t("share.messageIntro")} 🌦️\n`;
