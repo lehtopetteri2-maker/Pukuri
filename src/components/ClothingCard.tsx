@@ -1,5 +1,5 @@
 import { ClothingItem } from "@/lib/weatherData";
-import { useLanguage } from "@/lib/i18n";
+import { useLanguage, translateClothingItem } from "@/lib/i18n";
 
 /** Custom SVG: thick beanie with pom-pom */
 function BeanieIcon({ className = "" }: { className?: string }) {
