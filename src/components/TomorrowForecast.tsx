@@ -11,7 +11,7 @@ interface TomorrowForecastProps {
 }
 
 export default function TomorrowForecastCard({ weather, ageGroup, tomorrow: apiTomorrow }: TomorrowForecastProps) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const mockTomorrow = getTomorrowForecast(weather);
 
   const tempMin = apiTomorrow ? apiTomorrow.tempMin : mockTomorrow.tempMin;
