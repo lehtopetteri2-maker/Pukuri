@@ -2,7 +2,7 @@ import { WeatherData, AgeGroup, getWeatherIcon, getClothingRecommendation } from
 import type { TomorrowData } from "@/lib/weatherApi";
 import { getTomorrowForecast } from "@/lib/tomorrowWeather";
 import { AlertTriangle, Moon } from "lucide-react";
-import { useLanguage } from "@/lib/i18n";
+import { useLanguage, translateClothingItem } from "@/lib/i18n";
 
 interface TomorrowForecastProps {
   weather: WeatherData;
