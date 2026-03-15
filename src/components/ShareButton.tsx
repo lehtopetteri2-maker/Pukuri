@@ -1,7 +1,7 @@
 import { Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DualRecommendation } from "@/lib/dualRecommendation";
-import { useLanguage, TranslationKey } from "@/lib/i18n";
+import { useLanguage, TranslationKey, translateClothingItem } from "@/lib/i18n";
 import { AgeGroup } from "@/lib/weatherData";
 
 interface ShareButtonProps {
