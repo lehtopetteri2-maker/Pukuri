@@ -2,7 +2,7 @@ import { WeatherData, AgeGroup, getWeatherIcon, getClothingRecommendation } from
 import type { TomorrowData } from "@/lib/weatherApi";
 import { getTomorrowForecast } from "@/lib/tomorrowWeather";
 import { AlertTriangle, Moon } from "lucide-react";
-import { useLanguage } from "@/lib/i18n";
+import { useLanguage, translateClothingItem } from "@/lib/i18n";
 
 interface TomorrowForecastProps {
   weather: WeatherData;
@@ -11,7 +11,7 @@ interface TomorrowForecastProps {
 }
 
 export default function TomorrowForecastCard({ weather, ageGroup, tomorrow: apiTomorrow }: TomorrowForecastProps) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const mockTomorrow = getTomorrowForecast(weather);
 
   const tempMin = apiTomorrow ? apiTomorrow.tempMin : mockTomorrow.tempMin;
@@ -88,15 +88,18 @@ export default function TomorrowForecastCard({ weather, ageGroup, tomorrow: apiT
             {t("tomorrow.prepTitle")}
           </h3>
           <div className="grid grid-cols-2 gap-2">
-            {prepItems.map((item) => (
-              <div
-                key={item.name}
-                className="flex items-center gap-2 rounded-md bg-night-foreground/10 p-2"
-              >
-                <span className="text-lg">{item.emoji}</span>
-                <span className="text-sm font-display font-600">{item.name}</span>
-              </div>
-            ))}
+            {prepItems.map((item) => {
+              const translated = translateClothingItem(item, lang);
+              return (
+                <div
+                  key={item.name}
+                  className="flex items-center gap-2 rounded-md bg-night-foreground/10 p-2"
+                >
+                  <span className="text-lg">{item.emoji}</span>
+                  <span className="text-sm font-display font-600">{translated.name}</span>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
