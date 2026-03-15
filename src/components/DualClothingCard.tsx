@@ -1,6 +1,6 @@
 import { ClothingItem } from "@/lib/weatherData";
 import { DualRecommendation } from "@/lib/dualRecommendation";
-import { useLanguage } from "@/lib/i18n";
+import { useLanguage, translateClothingItem } from "@/lib/i18n";
 import { Wind, Droplets, AlertTriangle } from "lucide-react";
 
 /** Custom SVG: beanie */
@@ -37,21 +37,25 @@ function ItemIcon({ item }: { item: ClothingItem }) {
 }
 
 function ClothingList({ items }: { items: ClothingItem[] }) {
+  const { lang } = useLanguage();
   return (
     <div className="space-y-2">
-      {items.map((item, i) => (
-        <div
-          key={item.name}
-          className="flex items-center gap-3 p-2.5 rounded-md bg-mint-light/50 border border-primary/10"
-          style={{ animationDelay: `${i * 40}ms` }}
-        >
-          <ItemIcon item={item} />
-          <div>
-            <div className="font-display font-700 text-xs text-foreground">{item.name}</div>
-            <div className="text-[11px] text-muted-foreground">{item.description}</div>
+      {items.map((item, i) => {
+        const translated = translateClothingItem(item, lang);
+        return (
+          <div
+            key={item.name}
+            className="flex items-center gap-3 p-2.5 rounded-md bg-mint-light/50 border border-primary/10"
+            style={{ animationDelay: `${i * 40}ms` }}
+          >
+            <ItemIcon item={item} />
+            <div>
+              <div className="font-display font-700 text-xs text-foreground">{translated.name}</div>
+              <div className="text-[11px] text-muted-foreground">{translated.description}</div>
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

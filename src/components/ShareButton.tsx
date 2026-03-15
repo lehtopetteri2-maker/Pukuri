@@ -1,7 +1,7 @@
 import { Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DualRecommendation } from "@/lib/dualRecommendation";
-import { useLanguage, TranslationKey } from "@/lib/i18n";
+import { useLanguage, TranslationKey, translateClothingItem } from "@/lib/i18n";
 import { AgeGroup } from "@/lib/weatherData";
 
 interface ShareButtonProps {
@@ -10,13 +10,13 @@ interface ShareButtonProps {
 }
 
 export default function ShareButton({ dual, ageGroup }: ShareButtonProps) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
 
   const buildMessage = () => {
     const ageName = t(`age.${ageGroup}` as TranslationKey);
-    const morningItems = dual.morningClothing.map((c) => `${c.emoji} ${c.name}`).join(", ");
+    const morningItems = dual.morningClothing.map((c) => `${c.emoji} ${translateClothingItem(c, lang).name}`).join(", ");
     const afternoonItems = dual.isDual
-      ? dual.afternoonClothing.map((c) => `${c.emoji} ${c.name}`).join(", ")
+      ? dual.afternoonClothing.map((c) => `${c.emoji} ${translateClothingItem(c, lang).name}`).join(", ")
       : "";
 
     let msg = `${t("share.messageIntro")} 🌦️\n`;
