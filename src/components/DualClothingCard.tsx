@@ -1,6 +1,6 @@
 import { ClothingItem } from "@/lib/weatherData";
 import { DualRecommendation } from "@/lib/dualRecommendation";
-import { useLanguage } from "@/lib/i18n";
+import { useLanguage, translateClothingItem } from "@/lib/i18n";
 import { Wind, Droplets, AlertTriangle } from "lucide-react";
 
 /** Custom SVG: beanie */
