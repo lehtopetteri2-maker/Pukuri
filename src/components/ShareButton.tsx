@@ -10,7 +10,7 @@ interface ShareButtonProps {
 }
 
 export default function ShareButton({ dual, ageGroup }: ShareButtonProps) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
 
   const buildMessage = () => {
     const ageName = t(`age.${ageGroup}` as TranslationKey);
