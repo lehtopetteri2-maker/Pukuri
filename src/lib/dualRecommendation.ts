@@ -168,7 +168,7 @@ function applyMudFactor(
   currentCondition: string,
   temperature: number
 ): ClothingItem[] {
-  if (recentRainMm < 2) return items;
+  if (recentRainMm <= 1) return items;
 
   const result = [...items];
   const hasWaterproof = result.some(i =>
@@ -218,7 +218,7 @@ export function computeDualRecommendation(
   const windWarning = windSpeed > 6;
 
   const recentRainMm = data.recentRainMm;
-  const mudFactor = recentRainMm >= 2;
+  const mudFactor = recentRainMm > 1;
 
   // Build weather snapshots using feels_like for clothing
   const morningWeather = buildWeatherSnapshot(
