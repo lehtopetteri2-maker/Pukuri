@@ -168,7 +168,7 @@ function applyMudFactor(
   currentCondition: string,
   temperature: number
 ): ClothingItem[] {
-  if (recentRainMm < 2) return items;
+  if (recentRainMm <= 1) return items;
 
   const result = [...items];
   const hasWaterproof = result.some(i =>
