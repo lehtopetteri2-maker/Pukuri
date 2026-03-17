@@ -27,43 +27,43 @@ export default function AiAnalysis({ weather, ageGroup, dual }: AiAnalysisProps)
       const newTips: string[] = [];
       const ageLabel = ageGroup ? t(`ai.ageLabel.${ageGroup}` as TranslationKey) : "";
 
-      // 1. Mud Factor — ground still wet
-      if (dual?.mudFactor) {
-        newTips.push(t("ai.mudTip"));
-      }
-
-      // 2. Temperature gap (AM vs PM)
+      // 1. PRIORITY: Temperature gap (AM vs PM) — highlighted morning tip at the top
       if (dual?.isDual) {
         const amTemp = dual.morningTemp;
         const pmTemp = dual.afternoonTemp;
-        newTips.push(t("ai.gapTip", {
+        newTips.push(t("ai.morningGapHighlight" as TranslationKey, {
           amTemp: `${amTemp > 0 ? "+" : ""}${amTemp}`,
           pmTemp: `${pmTemp > 0 ? "+" : ""}${pmTemp}`,
         }));
       }
 
-      // 3. Layering zone +2…+10 °C
-      const temp = weather.feelsLike ?? weather.temperature;
-      if (temp >= 2 && temp <= 10) {
-        newTips.push(t("ai.layerZoneTip"));
-      }
-
-      // 4. Wind chill > 6 m/s
+      // 2. Wind chill > 6 m/s
       if (weather.windSpeed > 6) {
         newTips.push(t("ai.windChillTip", { speed: weather.windSpeed }));
       }
 
-      // 5. UV reminder
+      // 3. Mud Factor — ground still wet (>1mm in last 12h)
+      if (dual?.mudFactor) {
+        newTips.push(t("ai.mudTipWet" as TranslationKey));
+      }
+
+      // 4. UV reminder > 3
       if (weather.uvi !== undefined && weather.uvi > 3) {
         newTips.push(t("ai.uvReminderTip", { uvi: weather.uvi }));
       }
 
-      // 6. Rain approaching
+      // 5. Rain approaching
       if (weather.rainProbability > 40 || weather.afternoonRain) {
         newTips.push(t("ai.rainTip"));
       }
 
-      // 7. Feels-like gap (existing layering tip)
+      // 6. Layering zone +2…+10 °C
+      const temp = weather.feelsLike ?? weather.temperature;
+      if (temp >= 2 && temp <= 10 && !dual?.isDual) {
+        newTips.push(t("ai.layerZoneTip"));
+      }
+
+      // 7. Feels-like gap (when no dual)
       const feelsLikeDiff = Math.abs(weather.temperature - weather.feelsLike);
       if (feelsLikeDiff >= 4 && !dual?.isDual) {
         newTips.push(t("ai.layeringTip", {
