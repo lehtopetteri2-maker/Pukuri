@@ -218,7 +218,13 @@ const Index = () => {
         {error && (
           <div className="rounded-lg bg-destructive/10 border border-destructive/30 p-4 flex items-center gap-3 animate-fade-in">
             <AlertCircle className="h-5 w-5 text-destructive shrink-0" />
-            <p className="text-sm text-destructive">{error}</p>
+            <p className="text-sm text-destructive flex-1">{error}</p>
+            <button
+              onClick={handleForceRefresh}
+              className="text-xs font-medium text-destructive underline underline-offset-2 hover:opacity-80 shrink-0"
+            >
+              {t("weather.refreshNow")}
+            </button>
           </div>
         )}
 
