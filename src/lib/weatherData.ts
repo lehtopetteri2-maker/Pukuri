@@ -181,21 +181,37 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
     base.push({
       name: "Toppapuku ja villasukat",
       emoji: "🧥",
-      description: "Lämpö: 0 … –10 °C — paksu toppapuku ja villasukat",
+      description: "Lämpö: 0 … –1 °C — paksu toppapuku ja villasukat",
     });
     base.push(...coldSnowGear[ageGroup].filter(
       (i) => !["Toppahaalari", "Toppahousut", "Toppatakki", "Villasukat"].includes(i.name)
     ));
-  } else if (temp < 5) {
+  } else if (temp < 1) {
     base.push(...coldSnowGear[ageGroup]);
   } else if (temp <= 12) {
-    // +5…+12 °C — välikausi
-    base.push({
-      name: "Välikausivaatteet",
-      emoji: "🍂",
-      description: "+5 … +12 °C — kuoritakki ja kerroksia",
-    });
+    // +1…+12 °C — välikausi
+    if (ageGroup === "koululainen") {
+      base.push({
+        name: "Tekniset kuorivaatteet",
+        emoji: "🧥",
+        description: "+1 … +12 °C — tekniset kuorivaatteet ja kerroksia",
+      });
+    } else {
+      base.push({
+        name: "Välikausivaatteet",
+        emoji: "🍂",
+        description: "+1 … +12 °C — kuoritakki ja kerroksia",
+      });
+    }
     base.push(...mildRainGear[ageGroup]);
+    // Paikoillaan oleva pieni lapsi — lisäkerros
+    if (ageGroup === "vauva" || ageGroup === "taapero") {
+      base.push({
+        name: "Rattaissa lisäkerros",
+        emoji: "🧸",
+        description: "Jos lapsi on paikoillaan rattaissa, käytä lämmintä makuupussia tai lisää villakerros välikausiasun alle",
+      });
+    }
     // Tuulilisä
     if (weather.windSpeed > 5) {
       base.push({ name: "Tuubihuivi", emoji: "🧣", description: "Tuuli yli 5 m/s — tuubihuivi suojaa" });
