@@ -121,6 +121,8 @@ const translations = {
   "tomorrow.prepTitle": { fi: "Valmistele huomiseksi — Poimi valmiiksi:", sv: "Förbered till i morgon — Plocka fram:", en: "Prepare for tomorrow — Get ready:" },
   "tomorrow.colderWarning": { fi: "Huomiseksi kylmenee, muista lämpimämpi kerrasto.", sv: "Det blir kallare i morgon, kom ihåg varmare underställ.", en: "It gets colder tomorrow, remember warmer layers." },
   "tomorrow.rainWarning": { fi: "Huomenna sataa, muista viedä kuravarusteet päiväkotiin.", sv: "Det regnar i morgon, kom ihåg att ta med regnutrustning till dagis.", en: "Rain expected tomorrow, remember rain gear for daycare." },
+  "tomorrow.morningGear": { fi: "Aamun varusteet", sv: "Morgonens utrustning", en: "Morning gear" },
+  "tomorrow.afternoonGear": { fi: "Iltapäivän varusteet", sv: "Eftermiddagens utrustning", en: "Afternoon gear" },
 
   // AI Analysis
   "ai.title": { fi: "Säävahdin analyysi", sv: "Väderpyttens analys", en: "Säävahti's analysis" },
