@@ -468,8 +468,10 @@ const clothingNameMap: Record<string, { sv: string; en: string }> = {
 
 const clothingDescMap: Record<string, { sv: string; en: string }> = {
   "Merinovilla, välikerros ja paksu toppapuku": { sv: "Merinoull, mellanskikt och tjock overall", en: "Merino wool, mid layer and thick snow overall" },
-  "Lämpö: 0 … –10 °C — paksu toppapuku ja villasukat": { sv: "Temp: 0 … –10 °C — tjock täckoverall och ullstrumpor", en: "Temp: 0 … –10 °C — thick snow overall and wool socks" },
-  "+5 … +12 °C — kuoritakki ja kerroksia": { sv: "+5 … +12 °C — skaljacka och lager", en: "+5 … +12 °C — shell jacket and layers" },
+  "Lämpö: 0 … –1 °C — paksu toppapuku ja villasukat": { sv: "Temp: 0 … –1 °C — tjock täckoverall och ullstrumpor", en: "Temp: 0 … –1 °C — thick snow overall and wool socks" },
+  "+1 … +12 °C — kuoritakki ja kerroksia": { sv: "+1 … +12 °C — skaljacka och lager", en: "+1 … +12 °C — shell jacket and layers" },
+  "+1 … +12 °C — tekniset kuorivaatteet ja kerroksia": { sv: "+1 … +12 °C — tekniska skalkläder och lager", en: "+1 … +12 °C — technical shell clothing and layers" },
+  "Jos lapsi on paikoillaan rattaissa, käytä lämmintä makuupussia tai lisää villakerros välikausiasun alle": { sv: "Om barnet sitter stilla i vagnen, använd en varm åkpåse eller lägg till ett ullskikt under skalkläder", en: "If the child is stationary in a stroller, use a warm footmuff or add a wool layer under mid-season gear" },
   "Tuuli yli 5 m/s — tuubihuivi suojaa": { sv: "Vind över 5 m/s — tubhalsduk skyddar", en: "Wind over 5 m/s — neck gaiter protects" },
   "Aurinkoisella säällä suojaksi": { sv: "Skydd i soligt väder", en: "Protection in sunny weather" },
   "Suojaa iho UV-säteilyltä": { sv: "Skyddar huden mot UV-strålning", en: "Protects skin from UV radiation" },
