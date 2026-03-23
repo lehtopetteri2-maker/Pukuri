@@ -181,7 +181,7 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
     base.push({
       name: "Toppapuku ja villasukat",
       emoji: "🧥",
-      description: "Lämpö: 0 … –10 °C — paksu toppapuku ja villasukat",
+      description: "Lämpö: 0 … –1 °C — paksu toppapuku ja villasukat",
     });
     base.push(...coldSnowGear[ageGroup].filter(
       (i) => !["Toppahaalari", "Toppahousut", "Toppatakki", "Villasukat"].includes(i.name)
