@@ -241,7 +241,7 @@ const Index = () => {
           onRefresh={handleForceRefresh}
           loading={loading}
         />
-        <TomorrowForecastCard weather={weather} ageGroup={ageGroup} tomorrow={tomorrow} />
+        <TomorrowForecastCard weather={weather} ageGroup={ageGroup} tomorrow={tomorrow} forecastList={forecastList} />
 
         <AiAnalysis weather={weather} ageGroup={ageGroup} dual={dual} />
 
