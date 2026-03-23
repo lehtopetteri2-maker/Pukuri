@@ -462,6 +462,8 @@ const clothingNameMap: Record<string, { sv: string; en: string }> = {
   "Sadehaalari tai kurahousut & sadetakki": { sv: "Regnoverall eller regnbyxor & regnjacka", en: "Rain overall or rain trousers & rain jacket" },
   "Tuulenpitävä kuorikerros": { sv: "Vindtätt skallager", en: "Windproof shell layer" },
   "Lämpöpussi / lisäkerros": { sv: "Åkpåse / extra lager", en: "Footmuff / extra layer" },
+  "Tekniset kuorivaatteet": { sv: "Tekniska skalkläder", en: "Technical shell clothing" },
+  "Rattaissa lisäkerros": { sv: "Extra lager i vagnen", en: "Extra layer in stroller" },
 };
 
 const clothingDescMap: Record<string, { sv: string; en: string }> = {
