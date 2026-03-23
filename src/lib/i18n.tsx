@@ -543,6 +543,7 @@ const clothingDescMap: Record<string, { sv: string; en: string }> = {
   "Kevyet kurahanskat": { sv: "Lätta regnvantar", en: "Light rain gloves" },
   "Kestää päiväkodin hiekkalaatikkoleikkejä": { sv: "Tål sandlådelek på dagis", en: "Withstands daycare sandbox play" },
   "Kevyet sadehousut ilman vuorta": { sv: "Lätta regnbyxor utan foder", en: "Light rain trousers without lining" },
+  "Huomenna sataa — vedenpitävät varusteet mukaan": { sv: "Det regnar i morgon — ta med vattentäta kläder", en: "Rain expected tomorrow — bring waterproof gear" },
   "Maa on märkä yöllisen sateen jäljiltä": { sv: "Marken är blöt efter nattens regn", en: "Ground is wet from overnight rain" },
   "Vaikka nyt on poutaa, maa on vielä märkä": { sv: "Även om det är uppehåll nu är marken fortfarande blöt", en: "Even though it's dry now, the ground is still wet" },
   "Kova tuuli lisää kylmyyden tuntua — valitse tuulenpitävä kuorikerros": { sv: "Stark vind ökar kylkänslan — välj vindtätt skalplagg", en: "Strong wind increases wind chill — choose a windproof shell layer" },
