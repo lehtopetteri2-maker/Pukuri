@@ -121,6 +121,8 @@ const translations = {
   "tomorrow.prepTitle": { fi: "Valmistele huomiseksi — Poimi valmiiksi:", sv: "Förbered till i morgon — Plocka fram:", en: "Prepare for tomorrow — Get ready:" },
   "tomorrow.colderWarning": { fi: "Huomiseksi kylmenee, muista lämpimämpi kerrasto.", sv: "Det blir kallare i morgon, kom ihåg varmare underställ.", en: "It gets colder tomorrow, remember warmer layers." },
   "tomorrow.rainWarning": { fi: "Huomenna sataa, muista viedä kuravarusteet päiväkotiin.", sv: "Det regnar i morgon, kom ihåg att ta med regnutrustning till dagis.", en: "Rain expected tomorrow, remember rain gear for daycare." },
+  "tomorrow.morningGear": { fi: "Aamun varusteet", sv: "Morgonens utrustning", en: "Morning gear" },
+  "tomorrow.afternoonGear": { fi: "Iltapäivän varusteet", sv: "Eftermiddagens utrustning", en: "Afternoon gear" },
 
   // AI Analysis
   "ai.title": { fi: "Säävahdin analyysi", sv: "Väderpyttens analys", en: "Säävahti's analysis" },
@@ -541,6 +543,7 @@ const clothingDescMap: Record<string, { sv: string; en: string }> = {
   "Kevyet kurahanskat": { sv: "Lätta regnvantar", en: "Light rain gloves" },
   "Kestää päiväkodin hiekkalaatikkoleikkejä": { sv: "Tål sandlådelek på dagis", en: "Withstands daycare sandbox play" },
   "Kevyet sadehousut ilman vuorta": { sv: "Lätta regnbyxor utan foder", en: "Light rain trousers without lining" },
+  "Huomenna sataa — vedenpitävät varusteet mukaan": { sv: "Det regnar i morgon — ta med vattentäta kläder", en: "Rain expected tomorrow — bring waterproof gear" },
   "Maa on märkä yöllisen sateen jäljiltä": { sv: "Marken är blöt efter nattens regn", en: "Ground is wet from overnight rain" },
   "Vaikka nyt on poutaa, maa on vielä märkä": { sv: "Även om det är uppehåll nu är marken fortfarande blöt", en: "Even though it's dry now, the ground is still wet" },
   "Kova tuuli lisää kylmyyden tuntua — valitse tuulenpitävä kuorikerros": { sv: "Stark vind ökar kylkänslan — välj vindtätt skalplagg", en: "Strong wind increases wind chill — choose a windproof shell layer" },
