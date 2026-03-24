@@ -124,8 +124,10 @@ export default function ClothingCard({ items }: ClothingCardProps) {
                 className="flex items-center gap-3 p-3 rounded-md bg-mint-light/50 border border-primary/10"
                 style={{ animationDelay: `${i * 60}ms` }}
               >
-                {isHatItem(item.name) ? (
+            {isHatItem(item.name) ? (
                   <HatIcon itemName={item.name} />
+                ) : isOverallItem(item.name) ? (
+                  <WinterOverallIcon className="text-primary" />
                 ) : (
                   <span className="text-2xl">{item.emoji}</span>
                 )}
