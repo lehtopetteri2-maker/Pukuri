@@ -43,10 +43,57 @@ function CapIcon({ className = "" }: { className?: string }) {
   );
 }
 
+/** Custom SVG: detailed winter overall with hood, zipper, puffy segments */
+function WinterOverallIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 48 48" fill="none" className={className} width="28" height="28">
+      {/* Fur-trimmed hood */}
+      <ellipse cx="24" cy="9" rx="10" ry="5" fill="currentColor" opacity={0.18} />
+      <path d="M14 9 C14 4 19 1 24 1 C29 1 34 4 34 9" stroke="currentColor" strokeWidth="2.2" fill="none" />
+      {/* Fur trim on hood */}
+      <path d="M13 9 Q14 7.5 15.5 9 Q17 7 18.5 9 Q20 7 21.5 9 Q23 7 24.5 9 Q26 7 27.5 9 Q29 7 30.5 9 Q32 7 33.5 9 Q35 7.5 35 9" stroke="currentColor" strokeWidth="1.2" fill="none" opacity={0.6} />
+      {/* Body – puffy top segment */}
+      <rect x="16" y="10" width="16" height="9" rx="3" fill="currentColor" opacity={0.3} />
+      {/* Horizontal quilting lines */}
+      <line x1="16.5" y1="14" x2="31.5" y2="14" stroke="currentColor" strokeWidth="0.8" opacity={0.35} />
+      <line x1="16.5" y1="17.5" x2="31.5" y2="17.5" stroke="currentColor" strokeWidth="0.8" opacity={0.35} />
+      {/* Body – puffy middle segment */}
+      <rect x="15" y="19" width="18" height="9" rx="3" fill="currentColor" opacity={0.25} />
+      {/* Quilting */}
+      <line x1="15.5" y1="23" x2="32.5" y2="23" stroke="currentColor" strokeWidth="0.8" opacity={0.3} />
+      <line x1="15.5" y1="26" x2="32.5" y2="26" stroke="currentColor" strokeWidth="0.8" opacity={0.3} />
+      {/* Left leg */}
+      <rect x="15" y="28" width="7" height="13" rx="3" fill="currentColor" opacity={0.25} />
+      <line x1="15.5" y1="32" x2="21.5" y2="32" stroke="currentColor" strokeWidth="0.7" opacity={0.3} />
+      <line x1="15.5" y1="36" x2="21.5" y2="36" stroke="currentColor" strokeWidth="0.7" opacity={0.3} />
+      {/* Right leg */}
+      <rect x="26" y="28" width="7" height="13" rx="3" fill="currentColor" opacity={0.25} />
+      <line x1="26.5" y1="32" x2="32.5" y2="32" stroke="currentColor" strokeWidth="0.7" opacity={0.3} />
+      <line x1="26.5" y1="36" x2="32.5" y2="36" stroke="currentColor" strokeWidth="0.7" opacity={0.3} />
+      {/* Center zipper */}
+      <line x1="24" y1="10" x2="24" y2="28" stroke="currentColor" strokeWidth="1.4" opacity={0.55} />
+      {/* Zipper teeth */}
+      {[12, 14.5, 17, 19.5, 22, 24.5, 27].map(y => (
+        <line key={y} x1="23" y1={y} x2="25" y2={y} stroke="currentColor" strokeWidth="0.8" opacity={0.4} />
+      ))}
+      {/* Zipper pull */}
+      <circle cx="24" cy="11" r="1" fill="currentColor" opacity={0.6} />
+      {/* Sleeves */}
+      <rect x="8" y="12" width="8" height="5" rx="2.5" fill="currentColor" opacity={0.22} />
+      <rect x="32" y="12" width="8" height="5" rx="2.5" fill="currentColor" opacity={0.22} />
+    </svg>
+  );
+}
+
 const HAT_NAMES = new Set(["Pipo", "Lippalakki", "Lippis/Hattu"]);
+const OVERALL_NAMES = new Set(["Toppahaalari"]);
 
 function isHatItem(name: string): boolean {
   return HAT_NAMES.has(name);
+}
+
+function isOverallItem(name: string): boolean {
+  return OVERALL_NAMES.has(name);
 }
 
 function HatIcon({ itemName }: { itemName: string }) {
