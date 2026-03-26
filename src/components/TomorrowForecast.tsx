@@ -3,6 +3,7 @@ import type { TomorrowData } from "@/lib/weatherApi";
 import { getTomorrowForecast } from "@/lib/tomorrowWeather";
 import { AlertTriangle, Moon, Sunrise, Sun } from "lucide-react";
 import { useLanguage, translateClothingItem } from "@/lib/i18n";
+import { PufferOverallIcon, PufferJacketIcon, PufferTrousersIcon } from "./WinterIcons";
 
 interface TomorrowForecastProps {
   weather: WeatherData;
