@@ -185,11 +185,24 @@ export default function TomorrowForecastCard({ weather, ageGroup, tomorrow: apiT
     prepItems = prepItems.slice(0, 6);
   }
 
+  const renderItemIcon = (item: ClothingItem) => {
+    const HAT_NAMES = new Set(["Pipo", "Lippalakki", "Lippis/Hattu"]);
+    if (HAT_NAMES.has(item.name)) {
+      return item.name === "Pipo"
+        ? <svg viewBox="0 0 48 48" fill="none" width="20" height="20"><circle cx="24" cy="8" r="4" fill="currentColor" opacity={0.7} /><path d="M10 28 C10 16 14 10 24 10 C34 10 38 16 38 28" stroke="currentColor" strokeWidth="3" fill="currentColor" opacity={0.25} /><rect x="8" y="26" width="32" height="8" rx="4" fill="currentColor" opacity={0.55} /></svg>
+        : <svg viewBox="0 0 48 48" fill="none" width="20" height="20"><path d="M12 30 C12 18 16 12 26 12 C36 12 38 18 38 26 L38 30 Z" fill="currentColor" opacity={0.3} /><path d="M8 30 Q8 34 14 36 L40 34 Q44 32 44 30 Z" fill="currentColor" opacity={0.6} /><rect x="10" y="28" width="30" height="4" rx="2" fill="currentColor" opacity={0.45} /></svg>;
+    }
+    if (item.name === "Toppahaalari") return <PufferOverallIcon className="text-night-foreground" />;
+    if (item.name === "Toppatakki") return <PufferJacketIcon className="text-night-foreground" />;
+    if (item.name === "Toppahousut") return <PufferTrousersIcon className="text-night-foreground" />;
+    return <span className="text-lg">{item.emoji}</span>;
+  };
+
   const renderItem = (item: ClothingItem) => {
     const translated = translateClothingItem(item, lang);
     return (
       <div key={item.name} className="flex items-center gap-2 rounded-md bg-night-foreground/10 p-2">
-        <span className="text-lg">{item.emoji}</span>
+        {renderItemIcon(item)}
         <span className="text-sm font-display font-600">{translated.name}</span>
       </div>
     );
