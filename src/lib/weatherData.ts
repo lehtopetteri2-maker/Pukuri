@@ -165,9 +165,15 @@ const warmGear: Record<AgeGroup, ClothingItem[]> = {
   ],
 };
 
+export function isSpringMonth(): boolean {
+  const month = new Date().getMonth(); // 0-indexed: 2=March, 3=April
+  return month === 2 || month === 3;
+}
+
 export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGroup): ClothingItem[] {
   const base: ClothingItem[] = [];
   const temp = weather.temperature;
+  const spring = isSpringMonth();
 
   // Temperature-based logic
   if (temp < -10) {
@@ -177,6 +183,35 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
       description: "Merinovilla, välikerros ja paksu toppapuku",
     });
     base.push(...coldSnowGear[ageGroup]);
+  } else if (spring && temp >= -1) {
+    // Spring Rule (March-April): temp >= -1°C → mid-season gear
+    if (ageGroup === "koululainen") {
+      base.push({
+        name: "Tekniset kuorivaatteet",
+        emoji: "🧥",
+        description: "Kevätkausi — tekniset kuorivaatteet ja lämmin välikerros",
+      });
+    } else {
+      base.push({
+        name: "Välikausivaatteet",
+        emoji: "🍂",
+        description: "Kevätkausi — kuoritakki ja lämmin välikerros alle",
+      });
+    }
+    base.push(...mildRainGear[ageGroup]);
+    // Layering tip for spring
+    base.push({
+      name: "Lämmin välikerros",
+      emoji: "🧶",
+      description: "Lisää villa- tai fleecekerros kuoriasun alle",
+    });
+    if (ageGroup === "vauva" || ageGroup === "taapero") {
+      base.push({
+        name: "Rattaissa lisäkerros",
+        emoji: "🧸",
+        description: "Jos lapsi on paikoillaan rattaissa, käytä lämmintä makuupussia tai lisää villakerros välikausiasun alle",
+      });
+    }
   } else if (temp <= 0) {
     base.push({
       name: "Toppapuku ja villasukat",

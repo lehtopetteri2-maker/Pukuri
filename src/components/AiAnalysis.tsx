@@ -52,7 +52,12 @@ export default function AiAnalysis({ weather, ageGroup, dual }: AiAnalysisProps)
         newTips.push(t("ai.uvReminderTip", { uvi: weather.uvi }));
       }
 
-      // 5. Rain approaching
+      // 5. Spring rule tip (March-April, temp >= -1°C)
+      if (isSpringMonth() && weather.temperature >= -1) {
+        newTips.push(t("ai.springTip" as TranslationKey));
+      }
+
+      // 6. Rain approaching
       if (weather.rainProbability > 40 || weather.afternoonRain) {
         newTips.push(t("ai.rainTip"));
       }
