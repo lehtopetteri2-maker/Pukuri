@@ -220,7 +220,7 @@ export function computeDualRecommendation(
   const recentRainMm = data.recentRainMm;
   const mudFactor = recentRainMm > 1;
 
-  // Build weather snapshots using feels_like for clothing
+  // Build weather snapshots with actual temp for spring rule
   const morningWeather = buildWeatherSnapshot(
     weather, morningTemp, morningFeelsLike,
     data.morningConditionId, data.morningWind, data.morningHumidity,
