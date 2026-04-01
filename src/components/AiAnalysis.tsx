@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { Sparkles, RefreshCw, Lightbulb } from "lucide-react";
-import { WeatherData, AgeGroup } from "@/lib/weatherData";
+import { WeatherData, AgeGroup, isSpringMonth } from "@/lib/weatherData";
 import { DualRecommendation } from "@/lib/dualRecommendation";
 import { useLanguage, TranslationKey } from "@/lib/i18n";
 import {
