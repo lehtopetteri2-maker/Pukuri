@@ -183,8 +183,8 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
       description: "Merinovilla, välikerros ja paksu toppapuku",
     });
     base.push(...coldSnowGear[ageGroup]);
-  } else if (spring && temp >= -1) {
-    // Spring Rule (March-April): temp >= -1°C → mid-season gear
+  } else if (spring && temp >= -2) {
+    // Spring Rule (March-April): temp >= -2°C → mid-season gear
     if (ageGroup === "koululainen") {
       base.push({
         name: "Tekniset kuorivaatteet",
