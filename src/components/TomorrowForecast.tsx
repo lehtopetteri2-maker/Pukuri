@@ -78,7 +78,7 @@ function mapCondition(id: number): import("@/lib/weatherData").WeatherCondition 
 function buildSnapshot(base: WeatherData, temp: number, feelsLike: number, condId: number | null, wind: number | null, humidity: number | null, desc: string | null, pop: number): WeatherData {
   return {
     ...base,
-    temperature: feelsLike,
+    temperature: temp, // Use ACTUAL temperature (spring rule needs it)
     feelsLike,
     condition: condId ? mapCondition(condId) : base.condition,
     windSpeed: wind ?? base.windSpeed,

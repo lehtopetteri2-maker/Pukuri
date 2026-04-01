@@ -172,11 +172,13 @@ export function isSpringMonth(): boolean {
 
 export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGroup): ClothingItem[] {
   const base: ClothingItem[] = [];
-  const temp = weather.temperature;
+  const actualTemp = weather.temperature; // Actual measured temperature
   const spring = isSpringMonth();
 
-  // Temperature-based logic — Spring Rule uses ACTUAL temperature (not feelsLike)
-  // so wind chill does not override mid-season gear in March-April
+  // Spring Rule: use ACTUAL temperature to decide mid-season vs winter gear
+  // For non-spring logic: use feelsLike (wind chill) for threshold decisions
+  const temp = spring ? actualTemp : (weather.feelsLike ?? actualTemp);
+
   if (temp < -10) {
     base.push({
       name: "Kerrospukeutuminen",

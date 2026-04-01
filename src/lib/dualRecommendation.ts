@@ -132,7 +132,7 @@ function buildWeatherSnapshot(
 ): WeatherData {
   return {
     ...base,
-    temperature: feelsLike, // Use feels_like for clothing decisions
+    temperature: temp, // Use ACTUAL temperature (spring rule needs it)
     feelsLike,
     condition: conditionId ? mapCondition(conditionId) : base.condition,
     windSpeed: wind ?? base.windSpeed,
