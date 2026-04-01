@@ -233,7 +233,7 @@ export function computeDualRecommendation(
     data.afternoonDesc, data.afternoonPop,
   );
 
-  // Get clothing using feels_like temperature
+  // Get clothing — spring rule uses actual temp, others use feelsLike internally
   let morningClothing = getClothingRecommendation(morningWeather, ageGroup);
   let afternoonClothing = getClothingRecommendation(afternoonWeather, ageGroup);
 
