@@ -52,9 +52,14 @@ export default function AiAnalysis({ weather, ageGroup, dual }: AiAnalysisProps)
         newTips.push(t("ai.uvReminderTip", { uvi: weather.uvi }));
       }
 
-      // 5. Spring rule tip (March-April, temp >= -2°C)
+      // 5. Spring rule tip (March-April, actual temp >= -2°C)
       if (isSpringMonth() && weather.temperature >= -2) {
-        newTips.push(t("ai.springTip" as TranslationKey));
+        if (weather.windSpeed > 5) {
+          // Windy spring: reassure user to stay with mid-season gear
+          newTips.push(t("ai.springWindTip" as TranslationKey));
+        } else {
+          newTips.push(t("ai.springTip" as TranslationKey));
+        }
       }
 
       // 6. Rain approaching
