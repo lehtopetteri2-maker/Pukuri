@@ -132,7 +132,7 @@ function buildWeatherSnapshot(
 ): WeatherData {
   return {
     ...base,
-    temperature: feelsLike, // Use feels_like for clothing decisions
+    temperature: temp, // Use ACTUAL temperature (spring rule needs it)
     feelsLike,
     condition: conditionId ? mapCondition(conditionId) : base.condition,
     windSpeed: wind ?? base.windSpeed,
@@ -220,7 +220,7 @@ export function computeDualRecommendation(
   const recentRainMm = data.recentRainMm;
   const mudFactor = recentRainMm > 1;
 
-  // Build weather snapshots using feels_like for clothing
+  // Build weather snapshots with actual temp for spring rule
   const morningWeather = buildWeatherSnapshot(
     weather, morningTemp, morningFeelsLike,
     data.morningConditionId, data.morningWind, data.morningHumidity,
@@ -233,7 +233,7 @@ export function computeDualRecommendation(
     data.afternoonDesc, data.afternoonPop,
   );
 
-  // Get clothing using feels_like temperature
+  // Get clothing — spring rule uses actual temp, others use feelsLike internally
   let morningClothing = getClothingRecommendation(morningWeather, ageGroup);
   let afternoonClothing = getClothingRecommendation(afternoonWeather, ageGroup);
 
