@@ -175,7 +175,8 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
   const temp = weather.temperature;
   const spring = isSpringMonth();
 
-  // Temperature-based logic
+  // Temperature-based logic — Spring Rule uses ACTUAL temperature (not feelsLike)
+  // so wind chill does not override mid-season gear in March-April
   if (temp < -10) {
     base.push({
       name: "Kerrospukeutuminen",
