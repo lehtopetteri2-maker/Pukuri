@@ -95,6 +95,7 @@ const FeedbackSection = ({ ageGroup }: FeedbackSectionProps) => {
             <button
               key={star}
               type="button"
+              aria-label={`${star}/5`}
               onClick={() => setRating(star)}
               onMouseEnter={() => setHoveredRating(star)}
               onMouseLeave={() => setHoveredRating(0)}
