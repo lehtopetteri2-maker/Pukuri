@@ -34,7 +34,7 @@ export default function Footer() {
             <section><h3 className="font-display font-700 text-foreground mb-1">{t("footer.privacyS3Title")}</h3><p>{t("footer.privacyS3")}</p></section>
             <section><h3 className="font-display font-700 text-foreground mb-1">{t("footer.privacyS4Title")}</h3><p>{t("footer.privacyS4")}</p></section>
             <section><h3 className="font-display font-700 text-foreground mb-1">{t("footer.privacyS5Title")}</h3><p>{t("footer.privacyS5")}</p></section>
-            <section><h3 className="font-display font-700 text-foreground mb-1">{t("footer.privacyS6Title")}</h3><p>{t("footer.privacyS6")} <a href="mailto:lehtopetteri@hotmail.com" className="text-primary underline hover:text-primary/80 transition-colors">lehtopetteri@hotmail.com</a></p></section>
+            <section><h3 className="font-display font-700 text-foreground mb-1">{t("footer.privacyS6Title")}</h3><p>{t("footer.privacyS6")} <a href="mailto:saavahti@outlook.com" className="text-primary underline hover:text-primary/80 transition-colors">saavahti@outlook.com</a></p></section>
             <section className="pt-2 border-t border-border/30">
               <p className="text-[10px] text-muted-foreground/50">{t("affiliate.adtraction")}</p>
             </section>
@@ -53,7 +53,7 @@ export default function Footer() {
             <p>{t("footer.contactIntro")}</p>
             <section>
               <h3 className="font-display font-700 text-foreground mb-1">{t("footer.emailTitle")}</h3>
-              <p><a href="mailto:lehtopetteri@hotmail.com" className="text-primary underline hover:text-primary/80 transition-colors">lehtopetteri@hotmail.com</a></p>
+              <p><a href="mailto:saavahti@outlook.com" className="text-primary underline hover:text-primary/80 transition-colors">saavahti@outlook.com</a></p>
             </section>
             <section>
               <h3 className="font-display font-700 text-foreground mb-1">{t("footer.partnerTitle")}</h3>
