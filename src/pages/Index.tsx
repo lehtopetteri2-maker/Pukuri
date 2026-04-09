@@ -211,7 +211,6 @@ const Index = () => {
         <LocationSearch
           currentCity={city}
           onSelectCity={handleCityChange}
-          onSelectCoords={(lat, lon) => loadWeatherByCoords(lat, lon)}
           onGeolocate={handleGeolocate}
           loading={loading}
         />
