@@ -93,7 +93,7 @@ export default function LocationSearch({ currentCity, onSelectCity, onSelectCoor
   const getDisplayName = (r: GeoResult): string => {
     // Try local language name first
     const langMap: Record<string, string> = { fi: "fi", sv: "sv", no: "no", da: "da", en: "en" };
-    const langKey = langMap[language] || "fi";
+    const langKey = langMap[lang] || "fi";
     if (r.local_names?.[langKey]) return r.local_names[langKey];
     return r.name;
   };
