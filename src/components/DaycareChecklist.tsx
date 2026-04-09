@@ -62,7 +62,7 @@ export default function DaycareChecklist({ ageGroup, weather }: DaycareChecklist
   useEffect(() => { saveChecked(ageGroup, checked); }, [checked, ageGroup]);
   useEffect(() => { saveNote(ageGroup, note); }, [note, ageGroup]);
 
-  const weatherItems = useMemo(() => {
+  const seasonalItems = useMemo(() => {
     const items: ChecklistItem[] = [];
     const ids = new Set<string>();
     const add = (id: string, labelKey: TranslationKey, emoji: string) => { if (!ids.has(id)) { items.push({ id, labelKey, emoji }); ids.add(id); } };
@@ -78,7 +78,7 @@ export default function DaycareChecklist({ ageGroup, weather }: DaycareChecklist
     return items;
   }, [ageGroup, weather.temperature, weather.rainProbability, weather.afternoonRain]);
 
-  const miscItems = useMemo(() => [...miscByAge[ageGroup]], [ageGroup]);
+  const miscItems = useMemo(() => [...seasonalItems, ...miscByAge[ageGroup]], [ageGroup, seasonalItems]);
 
   const getDayReminder = (): TranslationKey | null => {
     const day = new Date().getDay();
@@ -90,7 +90,7 @@ export default function DaycareChecklist({ ageGroup, weather }: DaycareChecklist
   };
 
   const dayReminderKey = getDayReminder();
-  const allItems = [...weatherItems, ...SPARE_CLOTHES, ...miscItems];
+  const allItems = [...SPARE_CLOTHES, ...miscItems];
   const allDone = allItems.every((i) => checked.has(i.id));
 
   const toggle = useCallback((id: string) => {
@@ -135,17 +135,6 @@ export default function DaycareChecklist({ ageGroup, weather }: DaycareChecklist
         <div className="flex items-start gap-2 rounded-md bg-amber-50 dark:bg-amber-950/30 border border-amber-200/50 dark:border-amber-800/30 p-3 mb-4">
           <AlertTriangle className="h-4 w-4 text-amber-500 mt-0.5 shrink-0" />
           <span className="text-sm text-foreground">{t(dayReminderKey)}</span>
-        </div>
-      )}
-
-      {weatherItems.length > 0 && (
-        <div className="rounded-lg border-2 border-primary/30 bg-primary/5 p-4 mb-4">
-          <h3 className="text-xs font-display font-700 text-primary uppercase tracking-wide mb-3">
-            {t("checklist.weatherGear")}
-          </h3>
-          <div className="space-y-2">
-            {weatherItems.map((item) => renderItem(item))}
-          </div>
         </div>
       )}
 
