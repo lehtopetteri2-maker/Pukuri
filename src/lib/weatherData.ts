@@ -272,8 +272,8 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
     }
   }
 
-  // Sadevarusteet (rainProbability > 40 %)
-  if (weather.rainProbability > 40) {
+  // Sadevarusteet (rainProbability > 30 %)
+  if (weather.rainProbability > 30 || weather.condition === "rainy") {
     // Lämpötilan mukaan: alle +10°C -> + villasukat kumisaappaisiin
     const kumisaappaatWithSocks = (temp: number): ClothingItem => {
       if (temp < 10) {
