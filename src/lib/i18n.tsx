@@ -460,7 +460,7 @@ const clothingNameMap: Record<string, { sv: string; en: string }> = {
   "Aurinkohattu": { sv: "Solhatt", en: "Sun hat" },
   "T-paita": { sv: "T-shirt", en: "T-shirt" },
   "Shortsit": { sv: "Shorts", en: "Shorts" },
-  "Sandaalit": { sv: "Sandaler", en: "Sandals" },
+  "Kevyet kengät": { sv: "Lätta skor", en: "Lightweight shoes" },
   "Huppari": { sv: "Hoodie", en: "Hoodie" },
   "Vedenpitävä kuoritakki": { sv: "Vattentät skaljacka", en: "Waterproof shell jacket" },
   "Vedenpitävät ulkoiluhousut": { sv: "Vattentäta utomhusbyxor", en: "Waterproof outdoor trousers" },
