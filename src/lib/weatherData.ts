@@ -245,7 +245,7 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
         description: "+1 … +15 °C — kuoritakki ja kerroksia",
       });
     }
-    base.push(...mildRainGear[ageGroup]);
+    base.push(...mildBaseGear[ageGroup]);
     // Paikoillaan oleva pieni lapsi — lisäkerros
     if (ageGroup === "vauva" || ageGroup === "taapero") {
       base.push({
