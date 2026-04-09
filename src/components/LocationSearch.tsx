@@ -85,9 +85,16 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
     return r.name;
   };
 
-  const countryFlag = (code: string) => {
+  const countryName = (code: string) => {
+    const names: Record<string, Record<string, string>> = {
+      FI: { fi: "Suomi", sv: "Finland", en: "Finland" },
+      SE: { fi: "Ruotsi", sv: "Sverige", en: "Sweden" },
+      NO: { fi: "Norja", sv: "Norge", en: "Norway" },
+      DK: { fi: "Tanska", sv: "Danmark", en: "Denmark" },
+    };
     const flags: Record<string, string> = { FI: "🇫🇮", SE: "🇸🇪", NO: "🇳🇴", DK: "🇩🇰" };
-    return flags[code] ?? "";
+    const n = names[code]?.[lang] ?? code;
+    return `${flags[code] ?? ""} ${n}`;
   };
 
   const handleSelect = (r: GeoResult) => {
