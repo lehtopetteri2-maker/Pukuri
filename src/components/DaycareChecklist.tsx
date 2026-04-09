@@ -62,7 +62,7 @@ export default function DaycareChecklist({ ageGroup, weather }: DaycareChecklist
   useEffect(() => { saveChecked(ageGroup, checked); }, [checked, ageGroup]);
   useEffect(() => { saveNote(ageGroup, note); }, [note, ageGroup]);
 
-  const weatherItems = useMemo(() => {
+  const seasonalItems = useMemo(() => {
     const items: ChecklistItem[] = [];
     const ids = new Set<string>();
     const add = (id: string, labelKey: TranslationKey, emoji: string) => { if (!ids.has(id)) { items.push({ id, labelKey, emoji }); ids.add(id); } };
