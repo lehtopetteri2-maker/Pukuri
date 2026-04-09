@@ -13,13 +13,13 @@ function BeanieIcon({ className = "" }: { className?: string }) {
   );
 }
 
-/** Custom SVG: baseball cap / lippis */
-function CapIcon({ className = "" }: { className?: string }) {
+/** Custom SVG: thin/light beanie (ohut pipo) */
+function ThinBeanieIcon({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 48 48" fill="none" className={className} width="28" height="28">
-      <path d="M12 30 C12 18 16 12 26 12 C36 12 38 18 38 26 L38 30 Z" fill="currentColor" opacity={0.3} />
-      <path d="M8 30 Q8 34 14 36 L40 34 Q44 32 44 30 Z" fill="currentColor" opacity={0.6} />
-      <rect x="10" y="28" width="30" height="4" rx="2" fill="currentColor" opacity={0.45} />
+      <circle cx="24" cy="9" r="2.5" fill="currentColor" opacity={0.5} />
+      <path d="M13 28 C13 19 16 13 24 13 C32 13 35 19 35 28" stroke="currentColor" strokeWidth="2" fill="currentColor" opacity={0.15} />
+      <rect x="11" y="27" width="26" height="5" rx="2.5" fill="currentColor" opacity={0.4} />
     </svg>
   );
 }
