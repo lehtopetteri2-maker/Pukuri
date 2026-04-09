@@ -129,7 +129,7 @@ export default function DaycareChecklist({ ageGroup, weather }: DaycareChecklist
   return (
     <div className="rounded-lg bg-card p-6 shadow-sm border border-border animate-fade-in">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-display font-700 text-foreground">{t("checklist.title")}</h2>
+        <h2 className="text-lg font-display font-700 text-foreground">{t(ageGroup === "koululainen" ? "checklist.title.school" : "checklist.title")}</h2>
         {allDone && (
           <span className="text-xs font-medium bg-primary/15 text-primary px-2 py-1 rounded-full">{t("checklist.allPacked")}</span>
         )}
