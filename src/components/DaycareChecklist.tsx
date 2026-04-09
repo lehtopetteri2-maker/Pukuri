@@ -87,9 +87,10 @@ export default function DaycareChecklist({ ageGroup, weather }: DaycareChecklist
   const getDayReminder = (): TranslationKey | null => {
     const day = new Date().getDay();
     const hour = new Date().getHours();
-    if (day === 5) return "checklist.fridayReminder";
-    if (day === 0) return "checklist.sundayReminder";
-    if (day === 1 && hour < 12) return "checklist.mondayReminder";
+    const suffix = ageGroup === "koululainen" ? ".school" : "";
+    if (day === 5) return `checklist.fridayReminder` as TranslationKey;
+    if (day === 0) return `checklist.sundayReminder${suffix}` as TranslationKey;
+    if (day === 1 && hour < 12) return `checklist.mondayReminder${suffix}` as TranslationKey;
     return null;
   };
 
@@ -129,7 +130,7 @@ export default function DaycareChecklist({ ageGroup, weather }: DaycareChecklist
   return (
     <div className="rounded-lg bg-card p-6 shadow-sm border border-border animate-fade-in">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-display font-700 text-foreground">{t("checklist.title")}</h2>
+        <h2 className="text-lg font-display font-700 text-foreground">{t(ageGroup === "koululainen" ? "checklist.title.school" : "checklist.title")}</h2>
         {allDone && (
           <span className="text-xs font-medium bg-primary/15 text-primary px-2 py-1 rounded-full">{t("checklist.allPacked")}</span>
         )}

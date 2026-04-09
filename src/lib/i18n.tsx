@@ -41,7 +41,9 @@ const translations = {
   "morning.title": { fi: "☀️ Vinkki aamuun", sv: "☀️ Morgontips", en: "☀️ Morning tip" },
   "morning.loading": { fi: "Haetaan päivän suosituksia...", sv: "Hämtar dagens rekommendationer...", en: "Fetching today's recommendations..." },
   "morning.rainStart": { fi: "Säävahti huomasi: sade alkaa arviolta klo {time}. Muista kuravarusteet päiväkotiin!", sv: "Vädervakten märkte: regn börjar ungefär kl {time}. Kom ihåg regnkläder till dagis!", en: "Säävahti noticed: rain starts around {time}. Remember rain gear for daycare!" },
+  "morning.rainStart.school": { fi: "Säävahti huomasi: sade alkaa arviolta klo {time}. Muista kuravarusteet kouluun!", sv: "Vädervakten märkte: regn börjar ungefär kl {time}. Kom ihåg regnkläder till skolan!", en: "Säävahti noticed: rain starts around {time}. Remember rain gear for school!" },
   "morning.rainDaycare": { fi: "Sade alkaa arviolta klo {time}. Muista kuravarusteet päiväkotiin!", sv: "Regn börjar ungefär kl {time}. Kom ihåg regnkläder till dagis!", en: "Rain starts around {time}. Remember rain gear for daycare!" },
+  "morning.rainDaycare.school": { fi: "Sade alkaa arviolta klo {time}. Muista kuravarusteet kouluun!", sv: "Regn börjar ungefär kl {time}. Kom ihåg regnkläder till skolan!", en: "Rain starts around {time}. Remember rain gear for school!" },
   "morning.freezing": { fi: "Säävahti huomasi: tie on liukas ja aamu on kylmä, valitse lämpimät kengät.", sv: "Vädervakten märkte: vägen är hal och morgonen kall, välj varma skor.", en: "Säävahti noticed: roads are slippery and the morning is cold, choose warm shoes." },
   "morning.uvHigh": { fi: "Säävahti huomasi: UV-indeksi nousee yli 3 tänään. Muista aurinkorasva lapselle!", sv: "Vädervakten märkte: UV-index stiger över 3 idag. Kom ihåg solskyddskräm!", en: "Säävahti noticed: UV index rises above 3 today. Remember sunscreen for the child!" },
   "morning.windChill": { fi: "Viima tekee säästä purevan ({speed} m/s), suosi tuulenpitävää.", sv: "Blåsten gör vädret bitande ({speed} m/s), välj vindtäta kläder.", en: "Wind chill makes it feel bitter ({speed} m/s), choose windproof clothing." },
@@ -73,6 +75,7 @@ const translations = {
 
   // Checklist
   "checklist.title": { fi: "🎒 Päiväkoti-reppu", sv: "🎒 Dagisryggsäck", en: "🎒 Daycare backpack" },
+  "checklist.title.school": { fi: "🎒 Koulureppu", sv: "🎒 Skolryggsäck", en: "🎒 School backpack" },
   "checklist.allPacked": { fi: "✅ Kaikki pakattu!", sv: "✅ Allt packat!", en: "✅ All packed!" },
   "checklist.weatherGear": { fi: "🌦️ Säänmukaiset varusteet", sv: "🌦️ Väderanpassad utrustning", en: "🌦️ Weather-appropriate gear" },
   "checklist.spareClothes": { fi: "👕 Varavaatteet (arkisto) — tarkista viikoittain", sv: "👕 Ombyteskläder (arkiv) — kontrollera varje vecka", en: "👕 Spare clothes (archive) — check weekly" },
@@ -81,7 +84,9 @@ const translations = {
   "checklist.notePlaceholder": { fi: "Kirjoita tähän oma tavara tai muistutus…", sv: "Skriv din egen sak eller påminnelse här…", en: "Write your own item or reminder here…" },
   "checklist.fridayReminder": { fi: "📋 Muista tyhjentää reppu viikonlopuksi ja tarkistaa vaihtovaatteiden määrä!", sv: "📋 Kom ihåg att tömma ryggsäcken inför helgen och kontrollera ombyteskläderna!", en: "📋 Remember to empty the backpack for the weekend and check spare clothes!" },
   "checklist.sundayReminder": { fi: "👕 Huomenna on maanantai — muista pakata vaihtovaatteet päiväkotiin!", sv: "👕 I morgon är det måndag — kom ihåg att packa ombyteskläder till dagis!", en: "👕 Tomorrow is Monday — remember to pack spare clothes for daycare!" },
+  "checklist.sundayReminder.school": { fi: "👕 Huomenna on maanantai — muista pakata vaihtovaatteet kouluun!", sv: "👕 I morgon är det måndag — kom ihåg att packa ombyteskläder till skolan!", en: "👕 Tomorrow is Monday — remember to pack spare clothes for school!" },
   "checklist.mondayReminder": { fi: "👕 Muista viedä vaihtovaatteet takaisin päiväkotiin tänään!", sv: "👕 Kom ihåg att ta med ombyteskläderna tillbaka till dagis idag!", en: "👕 Remember to bring spare clothes back to daycare today!" },
+  "checklist.mondayReminder.school": { fi: "👕 Muista viedä vaihtovaatteet takaisin kouluun tänään!", sv: "👕 Kom ihåg att ta med ombyteskläderna tillbaka till skolan idag!", en: "👕 Remember to bring spare clothes back to school today!" },
 
   // Checklist items
   "item.varahousut": { fi: "Varahousut", sv: "Reservbyxor", en: "Spare trousers" },

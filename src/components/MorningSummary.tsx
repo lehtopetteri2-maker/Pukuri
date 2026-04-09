@@ -1,13 +1,16 @@
 import { ForecastAlerts } from "@/lib/forecastAlerts";
 import { AlertTriangle, CloudRain, Thermometer, Sun, Wind, Loader2, CheckCircle2 } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
+import { AgeGroup } from "@/lib/weatherData";
 
 interface MorningSummaryProps {
   alerts: ForecastAlerts;
+  ageGroup?: AgeGroup;
 }
 
-export default function MorningSummary({ alerts }: MorningSummaryProps) {
+export default function MorningSummary({ alerts, ageGroup }: MorningSummaryProps) {
   const { t } = useLanguage();
+  const suffix = ageGroup === "koululainen" ? ".school" : "";
 
   if (!alerts.loaded) {
     return (
@@ -25,12 +28,12 @@ export default function MorningSummary({ alerts }: MorningSummaryProps) {
     if (alerts.rainDuringDaycare) {
       messages.push({
         icon: <CloudRain className="h-4 w-4 text-primary shrink-0 mt-0.5" />,
-        text: t("morning.rainDaycare", { time: alerts.rainStartTime }),
+        text: t(`morning.rainDaycare${suffix}` as any, { time: alerts.rainStartTime }),
       });
     } else {
       messages.push({
         icon: <CloudRain className="h-4 w-4 text-primary shrink-0 mt-0.5" />,
-        text: t("morning.rainStart", { time: alerts.rainStartTime }),
+        text: t(`morning.rainStart${suffix}` as any, { time: alerts.rainStartTime }),
       });
     }
   }

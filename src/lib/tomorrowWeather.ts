@@ -60,7 +60,7 @@ export function getTomorrowWarnings(today: WeatherData, tomorrow: TomorrowForeca
 
   // First rainy day after dry
   if (today.rainProbability < 30 && tomorrow.rainProbability > 50) {
-    warnings.push("Huomenna sataa, muista viedä kuravarusteet päiväkotiin.");
+    warnings.push("Huomenna sataa, muista viedä kuravarusteet mukaan.");
   }
 
   return warnings;

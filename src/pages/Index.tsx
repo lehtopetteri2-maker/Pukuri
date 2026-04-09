@@ -232,7 +232,7 @@ const Index = () => {
           <WeeklySchedule ageGroup={ageGroup} />
         </div>
 
-        <MorningSummary alerts={alerts} />
+        <MorningSummary alerts={alerts} ageGroup={ageGroup} />
         <ScheduleReminder ageGroup={ageGroup} onOpen={scrollToSchedule} />
         <NightAlert weather={weather} alerts={alerts} />
         <WeatherCard
