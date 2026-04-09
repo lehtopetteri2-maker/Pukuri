@@ -73,7 +73,11 @@ export default function DaycareChecklist({ ageGroup, weather }: DaycareChecklist
     if (temp > 10) add("lippis", "item.lippis", "🧢");
     if (isRainy) { add("kuravarusteet", "item.kuravarusteet", "🌧️"); add("vaihtohanskat", "item.vaihtohanskat", "🧤"); }
     if (temp < 10) add("lamminkerrasto", "item.lamminkerrasto", "🧶");
-    if ((ageGroup === "leikki-ikäinen" || ageGroup === "koululainen") && temp < 0) add("luistimet", "item.luistimet", "⛸️");
+    const now = new Date();
+    const month = now.getMonth(); // 0-indexed
+    const day = now.getDate();
+    const hideSkates = (month === 3 && day >= 10) || (month >= 4 && month <= 6) || (month === 7 && day <= 2);
+    if (!hideSkates && (ageGroup === "leikki-ikäinen" || ageGroup === "koululainen") && temp < 0) add("luistimet", "item.luistimet", "⛸️");
 
     return items;
   }, [ageGroup, weather.temperature, weather.rainProbability, weather.afternoonRain]);
