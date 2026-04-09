@@ -83,11 +83,9 @@ const coldSnowGear: Record<AgeGroup, ClothingItem[]> = {
   ],
 };
 
-const mildRainGear: Record<AgeGroup, ClothingItem[]> = {
+const mildBaseGear: Record<AgeGroup, ClothingItem[]> = {
   vauva: [
     { name: "Välikausihaalari", emoji: "🧥", description: "Kevyt haalari" },
-    { name: "Sadehaalari", emoji: "🌧️", description: "Vedenpitävä haalari päälle" },
-    { name: "Kumisaappaat", emoji: "🥾", description: "Pienet kumpparet" },
     { name: "Ohut pipo", emoji: "🧢", description: "Puuvillapipo" },
   ],
   taapero: [
@@ -106,8 +104,8 @@ const mildRainGear: Record<AgeGroup, ClothingItem[]> = {
   ],
   koululainen: [
     { name: "Välikausihousut", emoji: "👖", description: "Joustavat välikausihousut" },
-    { name: "Vedenpitävä kuoritakki", emoji: "🧥", description: "Vedenpitävä kuoritakki" },
-    { name: "Vettä hylkivät kengät", emoji: "👟", description: "Vettä hylkivät kengät" },
+    { name: "Kuoritakki", emoji: "🧥", description: "Tuulenpitävä kuoritakki" },
+    { name: "Välikausikengät", emoji: "🥾", description: "Vettähylkivät välikausikengät" },
     { name: "Huppari", emoji: "👕", description: "Fleece tai huppari" },
     { name: "Ohut pipo", emoji: "🧢", description: "Ohut pipo" },
   ],
