@@ -138,17 +138,6 @@ export default function DaycareChecklist({ ageGroup, weather }: DaycareChecklist
         </div>
       )}
 
-      {weatherItems.length > 0 && (
-        <div className="rounded-lg border-2 border-primary/30 bg-primary/5 p-4 mb-4">
-          <h3 className="text-xs font-display font-700 text-primary uppercase tracking-wide mb-3">
-            {t("checklist.weatherGear")}
-          </h3>
-          <div className="space-y-2">
-            {weatherItems.map((item) => renderItem(item))}
-          </div>
-        </div>
-      )}
-
       <div className="mb-4">
         <h3 className="text-xs font-display font-600 text-muted-foreground/70 uppercase tracking-wide mb-2">
           {t("checklist.spareClothes")}
