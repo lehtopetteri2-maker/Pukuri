@@ -376,6 +376,29 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
     }
   }
 
+  // Hanskat/lapaset automaattisesti kun pipo on asussa
+  const hasPipo = base.some((i) => i.name === "Pipo");
+  if (hasPipo) {
+    const hasGloves = base.some((i) =>
+      i.name === "Hanskat" || i.name === "Lapaset" || i.name === "Rukkaset" ||
+      i.name === "Sormikkaat" || i.name === "Lapaset/Rukkaset"
+    );
+    if (!hasGloves) {
+      if (temp <= -10) {
+        base.push({ name: "Lapaset", emoji: "🧤", description: "Kova pakkanen — paksut lapaset tai rukkaset" });
+      } else {
+        base.push({ name: "Hanskat", emoji: "🧤", description: "Viileä sää — hanskat mukaan" });
+      }
+    } else if (temp <= -10) {
+      // Vaihda olemassa olevat hanskat lapasiksi kovalla pakkasella
+      for (let i = 0; i < base.length; i++) {
+        if (base[i].name === "Hanskat" || base[i].name === "Sormikkaat") {
+          base[i] = { name: "Lapaset", emoji: "🧤", description: "Kova pakkanen — paksut lapaset tai rukkaset" };
+        }
+      }
+    }
+  }
+
   // Deduplicate by name
   const seen = new Set<string>();
   return base.filter((item) => {
