@@ -41,7 +41,6 @@ const miscByAge: Record<AgeGroup, ChecklistItem[]> = {
     { id: "välipala", labelKey: "item.välipala", emoji: "🍎" },
     { id: "uikkarit", labelKey: "item.uikkarit", emoji: "🩱" },
     { id: "sisäliikunta", labelKey: "item.sisäliikunta", emoji: "🏃" },
-    { id: "aurinkorasva", labelKey: "item.aurinkorasva", emoji: "☀️" },
   ],
 };
 
@@ -72,7 +71,7 @@ export default function DaycareChecklist({ ageGroup, weather }: DaycareChecklist
 
     if (temp > 10) add("lippis", "item.lippis", "🧢");
     if (isRainy) { add("kuravarusteet", "item.kuravarusteet", "🌧️"); add("vaihtohanskat", "item.vaihtohanskat", "🧤"); }
-    if (temp < 10) add("lamminkerrasto", "item.lamminkerrasto", "🧶");
+    if (temp < 10 && ageGroup !== "koululainen") add("lamminkerrasto", "item.lamminkerrasto", "🧶");
     const now = new Date();
     const month = now.getMonth(); // 0-indexed
     const day = now.getDate();
