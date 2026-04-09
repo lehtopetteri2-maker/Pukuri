@@ -17,7 +17,7 @@ function getSavedLanguage(): Language {
 const translations = {
   // Header
   "header.title": { fi: "Pukuri", sv: "Pukuri", en: "Pukuri", et: "Pukuri", ar: "Pukuri" },
-  "header.subtitle": { fi: "Aamun älykkäät varustevalinnat", sv: "Morgonens smarta utrustningsval", en: "Smart morning gear choices", et: "Nutikad hommikused varustuse valikud", ar: "اختيارات معدات الصباح الذكية" },
+  "header.subtitle": { fi: "Älykäs apu aamun varustevalintoihin", sv: "Intelligent hjälp för morgonens utrustningsval", en: "Smart assistance for morning gear choices", et: "Nutikas abi hommikusteks varustuse valikuteks", ar: "مساعدة ذكية لاختيار معدات الصباح" },
 
   // Location search
   "location.weatherNow": { fi: "Sää nyt", sv: "Väder nu", en: "Weather now", et: "Ilm praegu", ar: "الطقس الآن" },
