@@ -79,10 +79,10 @@ const Index = () => {
 
   const alerts = useMemo(() => {
     if (loading && forecastList.length === 0) return emptyAlerts();
-    return computeAlerts(forecastList, effectiveWeather.temperature, effectiveWeather.uvi);
-  }, [effectiveWeather, forecastList, loading]);
+    return computeAlerts(forecastList, weather.temperature, weather.uvi);
+  }, [weather, forecastList, loading]);
 
-  const dual = useMemo(() => computeDualRecommendation(effectiveWeather, ageGroup, forecastList), [effectiveWeather, ageGroup, forecastList]);
+  const dual = useMemo(() => computeDualRecommendation(weather, ageGroup, forecastList), [weather, ageGroup, forecastList]);
 
   const applyResult = useCallback((data: { current: WeatherData; tomorrow: TomorrowData; forecastList: any[]; fromApi: boolean }) => {
     setWeather(data.current);
@@ -230,18 +230,18 @@ const Index = () => {
 
         <MorningSummary alerts={alerts} ageGroup={ageGroup} />
         <ScheduleReminder ageGroup={ageGroup} onOpen={scrollToSchedule} />
-        <NightAlert weather={effectiveWeather} alerts={alerts} />
+        <NightAlert weather={weather} alerts={alerts} />
         <WeatherCard
-          weather={effectiveWeather}
+          weather={weather}
           cacheAge={cacheAge}
           onRefresh={handleForceRefresh}
           loading={loading}
         />
-        <TomorrowForecastCard weather={effectiveWeather} ageGroup={ageGroup} tomorrow={tomorrow} forecastList={forecastList} />
+        <TomorrowForecastCard weather={weather} ageGroup={ageGroup} tomorrow={tomorrow} forecastList={forecastList} />
 
-        <AiAnalysis weather={effectiveWeather} ageGroup={ageGroup} dual={dual} />
+        <AiAnalysis weather={weather} ageGroup={ageGroup} dual={dual} />
 
-        <UvAlert weather={effectiveWeather} />
+        <UvAlert weather={weather} />
 
         <div className="space-y-3">
           <h2 className="text-sm font-display font-700 text-muted-foreground uppercase tracking-wide">
@@ -250,9 +250,9 @@ const Index = () => {
           <AgeGroupToggle selected={ageGroup} onChange={setAgeGroup} />
         </div>
 
-        <DualClothingCard key={`${city}-${ageGroup}-${debugTemp}`} dual={dual} />
+        <DualClothingCard key={`${city}-${ageGroup}-${city}`} dual={dual} />
         <ShareButton dual={dual} ageGroup={ageGroup} />
-        <DaycareChecklist ageGroup={ageGroup} weather={effectiveWeather} />
+        <DaycareChecklist ageGroup={ageGroup} weather={weather} />
 
         <DebugPanel weather={weather} onOverride={setDebugTemp} />
         <AffiliateSection />
