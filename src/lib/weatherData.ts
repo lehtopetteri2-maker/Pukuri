@@ -152,13 +152,13 @@ const warmGear: Record<AgeGroup, ClothingItem[]> = {
   taapero: [
     { name: "T-paita", emoji: "👕", description: "Kevyt paita" },
     { name: "Shortsit", emoji: "🩳", description: "Kevyet shortsit" },
-    { name: "Sandaalit", emoji: "👡", description: "Avoimet kengät" },
+    { name: "Kevyet kengät", emoji: "👟", description: "Kevyet kengät" },
     { name: "Aurinkohattu", emoji: "👒", description: "Lippalakki tai hattu" },
   ],
   "leikki-ikäinen": [
     { name: "T-paita", emoji: "👕", description: "T-paita" },
     { name: "Shortsit", emoji: "🩳", description: "Shortsit tai hame" },
-    { name: "Sandaalit", emoji: "👡", description: "Avoimet kengät" },
+    { name: "Kevyet kengät", emoji: "👟", description: "Kevyet kengät" },
     { name: "Lippalakki", emoji: "🧢", description: "Aurinkosuoja" },
   ],
   koululainen: [
