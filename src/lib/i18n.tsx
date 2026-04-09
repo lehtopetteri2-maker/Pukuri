@@ -13,6 +13,12 @@ function getSavedLanguage(): Language {
 
 // Flat translation keys
 const translations = {
+  // Bottom nav tabs
+  "tab.today": { fi: "Tänään", sv: "Idag", en: "Today" },
+  "tab.outfit": { fi: "Varustelu", sv: "Utrustning", en: "Outfit" },
+  "tab.family": { fi: "Perhe", sv: "Familj", en: "Family" },
+  "tab.settings": { fi: "Asetukset", sv: "Inställningar", en: "Settings" },
+
   // Header
   "header.title": { fi: "Säävahti", sv: "Väderpytten", en: "Säävahti" },
   "header.subtitle": { fi: "Älykäs apu aamun varustevalintoihin", sv: "Smart hjälp med morgonens utrustningsval", en: "Smart help for morning outfit choices" },
