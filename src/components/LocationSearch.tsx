@@ -1,7 +1,6 @@
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Search, MapPin, Loader2 } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
-import { cityWeather } from "@/lib/cityWeatherData";
 
 interface LocationSearchProps {
   currentCity: string;
@@ -10,15 +9,48 @@ interface LocationSearchProps {
   loading: boolean;
 }
 
-const allCities = Object.keys(cityWeather);
+const API_KEY = "247aa2ee8cccf0e1e53ea7ab0aeb4e7d";
+const GEO_URL = "https://api.openweathermap.org/geo/1.0/direct";
+
+interface GeoResult {
+  name: string;
+  local_names?: Record<string, string>;
+  lat: number;
+  lon: number;
+  country: string;
+  state?: string;
+}
+
+/** Normalize Nordic characters for fuzzy matching */
+function normalize(s: string): string {
+  return s
+    .toLowerCase()
+    .replace(/å/g, "a")
+    .replace(/ä/g, "a")
+    .replace(/ö/g, "o")
+    .replace(/ø/g, "o")
+    .replace(/æ/g, "ae");
+}
+
+/** Format display label for a geocoding result */
+function formatLabel(r: GeoResult): string {
+  const parts = [r.name];
+  if (r.state) parts.push(r.state);
+  parts.push(r.country);
+  return parts.join(", ");
+}
 
 export default function LocationSearch({ currentCity, onSelectCity, onGeolocate, loading }: LocationSearchProps) {
   const { t } = useLanguage();
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
+  const [results, setResults] = useState<GeoResult[]>([]);
+  const [searching, setSearching] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
 
+  // Close dropdown on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
@@ -29,38 +61,77 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  const filtered = useMemo(() => {
-    if (!query.trim()) return [];
-    const q = query.trim().toLowerCase();
-    return allCities
-      .filter((c) => c.toLowerCase().startsWith(q))
-      .slice(0, 20);
-  }, [query]);
+  // Geocoding search with debounce
+  const searchGeo = useCallback(async (q: string) => {
+    if (q.trim().length < 2) {
+      setResults([]);
+      return;
+    }
+    setSearching(true);
+    try {
+      const res = await fetch(
+        `${GEO_URL}?q=${encodeURIComponent(q.trim())}&limit=15&appid=${API_KEY}`
+      );
+      if (!res.ok) {
+        setResults([]);
+        return;
+      }
+      const data: GeoResult[] = await res.json();
+
+      // Prioritize Nordic countries
+      const nordic = new Set(["FI", "SE", "NO", "DK"]);
+      data.sort((a, b) => {
+        const aN = nordic.has(a.country) ? 0 : 1;
+        const bN = nordic.has(b.country) ? 0 : 1;
+        return aN - bN;
+      });
+
+      // Deduplicate by name+country
+      const seen = new Set<string>();
+      const unique = data.filter((r) => {
+        const key = `${normalize(r.name)}-${r.country}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+
+      setResults(unique);
+    } catch {
+      setResults([]);
+    } finally {
+      setSearching(false);
+    }
+  }, []);
+
+  const handleChange = (value: string) => {
+    setQuery(value);
+    setOpen(true);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    if (value.trim().length >= 2) {
+      debounceRef.current = setTimeout(() => searchGeo(value), 300);
+    } else {
+      setResults([]);
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (query.trim()) {
+    if (query.trim().length >= 2) {
       onSelectCity(query.trim());
       setQuery("");
       setOpen(false);
     }
   };
 
-  const handleSelect = (city: string) => {
-    onSelectCity(city);
+  const handleSelect = (r: GeoResult) => {
+    onSelectCity(r.name);
     setQuery("");
     setOpen(false);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      handleSubmit(e);
-    }
+    setResults([]);
   };
 
   return (
-    <div ref={containerRef} className="relative animate-fade-in">
+    <div ref={containerRef} className="relative animate-fade-in" style={{ zIndex: 50 }}>
       {loading && (
         <div className="absolute inset-0 z-20 flex items-center justify-center bg-card/80 rounded-lg backdrop-blur-sm">
           <div className="flex items-center gap-2 text-primary">
@@ -95,38 +166,31 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
             ref={inputRef}
             type="text"
             value={query}
-            onChange={(e) => {
-              setQuery(e.target.value);
-              setOpen(true);
-            }}
-            onFocus={() => setOpen(true)}
-            onKeyDown={handleKeyDown}
+            onChange={(e) => handleChange(e.target.value)}
+            onFocus={() => { if (results.length > 0) setOpen(true); }}
             placeholder={t("location.searchPlaceholder")}
             className="w-full rounded-md border border-input bg-background pl-9 pr-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/30 transition-shadow"
           />
 
-          {open && filtered.length > 0 && (
+          {open && (results.length > 0 || searching) && (
             <div
-              className="absolute z-30 top-full left-0 right-0 mt-1 rounded-md border border-border bg-popover shadow-md overflow-y-auto"
-              style={{ maxHeight: 'calc(100vh - 100% - 50px - 64px)' }}
-              ref={(el) => {
-                if (el) {
-                  const rect = el.getBoundingClientRect();
-                  const viewportH = window.innerHeight;
-                  const maxH = viewportH - rect.top - 50;
-                  el.style.maxHeight = `${Math.max(maxH, 120)}px`;
-                }
-              }}
+              className="absolute z-[100] top-full left-0 right-0 mt-1 rounded-md border border-border bg-popover shadow-lg overflow-y-auto max-h-64"
             >
-              {filtered.map((city) => (
+              {searching && results.length === 0 && (
+                <div className="flex items-center gap-2 px-3 py-3 text-sm text-muted-foreground">
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  {t("location.updating")}
+                </div>
+              )}
+              {results.map((r, i) => (
                 <button
-                  key={city}
+                  key={`${r.name}-${r.country}-${r.lat}-${i}`}
                   type="button"
-                  onClick={() => handleSelect(city)}
-                  className="w-full text-left px-3 py-2 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors flex items-center gap-2"
+                  onClick={() => handleSelect(r)}
+                  className="w-full text-left px-3 py-2.5 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors flex items-center gap-2"
                 >
                   <MapPin className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-                  {city}
+                  <span>{formatLabel(r)}</span>
                 </button>
               ))}
             </div>
