@@ -78,7 +78,7 @@ export default function DaycareChecklist({ ageGroup, weather }: DaycareChecklist
     return items;
   }, [ageGroup, weather.temperature, weather.rainProbability, weather.afternoonRain]);
 
-  const miscItems = useMemo(() => [...miscByAge[ageGroup]], [ageGroup]);
+  const miscItems = useMemo(() => [...seasonalItems, ...miscByAge[ageGroup]], [ageGroup, seasonalItems]);
 
   const getDayReminder = (): TranslationKey | null => {
     const day = new Date().getDay();
@@ -90,7 +90,7 @@ export default function DaycareChecklist({ ageGroup, weather }: DaycareChecklist
   };
 
   const dayReminderKey = getDayReminder();
-  const allItems = [...weatherItems, ...SPARE_CLOTHES, ...miscItems];
+  const allItems = [...SPARE_CLOTHES, ...miscItems];
   const allDone = allItems.every((i) => checked.has(i.id));
 
   const toggle = useCallback((id: string) => {
