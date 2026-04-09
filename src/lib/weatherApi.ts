@@ -125,12 +125,16 @@ function parseForecast(d: any): { tomorrow: TomorrowData; afternoonRain: boolean
   };
 }
 
-export async function fetchWeatherData(city: string): Promise<{
+export interface WeatherResult {
   current: WeatherData;
   tomorrow: TomorrowData;
   forecastList: any[];
   fromApi: boolean;
-}> {
+  lat?: number;
+  lon?: number;
+}
+
+export async function fetchWeatherData(city: string): Promise<WeatherResult> {
   const normalizedCity = capitalizeCity(city.trim());
 
   const [weatherJson, forecastJson] = await Promise.all([
@@ -151,15 +155,12 @@ export async function fetchWeatherData(city: string): Promise<{
     tomorrow: forecast.tomorrow,
     forecastList: forecastJson.list ?? [],
     fromApi: true,
+    lat: weatherJson.coord?.lat,
+    lon: weatherJson.coord?.lon,
   };
 }
 
-export async function fetchWeatherByCoords(lat: number, lon: number): Promise<{
-  current: WeatherData;
-  tomorrow: TomorrowData;
-  forecastList: any[];
-  fromApi: boolean;
-}> {
+export async function fetchWeatherByCoords(lat: number, lon: number): Promise<WeatherResult> {
   const [weatherJson, forecastJson] = await Promise.all([
     tryFetchJson(
       `${BASE}/weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}&lang=fi`,
@@ -184,5 +185,7 @@ export async function fetchWeatherByCoords(lat: number, lon: number): Promise<{
     tomorrow: forecast.tomorrow,
     forecastList: forecastJson.list ?? [],
     fromApi: true,
+    lat: weatherJson.coord?.lat ?? lat,
+    lon: weatherJson.coord?.lon ?? lon,
   };
 }

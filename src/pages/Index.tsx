@@ -18,8 +18,8 @@ import LanguageSwitcher from "@/components/LanguageSwitcher";
 import PwaInstallBanner from "@/components/PwaInstallBanner";
 import { getSavedCity, saveCity, AgeGroup, WeatherData } from "@/lib/weatherData";
 import { computeDualRecommendation } from "@/lib/dualRecommendation";
-import { fetchWeatherData, fetchWeatherByCoords, TomorrowData } from "@/lib/weatherApi";
-import { getCachedWeather, isCacheFresh, getCacheAgeMinutes, saveWeatherCache } from "@/lib/weatherCache";
+import { fetchWeatherData, fetchWeatherByCoords, TomorrowData, WeatherResult } from "@/lib/weatherApi";
+import { getCachedWeather, getCachedWeatherByCoords, isCacheFresh, getCacheAgeMinutes, saveWeatherCache } from "@/lib/weatherCache";
 import { ForecastAlerts, emptyAlerts, computeAlerts } from "@/lib/forecastAlerts";
 import FeedbackSection from "@/components/FeedbackSection";
 import { CloudSnow, AlertCircle } from "lucide-react";
@@ -84,13 +84,13 @@ const Index = () => {
 
   const dual = useMemo(() => computeDualRecommendation(weather, ageGroup, forecastList), [weather, ageGroup, forecastList]);
 
-  const applyResult = useCallback((data: { current: WeatherData; tomorrow: TomorrowData; forecastList: any[]; fromApi: boolean }) => {
+  const applyResult = useCallback((data: WeatherResult) => {
     setWeather(data.current);
     setTomorrow(data.tomorrow);
     setForecastList(data.forecastList);
     setCity(data.current.city);
     saveCity(data.current.city);
-    saveWeatherCache(data.current.city, data.current, data.tomorrow, data.forecastList, data.fromApi);
+    saveWeatherCache(data.current.city, data.current, data.tomorrow, data.forecastList, data.fromApi, data.lat, data.lon);
     console.log("[Pukuri] Säädata saatu:", { city: data.current.city, temp: data.current.temperature, forecastEntries: data.forecastList.length });
     setCacheAge(0);
   }, []);
@@ -131,6 +131,18 @@ const Index = () => {
   }, [applyResult, t]);
 
   const loadWeatherByCoords = useCallback(async (lat: number, lon: number) => {
+    // Check coord-based cache first
+    const cached = getCachedWeatherByCoords(lat, lon);
+    if (cached && isCacheFresh(cached)) {
+      setWeather(cached.current);
+      setTomorrow(cached.tomorrow);
+      setForecastList(cached.forecastList ?? []);
+      setCity(cached.city);
+      setCacheAge(getCacheAgeMinutes(cached));
+      console.log("[Pukuri] Koordinaattipohjainen välimuisti käytössä");
+      return;
+    }
+
     setLoading(true);
     setError(null);
     try {
