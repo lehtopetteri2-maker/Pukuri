@@ -370,6 +370,14 @@ const translations = {
   "share.button": { fi: "Jaa puolison kanssa", sv: "Dela med partner", en: "Share with partner" },
   "share.messageIntro": { fi: "Säävahti-muistutus!", sv: "Vädervakten-påminnelse!", en: "Säävahti reminder!" },
   "share.rememberMud": { fi: "Muista kuravarusteet!", sv: "Kom ihåg smutskläderna!", en: "Remember mud gear!" },
+
+  // Onboarding
+  "onboarding.welcome": { fi: "Tervetuloa Säävahtiin!", sv: "Välkommen till Väderpytten!", en: "Welcome to Säävahti!" },
+  "onboarding.subtitle": { fi: "Valitse asuinmaasi ja kieli, niin saat parhaat pukeutumissuositukset.", sv: "Välj ditt hemland och språk för bästa klädrekommendationer.", en: "Choose your country and language for the best clothing recommendations." },
+  "onboarding.selectCountry": { fi: "Valitse maa", sv: "Välj land", en: "Select country" },
+  "onboarding.selectLanguage": { fi: "Valitse kieli", sv: "Välj språk", en: "Select language" },
+  "onboarding.languageHint": { fi: "Kielivalinta on riippumaton maasta — voit käyttää sovellusta millä tahansa kielellä.", sv: "Språkvalet är oberoende av land — du kan använda appen på valfritt språk.", en: "Language is independent of country — you can use the app in any language." },
+  "onboarding.continue": { fi: "Jatka", sv: "Fortsätt", en: "Continue" },
 } as const;
 
 export type TranslationKey = keyof typeof translations;
