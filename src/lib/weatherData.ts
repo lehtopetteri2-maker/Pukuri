@@ -400,6 +400,34 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
     }
   }
 
+  // Sort: 1) outer/base layer  2) warm mid-layer  3) beanie & gloves  4) rest
+  const OUTER_NAMES = new Set([
+    "Kerrospukeutuminen", "Toppahaalari", "Toppahousut", "Toppatakki",
+    "Toppapuku ja villasukat", "Tekniset kuorivaatteet", "Välikausivaatteet",
+    "Välikausihaalari", "Välikausihousut", "Kuoritakki",
+    "Vedenpitävä kuoritakki", "Vedenpitävät ulkoiluhousut",
+    "Vuorellinen sadehaalari", "Sadehaalari tai kurahousut & sadetakki",
+    "Ohuet kuravarusteet", "Kurahousut ja kurahanskat", "Vuorettomat kurahousut",
+    "Body", "Ohut haalari", "T-paita", "Collegehousut", "Farkut", "Shortsit",
+  ]);
+  const MID_NAMES = new Set([
+    "Lämmin välikerros", "Villakerrastot", "Välikerrastot", "Välikerrasto",
+    "Huppari", "Pitkähihainen paita",
+  ]);
+  const HEAD_GLOVE_NAMES = new Set([
+    "Pipo", "Ohut pipo", "Lippalakki", "Lippis/Hattu", "Aurinkohattu",
+    "Hanskat", "Lapaset", "Rukkaset", "Sormikkaat", "Lapaset/Rukkaset",
+  ]);
+
+  function sortPriority(item: ClothingItem): number {
+    if (OUTER_NAMES.has(item.name)) return 0;
+    if (MID_NAMES.has(item.name)) return 1;
+    if (HEAD_GLOVE_NAMES.has(item.name)) return 2;
+    return 3;
+  }
+
+  base.sort((a, b) => sortPriority(a) - sortPriority(b));
+
   // Deduplicate by name
   const seen = new Set<string>();
   return base.filter((item) => {
