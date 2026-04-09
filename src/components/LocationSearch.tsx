@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Search, MapPin, Loader2 } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 import { cityWeather } from "@/lib/cityWeatherData";
@@ -10,14 +10,26 @@ interface LocationSearchProps {
   loading: boolean;
 }
 
-const allCities = Object.keys(cityWeather);
+const API_KEY = "247aa2ee8cccf0e1e53ea7ab0aeb4e7d";
+const allLocalCities = Object.keys(cityWeather);
+
+interface GeoResult {
+  name: string;
+  state?: string;
+  country: string;
+  lat: number;
+  lon: number;
+}
 
 export default function LocationSearch({ currentCity, onSelectCity, onGeolocate, loading }: LocationSearchProps) {
   const { t } = useLanguage();
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
+  const [results, setResults] = useState<string[]>([]);
+  const [searching, setSearching] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -29,13 +41,62 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  const filtered = useMemo(() => {
-    if (!query.trim()) return [];
-    const q = query.trim().toLowerCase();
-    return allCities
-      .filter((c) => c.toLowerCase().startsWith(q))
-      .slice(0, 20);
-  }, [query]);
+  const searchCities = useCallback(async (q: string) => {
+    if (!q.trim()) {
+      setResults([]);
+      return;
+    }
+
+    const lower = q.trim().toLowerCase();
+
+    // Local matches first (instant)
+    const localMatches = allLocalCities
+      .filter((c) => c.toLowerCase().startsWith(lower))
+      .slice(0, 10);
+
+    setResults(localMatches);
+
+    // Then fetch from Geocoding API (Finland only)
+    if (q.trim().length >= 2) {
+      setSearching(true);
+      try {
+        const url = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(q.trim())},FI&limit=10&appid=${API_KEY}`;
+        const res = await fetch(url);
+        if (res.ok) {
+          const data: GeoResult[] = await res.json();
+          const apiCities = data
+            .filter((r) => r.country === "FI")
+            .map((r) => r.name);
+
+          // Merge local + API results, deduplicate
+          const merged = [...localMatches];
+          for (const city of apiCities) {
+            if (!merged.some((m) => m.toLowerCase() === city.toLowerCase())) {
+              merged.push(city);
+            }
+          }
+          setResults(merged.slice(0, 20));
+        }
+      } catch {
+        // Keep local results on error
+      } finally {
+        setSearching(false);
+      }
+    }
+  }, []);
+
+  const handleQueryChange = useCallback((value: string) => {
+    setQuery(value);
+    setOpen(true);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => searchCities(value), 300);
+  }, [searchCities]);
+
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -91,34 +152,26 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
 
         <form onSubmit={handleSubmit} className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          {searching && (
+            <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground animate-spin" />
+          )}
           <input
             ref={inputRef}
             type="text"
             value={query}
-            onChange={(e) => {
-              setQuery(e.target.value);
-              setOpen(true);
-            }}
+            onChange={(e) => handleQueryChange(e.target.value)}
             onFocus={() => setOpen(true)}
             onKeyDown={handleKeyDown}
             placeholder={t("location.searchPlaceholder")}
             className="w-full rounded-md border border-input bg-background pl-9 pr-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/30 transition-shadow"
           />
 
-          {open && filtered.length > 0 && (
+          {open && results.length > 0 && (
             <div
-              className="absolute z-30 top-full left-0 right-0 mt-1 rounded-md border border-border bg-popover shadow-md overflow-y-auto"
-              style={{ maxHeight: 'calc(100vh - 100% - 50px - 64px)' }}
-              ref={(el) => {
-                if (el) {
-                  const rect = el.getBoundingClientRect();
-                  const viewportH = window.innerHeight;
-                  const maxH = viewportH - rect.top - 50;
-                  el.style.maxHeight = `${Math.max(maxH, 120)}px`;
-                }
-              }}
+              className="absolute top-full left-0 right-0 mt-1 rounded-md border border-border bg-popover shadow-md overflow-y-auto"
+              style={{ zIndex: 9999, maxHeight: '60vh' }}
             >
-              {filtered.map((city) => (
+              {results.map((city) => (
                 <button
                   key={city}
                   type="button"
@@ -129,6 +182,7 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
                   {city}
                 </button>
               ))}
+              <div className="h-[100px]" />
             </div>
           )}
         </form>
