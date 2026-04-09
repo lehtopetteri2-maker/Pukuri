@@ -440,7 +440,7 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
     }
   }
 
-  // Sort: 1) outer/base layer  2) warm mid-layer  3) beanie & gloves  4) rest
+  // Sort: 1) outer/base layer  2) warm mid-layer  3) beanie & gloves  4) rest  5) shoes (always last)
   const OUTER_NAMES = new Set([
     "Kerrospukeutuminen", "Toppahaalari", "Toppahousut", "Toppatakki",
     "Toppapuku ja villasukat", "Tekniset kuorivaatteet", "Välikausivaatteet",
@@ -450,7 +450,7 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
     "Ohuet kuravarusteet", "Kurahousut ja kurahanskat", "Vuorettomat kurahousut",
     "Body", "Ohut haalari", "T-paita", "Collegehousut", "Farkut", "Shortsit",
     "Puuvillabody", "Puuvillahousut", "Ohuet housut", "Kevyet housut",
-    "Ohut kuorihaalari", "Sadeasu", "Tekniset ulkoiluhousut", "Vedenpitävät kengät",
+    "Ohut kuorihaalari", "Sadeasu", "Tekniset ulkoiluhousut",
   ]);
   const MID_NAMES = new Set([
     "Lämmin välikerros", "Villakerrastot", "Välikerrastot", "Välikerrasto",
@@ -462,8 +462,14 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
     "Hanskat", "Lapaset", "Rukkaset", "Sormikkaat", "Lapaset/Rukkaset",
     "Ohuet sukat", "Sukat",
   ]);
+  const SHOE_NAMES = new Set([
+    "Kevyet kengät", "Lenkkarit", "Kumisaappaat", "Kumisaappaat + villasukat",
+    "Talvisaappaat", "Talvikengät", "Välikausikengät", "Talvitöppöset",
+    "Vedenpitävät kengät", "Vettä hylkivät kengät",
+  ]);
 
   function sortPriority(item: ClothingItem): number {
+    if (SHOE_NAMES.has(item.name)) return 4;
     if (OUTER_NAMES.has(item.name)) return 0;
     if (MID_NAMES.has(item.name)) return 1;
     if (HEAD_GLOVE_NAMES.has(item.name)) return 2;
