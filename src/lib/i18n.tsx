@@ -487,6 +487,7 @@ const clothingNameMap: Record<string, { sv: string; en: string }> = {
   "Sadehattu": { sv: "Regnhatt", en: "Rain hat" },
   "Tekniset ulkoiluhousut": { sv: "Tekniska utomhusbyxor", en: "Technical outdoor trousers" },
   "Vedenpitävät kengät": { sv: "Vattentäta skor", en: "Waterproof shoes" },
+  "Pehmeät tossut": { sv: "Mjuka tossor", en: "Soft booties" },
 };
 
 const clothingDescMap: Record<string, { sv: string; en: string }> = {
@@ -598,6 +599,8 @@ const clothingDescMap: Record<string, { sv: string; en: string }> = {
   "Farkut tai tekniset ulkoiluhousut": { sv: "Jeans eller tekniska utomhusbyxor", en: "Jeans or technical outdoor trousers" },
   "Vedenpitävät kengät tai tennarit": { sv: "Vattentäta skor eller sneakers", en: "Waterproof shoes or sneakers" },
   "Pakkaa sateenvarjo tai sadeviitta reppuun": { sv: "Packa paraply eller regnponcho i ryggsäcken", en: "Pack an umbrella or rain poncho in the backpack" },
+  "Leveälierinen hattu tai aurinkohattu": { sv: "Bredbrättad hatt eller solhatt", en: "Wide-brimmed hat or sun hat" },
+  "Pehmeät tossut tai kevyet kengät": { sv: "Mjuka tossor eller lätta skor", en: "Soft booties or lightweight shoes" },
 };
 
 export type { ClothingItem } from "./weatherData";

@@ -118,8 +118,9 @@ const warmSpringGear: Record<AgeGroup, ClothingItem[]> = {
   vauva: [
     { name: "Puuvillabody", emoji: "👶", description: "Ohut, pitkähihainen puuvillabody" },
     { name: "Puuvillahousut", emoji: "👖", description: "Ohuet puuvillahousut" },
-    { name: "Kypärämyssy", emoji: "🧢", description: "Ohut puuvillainen kypärämyssy tai aurinkohattu" },
+    { name: "Aurinkohattu", emoji: "👒", description: "Leveälierinen hattu tai aurinkohattu" },
     { name: "Ohuet sukat", emoji: "🧦", description: "Ohuet sukat" },
+    { name: "Pehmeät tossut", emoji: "👟", description: "Pehmeät tossut tai kevyet kengät" },
   ],
   taapero: [
     { name: "Pitkähihainen paita", emoji: "👕", description: "Pitkähihainen ohut paita tai t-paita" },
@@ -146,8 +147,9 @@ const warmGear: Record<AgeGroup, ClothingItem[]> = {
   vauva: [
     { name: "Puuvillabody", emoji: "👶", description: "Ohut, pitkähihainen puuvillabody" },
     { name: "Puuvillahousut", emoji: "👖", description: "Ohuet puuvillahousut" },
-    { name: "Aurinkohattu", emoji: "👒", description: "Leveälierinen hattu tai kypärämyssy" },
+    { name: "Aurinkohattu", emoji: "👒", description: "Leveälierinen hattu tai aurinkohattu" },
     { name: "Ohuet sukat", emoji: "🧦", description: "Ohuet sukat" },
+    { name: "Pehmeät tossut", emoji: "👟", description: "Pehmeät tossut tai kevyet kengät" },
   ],
   taapero: [
     { name: "T-paita", emoji: "👕", description: "Kevyt paita" },
@@ -465,7 +467,7 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
   const SHOE_NAMES = new Set([
     "Kevyet kengät", "Lenkkarit", "Kumisaappaat", "Kumisaappaat + villasukat",
     "Talvisaappaat", "Talvikengät", "Välikausikengät", "Talvitöppöset",
-    "Vedenpitävät kengät", "Vettä hylkivät kengät",
+    "Vedenpitävät kengät", "Vettä hylkivät kengät", "Pehmeät tossut",
   ]);
 
   function sortPriority(item: ClothingItem): number {
