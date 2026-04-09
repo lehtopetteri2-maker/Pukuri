@@ -14,7 +14,7 @@ function getSavedLanguage(): Language {
 // Flat translation keys
 const translations = {
   // Header
-  "header.title": { fi: "Säävahti", sv: "Väderpytten", en: "Säävahti" },
+  "header.title": { fi: "Pukuri", sv: "Pukuri", en: "Pukuri" },
   "header.subtitle": { fi: "Älykäs apu aamun varustevalintoihin", sv: "Smart hjälp med morgonens utrustningsval", en: "Smart help for morning outfit choices" },
 
   // Location search
@@ -40,12 +40,12 @@ const translations = {
   // Morning summary
   "morning.title": { fi: "☀️ Vinkki aamuun", sv: "☀️ Morgontips", en: "☀️ Morning tip" },
   "morning.loading": { fi: "Haetaan päivän suosituksia...", sv: "Hämtar dagens rekommendationer...", en: "Fetching today's recommendations..." },
-  "morning.rainStart": { fi: "Säävahti huomasi: sade alkaa arviolta klo {time}. Muista kuravarusteet päiväkotiin!", sv: "Vädervakten märkte: regn börjar ungefär kl {time}. Kom ihåg regnkläder till dagis!", en: "Säävahti noticed: rain starts around {time}. Remember rain gear for daycare!" },
-  "morning.rainStart.school": { fi: "Säävahti huomasi: sade alkaa arviolta klo {time}. Muista kuravarusteet kouluun!", sv: "Vädervakten märkte: regn börjar ungefär kl {time}. Kom ihåg regnkläder till skolan!", en: "Säävahti noticed: rain starts around {time}. Remember rain gear for school!" },
+  "morning.rainStart": { fi: "Pukuri huomasi: sade alkaa arviolta klo {time}. Muista kuravarusteet päiväkotiin!", sv: "Pukuri märkte: regn börjar ungefär kl {time}. Kom ihåg regnkläder till dagis!", en: "Pukuri noticed: rain starts around {time}. Remember rain gear for daycare!" },
+  "morning.rainStart.school": { fi: "Pukuri huomasi: sade alkaa arviolta klo {time}. Muista kuravarusteet kouluun!", sv: "Pukuri märkte: regn börjar ungefär kl {time}. Kom ihåg regnkläder till skolan!", en: "Pukuri noticed: rain starts around {time}. Remember rain gear for school!" },
   "morning.rainDaycare": { fi: "Sade alkaa arviolta klo {time}. Muista kuravarusteet päiväkotiin!", sv: "Regn börjar ungefär kl {time}. Kom ihåg regnkläder till dagis!", en: "Rain starts around {time}. Remember rain gear for daycare!" },
   "morning.rainDaycare.school": { fi: "Sade alkaa arviolta klo {time}. Muista kuravarusteet kouluun!", sv: "Regn börjar ungefär kl {time}. Kom ihåg regnkläder till skolan!", en: "Rain starts around {time}. Remember rain gear for school!" },
-  "morning.freezing": { fi: "Säävahti huomasi: tie on liukas ja aamu on kylmä, valitse lämpimät kengät.", sv: "Vädervakten märkte: vägen är hal och morgonen kall, välj varma skor.", en: "Säävahti noticed: roads are slippery and the morning is cold, choose warm shoes." },
-  "morning.uvHigh": { fi: "Säävahti huomasi: UV-indeksi nousee yli 3 tänään. Muista aurinkorasva lapselle!", sv: "Vädervakten märkte: UV-index stiger över 3 idag. Kom ihåg solskyddskräm!", en: "Säävahti noticed: UV index rises above 3 today. Remember sunscreen for the child!" },
+  "morning.freezing": { fi: "Pukuri huomasi: tie on liukas ja aamu on kylmä, valitse lämpimät kengät.", sv: "Pukuri märkte: vägen är hal och morgonen kall, välj varma skor.", en: "Pukuri noticed: roads are slippery and the morning is cold, choose warm shoes." },
+  "morning.uvHigh": { fi: "Pukuri huomasi: UV-indeksi nousee yli 3 tänään. Muista aurinkorasva lapselle!", sv: "Pukuri märkte: UV-index stiger över 3 idag. Kom ihåg solskyddskräm!", en: "Pukuri noticed: UV index rises above 3 today. Remember sunscreen for the child!" },
   "morning.windChill": { fi: "Viima tekee säästä purevan ({speed} m/s), suosi tuulenpitävää.", sv: "Blåsten gör vädret bitande ({speed} m/s), välj vindtäta kläder.", en: "Wind chill makes it feel bitter ({speed} m/s), choose windproof clothing." },
   "morning.calmDay": { fi: "Sää on vakaa, nauti päivästä! Normaalit kauden vaatteet riittävät. 🌤️", sv: "Vädret är stabilt, njut av dagen! Normala säsongskläder räcker. 🌤️", en: "Weather is stable, enjoy the day! Normal seasonal clothes will do. 🌤️" },
 
@@ -53,8 +53,8 @@ const translations = {
   "night.title": { fi: "🌙 Ilta-muistutus", sv: "🌙 Kvällspåminnelse", en: "🌙 Evening reminder" },
   "night.freezing": { fi: "Huomiseksi pakastuu ({from}° → {to}°), etsi toppahousut valmiiksi!", sv: "Det fryser i morgon ({from}° → {to}°), plocka fram täckbyxor!", en: "Freezing tomorrow ({from}° → {to}°), get snow trousers ready!" },
   "night.hardFrost": { fi: "Yöllä kireä pakkanen ({temp}°), jätä vaatteet eteiseen valmiiksi!", sv: "Hård frost i natt ({temp}°), lägg kläderna i hallen!", en: "Hard frost tonight ({temp}°), lay out clothes in the hallway!" },
-  "night.tomorrowColder": { fi: "Säävahti huomasi: huominen on selvästi kylmempi kuin tämä päivä ({today}° → {tomorrow}°). Varaudu vaatevaihtoon!", sv: "Vädervakten märkte: i morgon blir det betydligt kallare ({today}° → {tomorrow}°). Förbered klädombyte!", en: "Säävahti noticed: tomorrow is much colder than today ({today}° → {tomorrow}°). Prepare for a clothing change!" },
-  "night.tomorrowWarmer": { fi: "Säävahti huomasi: huominen on selvästi lämpimämpi kuin tämä päivä ({today}° → {tomorrow}°). Varaudu vaatevaihtoon!", sv: "Vädervakten märkte: i morgon blir det betydligt varmare ({today}° → {tomorrow}°). Förbered klädombyte!", en: "Säävahti noticed: tomorrow is much warmer than today ({today}° → {tomorrow}°). Prepare for a clothing change!" },
+  "night.tomorrowColder": { fi: "Pukuri huomasi: huominen on selvästi kylmempi kuin tämä päivä ({today}° → {tomorrow}°). Varaudu vaatevaihtoon!", sv: "Pukuri märkte: i morgon blir det betydligt kallare ({today}° → {tomorrow}°). Förbered klädombyte!", en: "Pukuri noticed: tomorrow is much colder than today ({today}° → {tomorrow}°). Prepare for a clothing change!" },
+  "night.tomorrowWarmer": { fi: "Pukuri huomasi: huominen on selvästi lämpimämpi kuin tämä päivä ({today}° → {tomorrow}°). Varaudu vaatevaihtoon!", sv: "Pukuri märkte: i morgon blir det betydligt varmare ({today}° → {tomorrow}°). Förbered klädombyte!", en: "Pukuri noticed: tomorrow is much warmer than today ({today}° → {tomorrow}°). Prepare for a clothing change!" },
   "night.tomorrowRain": { fi: "Huomenna tarvitaan kuravarusteita, tarkista että ne ovat repussa.", sv: "I morgon behövs regnutrustning, kontrollera att den finns i ryggsäcken.", en: "Rain gear needed tomorrow, check that it's in the backpack." },
   "night.dryGear": { fi: "Muista ottaa märät varusteet ja kengät kuivumaan! 👟", sv: "Kom ihåg att torka blöta kläder och skor! 👟", en: "Remember to dry wet gear and shoes! 👟" },
   "night.windChill": { fi: "Viima tekee säästä purevan ({speed} m/s), suosi tuulenpitävää huomenna.", sv: "Blåsten gör vädret bitande ({speed} m/s), välj vindtäta kläder i morgon.", en: "Wind chill makes it feel bitter ({speed} m/s), choose windproof clothing tomorrow." },
@@ -130,7 +130,7 @@ const translations = {
   "tomorrow.afternoonGear": { fi: "Iltapäivän varusteet", sv: "Eftermiddagens utrustning", en: "Afternoon gear" },
 
   // AI Analysis
-  "ai.title": { fi: "Säävahdin analyysi", sv: "Väderpyttens analys", en: "Säävahti's analysis" },
+  "ai.title": { fi: "Pukurin analyysi", sv: "Pukuris analys", en: "Pukuri's analysis" },
   "ai.ageGroup": { fi: "Ikäryhmä", sv: "Åldersgrupp", en: "Age group" },
   "ai.analyzing": { fi: "Analysoidaan...", sv: "Analyserar...", en: "Analyzing..." },
   "ai.updated": { fi: "Päivitetty", sv: "Uppdaterad", en: "Updated" },
@@ -192,9 +192,9 @@ const translations = {
   "affiliate.lindex.desc": { fi: "Kestävät ja pehmeät arkivaatteet lapsille", sv: "Hållbara och mjuka vardagskläder för barn", en: "Durable and soft everyday clothes for kids" },
   "affiliate.lindex.cta": { fi: "Katso päivän tarjoukset", sv: "Se dagens erbjudanden", en: "See today's deals" },
   "affiliate.disclaimer": {
-    fi: "Säävahti suosittelee laadukkaita varusteita arkeen. Linkit ovat mainoslinkkejä, joiden kautta tuet sovelluksen kehitystä.",
-    sv: "Väderpytten rekommenderar kvalitetsutrustning för vardagen. Länkarna är annonslänkar som stöder utvecklingen av appen.",
-    en: "Säävahti recommends quality gear for everyday life. Links are affiliate links that support the app's development."
+    fi: "Pukuri suosittelee laadukkaita varusteita arkeen. Linkit ovat mainoslinkkejä, joiden kautta tuet sovelluksen kehitystä.",
+    sv: "Pukuri rekommenderar kvalitetsutrustning för vardagen. Länkarna är annonslänkar som stöder utvecklingen av appen.",
+    en: "Pukuri recommends quality gear for everyday life. Links are affiliate links that support the app's development."
   },
   "affiliate.adtraction": {
     fi: "Tämä sivusto on vahvistettu Adtraction-verkostoon.",
@@ -208,18 +208,18 @@ const translations = {
   "feedback.send": { fi: "Lähetä palaute", sv: "Skicka feedback", en: "Send feedback" },
   "feedback.sending": { fi: "Lähetetään...", sv: "Skickar...", en: "Sending..." },
   "feedback.thanks": { fi: "Kiitos! Palautteesi on vastaanotettu.", sv: "Tack! Din feedback har mottagits.", en: "Thank you! Your feedback has been received." },
-  "feedback.thanksDesc": { fi: "Autat meitä tekemään Säävahdista paremman.", sv: "Du hjälper oss att göra Väderpytten bättre.", en: "You're helping us make Säävahti better." },
+  "feedback.thanksDesc": { fi: "Autat meitä tekemään Pukurista paremman.", sv: "Du hjälper oss att göra Pukuri bättre.", en: "You're helping us make Pukuri better." },
   "feedback.error": { fi: "Lähetys epäonnistui. Yritä uudelleen.", sv: "Sändningen misslyckades. Försök igen.", en: "Sending failed. Please try again." },
 
   // Footer
-  "footer.copyright": { fi: "© 2024 Säävahti", sv: "© 2024 Väderpytten", en: "© 2024 Säävahti" },
+  "footer.copyright": { fi: "© 2024 Pukuri", sv: "© 2024 Pukuri", en: "© 2024 Pukuri" },
   "footer.privacy": { fi: "Tietosuoja", sv: "Integritetspolicy", en: "Privacy" },
   "footer.contact": { fi: "Yhteystiedot", sv: "Kontaktuppgifter", en: "Contact" },
   "footer.close": { fi: "Sulje", sv: "Stäng", en: "Close" },
   "footer.privacyTitle": { fi: "Tietosuojaseloste", sv: "Integritetspolicy", en: "Privacy Policy" },
   "footer.contactTitle": { fi: "Yhteystiedot", sv: "Kontaktuppgifter", en: "Contact Information" },
   "footer.privacyS1Title": { fi: "1. Rekisterinpitäjä", sv: "1. Registeransvarig", en: "1. Data Controller" },
-  "footer.privacyS1": { fi: "Säävahti-sovellus", sv: "Väderpytten-appen", en: "Säävahti app" },
+  "footer.privacyS1": { fi: "Pukuri-sovellus", sv: "Pukuri-appen", en: "Pukuri app" },
   "footer.privacyS2Title": { fi: "2. Kerättävät tiedot", sv: "2. Insamlade uppgifter", en: "2. Data Collected" },
   "footer.privacyS2": { fi: "Sovellus tallentaa paikallisesti (selaimen LocalStorage) käyttäjän valitseman kaupungin, ikäryhmävalinnan sekä viikko-ohjelmakuvan. Tietoja ei lähetetä ulkoisille palvelimille.", sv: "Appen sparar lokalt (webbläsarens LocalStorage) användarens valda stad, åldersgrupp och veckoschemabild. Inga uppgifter skickas till externa servrar.", en: "The app stores locally (browser LocalStorage) the selected city, age group, and weekly schedule image. No data is sent to external servers." },
   "footer.privacyS3Title": { fi: "3. Tietojen käyttö", sv: "3. Användning av uppgifter", en: "3. Use of Data" },
@@ -361,14 +361,14 @@ const translations = {
   "dual.gapInfo": { fi: "Lämpötila muuttuu merkittävästi päivän aikana ({morning}°C → {afternoon}°C). Pakkaa iltapäivän varusteet reppuun!", sv: "Temperaturen förändras betydligt under dagen ({morning}°C → {afternoon}°C). Packa eftermiddagens kläder i ryggsäcken!", en: "Temperature changes significantly during the day ({morning}°C → {afternoon}°C). Pack afternoon outfit in the backpack!" },
 
   // PWA install banner
-  "pwa.title": { fi: "Asenna Säävahti puhelimeesi", sv: "Installera Vädervakten på din telefon", en: "Install Säävahti on your phone" },
+  "pwa.title": { fi: "Asenna Pukuri puhelimeesi", sv: "Installera Pukuri på din telefon", en: "Install Pukuri on your phone" },
   "pwa.instructionIos": { fi: "Paina selaimen \"Jaa\"-painiketta (📤) ja valitse \"Lisää kotivalikkoon\".", sv: "Tryck på webbläsarens \"Dela\"-knapp (📤) och välj \"Lägg till på hemskärmen\".", en: "Tap the browser's \"Share\" button (📤) and select \"Add to Home Screen\"." },
   "pwa.instructionAndroid": { fi: "Paina selaimen valikkoa (⋮) ja valitse \"Lisää aloitusnäytölle\".", sv: "Tryck på webbläsarens meny (⋮) och välj \"Lägg till på startskärmen\".", en: "Tap the browser menu (⋮) and select \"Add to Home Screen\"." },
   "pwa.close": { fi: "Sulje", sv: "Stäng", en: "Close" },
 
   // Share button
   "share.button": { fi: "Jaa puolison kanssa", sv: "Dela med partner", en: "Share with partner" },
-  "share.messageIntro": { fi: "Säävahti-muistutus!", sv: "Vädervakten-påminnelse!", en: "Säävahti reminder!" },
+  "share.messageIntro": { fi: "Pukuri-muistutus!", sv: "Pukuri-påminnelse!", en: "Pukuri reminder!" },
   "share.rememberMud": { fi: "Muista kuravarusteet!", sv: "Kom ihåg smutskläderna!", en: "Remember mud gear!" },
 } as const;
 
