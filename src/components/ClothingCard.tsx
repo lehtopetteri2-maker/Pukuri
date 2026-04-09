@@ -33,7 +33,7 @@ function ItemIcon({ item }: { item: ClothingItem }) {
   if (HAT_NAMES.has(item.name)) {
     return item.name === "Pipo"
       ? <BeanieIcon className="text-primary" />
-      : <CapIcon className="text-accent-foreground" />;
+      : <ThinBeanieIcon className="text-accent-foreground" />;
   }
   if (OVERALL_NAMES.has(item.name)) return <PufferOverallIcon className="text-primary" />;
   if (JACKET_NAMES.has(item.name)) return <PufferJacketIcon className="text-primary" />;
