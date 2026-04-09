@@ -85,16 +85,9 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
     return r.name;
   };
 
-  const countryName = (code: string) => {
-    const names: Record<string, Record<string, string>> = {
-      FI: { fi: "Suomi", sv: "Finland", en: "Finland" },
-      SE: { fi: "Ruotsi", sv: "Sverige", en: "Sweden" },
-      NO: { fi: "Norja", sv: "Norge", en: "Norway" },
-      DK: { fi: "Tanska", sv: "Danmark", en: "Denmark" },
-    };
+  const countryFlag = (code: string) => {
     const flags: Record<string, string> = { FI: "🇫🇮", SE: "🇸🇪", NO: "🇳🇴", DK: "🇩🇰" };
-    const n = names[code]?.[lang] ?? code;
-    return `${flags[code] ?? ""} ${n}`;
+    return flags[code] ?? "";
   };
 
   const handleSelect = (r: GeoResult) => {
@@ -223,7 +216,7 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
                         <span className="text-xs text-muted-foreground ml-1.5">{r.state}</span>
                       )}
                     </div>
-                    <span className="text-xs text-muted-foreground shrink-0">{countryName(r.country)}</span>
+                    <span className="text-sm shrink-0">{countryFlag(r.country)}</span>
                   </button>
                 ))
               ) : (
