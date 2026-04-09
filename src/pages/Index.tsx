@@ -253,7 +253,7 @@ const Index = () => {
         <DualClothingCard key={`${city}-${ageGroup}`} dual={dual} />
         <ShareButton dual={dual} ageGroup={ageGroup} />
         <DaycareChecklist ageGroup={ageGroup} weather={weather} />
-        <AffiliateSection />
+        
 
         <FeedbackSection ageGroup={ageGroup} />
       </main>
