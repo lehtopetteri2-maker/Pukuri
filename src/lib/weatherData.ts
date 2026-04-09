@@ -52,6 +52,7 @@ const coldSnowGear: Record<AgeGroup, ClothingItem[]> = {
     { name: "Talvitöppöset", emoji: "👟", description: "Lämpimät vauvan kengät" },
     { name: "Lapaset", emoji: "🧤", description: "Paksut tumput" },
     { name: "Pipo", emoji: "🎿", description: "Villapipo + kypärämyssy" },
+    { name: "Kauluri", emoji: "🧣", description: "Tuubihuivi tai kypärämyssy" },
   ],
   taapero: [
     { name: "Toppahousut", emoji: "👖", description: "Talvitoppahousut" },
@@ -377,8 +378,14 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
     }
   }
 
-  // Hanskat/lapaset automaattisesti kun pipo on asussa
+  // Vauva: lisää kauluri/tuubihuivi automaattisesti kun pipo on asussa ja on kylmää/tuulista
   const hasPipo = base.some((i) => i.name === "Pipo");
+  if (hasPipo && ageGroup === "vauva") {
+    const hasKauluri = base.some((i) => i.name === "Kauluri");
+    if (!hasKauluri && (temp <= 0 || weather.windSpeed > 5)) {
+      base.push({ name: "Kauluri", emoji: "🧣", description: "Tuubihuivi tai kypärämyssy" });
+    }
+  }
   if (hasPipo) {
     const hasGloves = base.some((i) =>
       i.name === "Hanskat" || i.name === "Lapaset" || i.name === "Rukkaset" ||
@@ -416,6 +423,7 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
   ]);
   const HEAD_GLOVE_NAMES = new Set([
     "Pipo", "Ohut pipo", "Lippalakki", "Lippis/Hattu", "Aurinkohattu",
+    "Kauluri",
     "Hanskat", "Lapaset", "Rukkaset", "Sormikkaat", "Lapaset/Rukkaset",
   ]);
 
