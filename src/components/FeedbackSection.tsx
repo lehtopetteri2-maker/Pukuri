@@ -56,7 +56,7 @@ const FeedbackSection = ({ ageGroup }: FeedbackSectionProps) => {
       setText("");
       setTimeout(() => setSubmitted(false), 5000);
     } catch (err) {
-      console.error("[Säävahti] EmailJS error:", err);
+      console.error("[Pukuri] EmailJS error:", err);
       import("sonner").then(({ toast }) =>
         toast.error(
           "Lähetys epäonnistui. Tarkista yhteys tai yritä myöhemmin uudelleen."

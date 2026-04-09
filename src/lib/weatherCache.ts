@@ -39,6 +39,6 @@ export function saveWeatherCache(city: string, current: WeatherData, tomorrow: T
   try {
     localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
   } catch {
-    console.log("[Säävahti] Välimuistin tallennus epäonnistui");
+    console.log("[Pukuri] Välimuistin tallennus epäonnistui");
   }
 }

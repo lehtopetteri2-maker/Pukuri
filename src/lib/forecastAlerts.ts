@@ -59,7 +59,7 @@ export function computeAlerts(
   const tomorrowDateObj = new Date(now.getTime() + 86400000);
   const tomorrowKey = `${tomorrowDateObj.getFullYear()}-${tomorrowDateObj.getMonth() + 1}-${tomorrowDateObj.getDate()}`;
 
-  console.log("[Säävahti] Generoidaan suositukset...", {
+  console.log("[Pukuri] Generoidaan suositukset...", {
     forecastEntries: forecastList.length,
     currentTemp,
     uvi,
@@ -182,6 +182,6 @@ export function computeAlerts(
     loaded: true,
   };
 
-  console.log("[Säävahti] Suositukset generoitu:", alerts);
+  console.log("[Pukuri] Suositukset generoitu:", alerts);
   return alerts;
 }
