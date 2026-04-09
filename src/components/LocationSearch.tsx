@@ -25,7 +25,7 @@ interface LocationSearchProps {
 const FLAG: Record<string, string> = { FI: "🇫🇮", SE: "🇸🇪", NO: "🇳🇴", DK: "🇩🇰" };
 
 export default function LocationSearch({ currentCity, onSelectCity, onSelectCoords, onGeolocate, loading }: LocationSearchProps) {
-  const { t, language } = useLanguage();
+  const { t, lang } = useLanguage();
   const [query, setQuery] = useState("");
   const [sheetOpen, setSheetOpen] = useState(false);
   const [results, setResults] = useState<GeoResult[]>([]);
