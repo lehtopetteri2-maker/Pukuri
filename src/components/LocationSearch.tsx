@@ -1,7 +1,6 @@
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Search, MapPin, Loader2 } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
-import { cityWeather } from "@/lib/cityWeatherData";
 
 interface LocationSearchProps {
   currentCity: string;
@@ -10,14 +9,65 @@ interface LocationSearchProps {
   loading: boolean;
 }
 
-const allCities = Object.keys(cityWeather);
+const API_KEY = "247aa2ee8cccf0e1e53ea7ab0aeb4e7d";
+const GEO_BASE = "https://api.openweathermap.org/geo/1.0/direct";
+
+interface GeoResult {
+  name: string;
+  local_names?: Record<string, string>;
+  lat: number;
+  lon: number;
+  country: string;
+  state?: string;
+}
+
+// Deduplicate results by lat/lon (rounded to 2 decimals)
+function deduplicateResults(results: GeoResult[]): GeoResult[] {
+  const seen = new Set<string>();
+  return results.filter((r) => {
+    const key = `${r.lat.toFixed(2)}_${r.lon.toFixed(2)}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+// Prioritize settlements over POIs by preferring results with state/country info
+function sortByRelevance(results: GeoResult[], query: string): GeoResult[] {
+  const q = query.toLowerCase();
+  return [...results].sort((a, b) => {
+    // Exact name match first
+    const aExact = a.name.toLowerCase() === q ? 0 : 1;
+    const bExact = b.name.toLowerCase() === q ? 0 : 1;
+    if (aExact !== bExact) return aExact - bExact;
+    // Starts-with match next
+    const aStarts = a.name.toLowerCase().startsWith(q) ? 0 : 1;
+    const bStarts = b.name.toLowerCase().startsWith(q) ? 0 : 1;
+    if (aStarts !== bStarts) return aStarts - bStarts;
+    // Nordic countries first (FI, SE, NO, DK)
+    const nordic = new Set(["FI", "SE", "NO", "DK"]);
+    const aNordic = nordic.has(a.country) ? 0 : 1;
+    const bNordic = nordic.has(b.country) ? 0 : 1;
+    return aNordic - bNordic;
+  });
+}
+
+function getDisplayName(r: GeoResult): string {
+  const parts = [r.name];
+  if (r.state) parts.push(r.state);
+  parts.push(r.country);
+  return parts.join(", ");
+}
 
 export default function LocationSearch({ currentCity, onSelectCity, onGeolocate, loading }: LocationSearchProps) {
   const { t } = useLanguage();
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
+  const [results, setResults] = useState<GeoResult[]>([]);
+  const [searching, setSearching] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -29,13 +79,47 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  const filtered = useMemo(() => {
-    if (!query.trim()) return [];
-    const q = query.trim().toLowerCase();
-    return allCities
-      .filter((c) => c.toLowerCase().startsWith(q))
-      .slice(0, 20);
-  }, [query]);
+  const fetchGeoResults = useCallback(async (q: string) => {
+    if (q.trim().length < 2) {
+      setResults([]);
+      setSearching(false);
+      return;
+    }
+
+    setSearching(true);
+    try {
+      // Single request without country restriction, limit=20
+      const url = `${GEO_BASE}?q=${encodeURIComponent(q.trim())}&limit=20&appid=${API_KEY}`;
+      const res = await fetch(url);
+      if (!res.ok) {
+        setResults([]);
+        return;
+      }
+      const data: GeoResult[] = await res.json();
+      const deduped = deduplicateResults(data);
+      const sorted = sortByRelevance(deduped, q.trim());
+      setResults(sorted);
+    } catch {
+      setResults([]);
+    } finally {
+      setSearching(false);
+    }
+  }, []);
+
+  const handleQueryChange = useCallback((value: string) => {
+    setQuery(value);
+    setOpen(true);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      fetchGeoResults(value);
+    }, 300);
+  }, [fetchGeoResults]);
+
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,13 +127,15 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
       onSelectCity(query.trim());
       setQuery("");
       setOpen(false);
+      setResults([]);
     }
   };
 
-  const handleSelect = (city: string) => {
-    onSelectCity(city);
+  const handleSelect = (r: GeoResult) => {
+    onSelectCity(r.name);
     setQuery("");
     setOpen(false);
+    setResults([]);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -95,17 +181,14 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
             ref={inputRef}
             type="text"
             value={query}
-            onChange={(e) => {
-              setQuery(e.target.value);
-              setOpen(true);
-            }}
+            onChange={(e) => handleQueryChange(e.target.value)}
             onFocus={() => setOpen(true)}
             onKeyDown={handleKeyDown}
             placeholder={t("location.searchPlaceholder")}
             className="w-full rounded-md border border-input bg-background pl-9 pr-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/30 transition-shadow"
           />
 
-          {open && filtered.length > 0 && (
+          {open && (results.length > 0 || searching) && (
             <div
               className="absolute z-30 top-full left-0 right-0 mt-1 rounded-md border border-border bg-popover shadow-md overflow-y-auto"
               style={{ maxHeight: 'calc(100vh - 100% - 50px - 64px)' }}
@@ -118,15 +201,21 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
                 }
               }}
             >
-              {filtered.map((city) => (
+              {searching && results.length === 0 && (
+                <div className="flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground">
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  <span>{t("location.updating")}</span>
+                </div>
+              )}
+              {results.map((r, i) => (
                 <button
-                  key={city}
+                  key={`${r.lat}-${r.lon}-${i}`}
                   type="button"
-                  onClick={() => handleSelect(city)}
+                  onClick={() => handleSelect(r)}
                   className="w-full text-left px-3 py-2 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors flex items-center gap-2"
                 >
                   <MapPin className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-                  {city}
+                  {getDisplayName(r)}
                 </button>
               ))}
             </div>
