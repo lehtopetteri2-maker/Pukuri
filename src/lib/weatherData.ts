@@ -442,7 +442,7 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
     }
   }
 
-  // Sort: 1) outer/base layer  2) warm mid-layer  3) beanie & gloves  4) rest  5) shoes (always last)
+  // Sort: 0) outer/base layer  1) warm mid-layer  2) accessories (beanie, gloves)  3) other/misc  4) shoes (always last)
   const OUTER_NAMES = new Set([
     "Kerrospukeutuminen", "Toppahaalari", "Toppahousut", "Toppatakki",
     "Toppapuku ja villasukat", "Tekniset kuorivaatteet", "Välikausivaatteet",
@@ -453,16 +453,19 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
     "Body", "Ohut haalari", "T-paita", "Collegehousut", "Farkut", "Shortsit",
     "Puuvillabody", "Puuvillahousut", "Ohuet housut", "Kevyet housut",
     "Ohut kuorihaalari", "Sadeasu", "Tekniset ulkoiluhousut",
+    "Tuulenpitävä kuorikerros", "Kurahousut",
   ]);
   const MID_NAMES = new Set([
     "Lämmin välikerros", "Villakerrastot", "Välikerrastot", "Välikerrasto",
     "Huppari", "Pitkähihainen paita", "Neuletakki",
+    "Lämpöpussi / lisäkerros",
   ]);
   const HEAD_GLOVE_NAMES = new Set([
     "Pipo", "Ohut pipo", "Lippalakki", "Lippis/Hattu", "Aurinkohattu",
     "Kauluri", "Kypärämyssy", "Sadehattu",
     "Hanskat", "Lapaset", "Rukkaset", "Sormikkaat", "Lapaset/Rukkaset",
-    "Ohuet sukat", "Sukat",
+    "Ohuet sukat", "Sukat", "Villasukat",
+    "Huomio",
   ]);
   const SHOE_NAMES = new Set([
     "Kevyet kengät", "Lenkkarit", "Kumisaappaat", "Kumisaappaat + villasukat",
