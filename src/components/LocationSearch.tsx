@@ -34,7 +34,7 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
     const q = query.trim().toLowerCase();
     return allCities
       .filter((c) => c.toLowerCase().startsWith(q))
-      .slice(0, 8);
+      .slice(0, 20);
   }, [query]);
 
   const handleSubmit = (e: React.FormEvent) => {
