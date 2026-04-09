@@ -456,7 +456,7 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
   const MID_NAMES = new Set([
     "Lämmin välikerros", "Villakerrastot", "Välikerrastot", "Välikerrasto",
     "Huppari", "Pitkähihainen paita", "Neuletakki",
-    "Lämpöpussi / lisäkerros",
+    "Lämpöpussi / lisäkerros", "Fleece", "Villapaita", "Fleecetakki",
   ]);
   const HEAD_GLOVE_NAMES = new Set([
     "Pipo", "Ohut pipo", "Lippalakki", "Lippis/Hattu", "Aurinkohattu",
