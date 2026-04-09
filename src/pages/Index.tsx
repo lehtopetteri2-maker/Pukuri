@@ -237,18 +237,18 @@ const Index = () => {
 
         <MorningSummary alerts={alerts} ageGroup={ageGroup} />
         <ScheduleReminder ageGroup={ageGroup} onOpen={scrollToSchedule} />
-        <NightAlert weather={weather} alerts={alerts} />
+        <NightAlert weather={effectiveWeather} alerts={alerts} />
         <WeatherCard
-          weather={weather}
+          weather={effectiveWeather}
           cacheAge={cacheAge}
           onRefresh={handleForceRefresh}
           loading={loading}
         />
-        <TomorrowForecastCard weather={weather} ageGroup={ageGroup} tomorrow={tomorrow} forecastList={forecastList} />
+        <TomorrowForecastCard weather={effectiveWeather} ageGroup={ageGroup} tomorrow={tomorrow} forecastList={forecastList} />
 
-        <AiAnalysis weather={weather} ageGroup={ageGroup} dual={dual} />
+        <AiAnalysis weather={effectiveWeather} ageGroup={ageGroup} dual={dual} />
 
-        <UvAlert weather={weather} />
+        <UvAlert weather={effectiveWeather} />
 
         <div className="space-y-3">
           <h2 className="text-sm font-display font-700 text-muted-foreground uppercase tracking-wide">
@@ -257,9 +257,11 @@ const Index = () => {
           <AgeGroupToggle selected={ageGroup} onChange={setAgeGroup} />
         </div>
 
-        <DualClothingCard key={`${city}-${ageGroup}`} dual={dual} />
+        <DualClothingCard key={`${city}-${ageGroup}-${debugTemp}`} dual={dual} />
         <ShareButton dual={dual} ageGroup={ageGroup} />
-        <DaycareChecklist ageGroup={ageGroup} weather={weather} />
+        <DaycareChecklist ageGroup={ageGroup} weather={effectiveWeather} />
+
+        <DebugPanel weather={weather} onOverride={setDebugTemp} />
         <AffiliateSection />
 
         <FeedbackSection ageGroup={ageGroup} />
