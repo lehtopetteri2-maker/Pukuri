@@ -16,15 +16,13 @@ import UvAlert from "@/components/UvAlert";
 import Footer from "@/components/Footer";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import PwaInstallBanner from "@/components/PwaInstallBanner";
-import BottomNavBar from "@/components/BottomNavBar";
-import SwipeablePages from "@/components/SwipeablePages";
 import { getSavedCity, saveCity, AgeGroup, WeatherData } from "@/lib/weatherData";
 import { computeDualRecommendation } from "@/lib/dualRecommendation";
 import { fetchWeatherData, fetchWeatherByCoords, TomorrowData } from "@/lib/weatherApi";
 import { getCachedWeather, isCacheFresh, getCacheAgeMinutes, saveWeatherCache } from "@/lib/weatherCache";
 import { ForecastAlerts, emptyAlerts, computeAlerts } from "@/lib/forecastAlerts";
 import FeedbackSection from "@/components/FeedbackSection";
-import { AlertCircle } from "lucide-react";
+import { CloudSnow, AlertCircle } from "lucide-react";
 import logoImg from "@/assets/saavahti-logo.png";
 import { toast } from "sonner";
 import { useLanguage } from "@/lib/i18n";
@@ -77,11 +75,14 @@ const Index = () => {
   const [loading, setLoading] = useState(!initial.hasRealData);
   const [error, setError] = useState<string | null>(null);
   const [cacheAge, setCacheAge] = useState<number | null>(initial.cacheAge);
-  const [activeTab, setActiveTab] = useState(0);
   const scheduleRef = useRef<HTMLDivElement>(null);
 
   const alerts = useMemo(() => {
     if (loading && forecastList.length === 0) return emptyAlerts();
+
+    console.log("Säädata saatu:", weather);
+    console.log("Generoidaan tekstit...");
+
     return computeAlerts(forecastList, weather.temperature, weather.uvi);
   }, [weather, forecastList, loading]);
 
@@ -94,6 +95,7 @@ const Index = () => {
     setCity(data.current.city);
     saveCity(data.current.city);
     saveWeatherCache(data.current.city, data.current, data.tomorrow, data.forecastList, data.fromApi);
+    console.log("[Säävahti] Säädata saatu:", { city: data.current.city, temp: data.current.temperature, forecastEntries: data.forecastList.length });
     setCacheAge(0);
   }, []);
 
@@ -188,113 +190,83 @@ const Index = () => {
   }, [loadWeatherByCoords, t]);
 
   const scrollToSchedule = useCallback(() => {
-    setActiveTab(2); // Family tab has the schedule
+    scheduleRef.current?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
-  // Tab 1: Tänään (Today)
-  const todayPage = (
-    <div className="px-4 py-6 space-y-5">
-      <PwaInstallBanner />
-
-      {error && (
-        <div className="rounded-lg bg-destructive/10 border border-destructive/30 p-4 flex items-center gap-3 animate-fade-in">
-          <AlertCircle className="h-5 w-5 text-destructive shrink-0" />
-          <p className="text-sm text-destructive flex-1">{error}</p>
-          <button
-            onClick={handleForceRefresh}
-            className="text-xs font-medium text-destructive underline underline-offset-2 hover:opacity-80 shrink-0"
-          >
-            {t("weather.refreshNow")}
-          </button>
-        </div>
-      )}
-
-      <MorningSummary alerts={alerts} ageGroup={ageGroup} />
-      <ScheduleReminder ageGroup={ageGroup} onOpen={scrollToSchedule} />
-      <NightAlert weather={weather} alerts={alerts} />
-      <WeatherCard
-        weather={weather}
-        cacheAge={cacheAge}
-        onRefresh={handleForceRefresh}
-        loading={loading}
-      />
-      <TomorrowForecastCard weather={weather} ageGroup={ageGroup} tomorrow={tomorrow} forecastList={forecastList} />
-      <UvAlert weather={weather} />
-    </div>
-  );
-
-  // Tab 2: Varustelu (Outfit)
-  const outfitPage = (
-    <div className="px-4 py-6 space-y-5">
-      <AiAnalysis weather={weather} ageGroup={ageGroup} dual={dual} />
-      <DualClothingCard key={`${city}-${ageGroup}`} dual={dual} />
-      <ShareButton dual={dual} ageGroup={ageGroup} />
-      <DaycareChecklist ageGroup={ageGroup} weather={weather} />
-      <AffiliateSection />
-    </div>
-  );
-
-  // Tab 3: Perhe (Family)
-  const familyPage = (
-    <div className="px-4 py-6 space-y-5">
-      <div className="space-y-3">
-        <h2 className="text-sm font-display font-700 text-muted-foreground uppercase tracking-wide">
-          {t("age.title")}
-        </h2>
-        <AgeGroupToggle selected={ageGroup} onChange={setAgeGroup} />
-      </div>
-
-      <div ref={scheduleRef}>
-        <WeeklySchedule ageGroup={ageGroup} />
-      </div>
-
-      <FeedbackSection ageGroup={ageGroup} />
-    </div>
-  );
-
-  // Tab 4: Asetukset (Settings)
-  const settingsPage = (
-    <div className="px-4 py-6 space-y-5">
-      <LocationSearch
-        currentCity={city}
-        onSelectCity={handleCityChange}
-        onGeolocate={handleGeolocate}
-        loading={loading}
-      />
-      <div className="space-y-3">
-        <h2 className="text-sm font-display font-700 text-muted-foreground uppercase tracking-wide">
-          {t("header.subtitle")}
-        </h2>
-        <LanguageSwitcher />
-      </div>
-
-      <p className="text-center text-xs text-muted-foreground">
-        {t("misc.windTip")}
-      </p>
-
-      <Footer />
-    </div>
-  );
-
   return (
-    <div className="h-[100dvh] flex flex-col bg-background">
-      <header className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-10 shrink-0">
-        <div className="max-w-lg mx-auto px-4 py-3 flex items-center gap-3">
-          <img src={logoImg} alt="Säävahti" className="h-9 w-9 rounded-lg object-contain" />
+    <div className="min-h-screen bg-background">
+      <header className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-10">
+        <div className="max-w-lg mx-auto px-4 py-4 flex items-center gap-3">
+          <img src={logoImg} alt="Säävahti" className="h-10 w-10 rounded-lg object-contain" />
           <div className="flex-1">
             <h1 className="text-xl font-display font-800 text-foreground leading-tight tracking-tight">{t("header.title")}</h1>
             <p className="text-[11px] font-medium text-muted-foreground tracking-wide">{t("header.subtitle")}</p>
           </div>
+          <LanguageSwitcher />
         </div>
       </header>
 
-      <div className="flex-1 overflow-hidden max-w-lg mx-auto w-full">
-        <SwipeablePages activeIndex={activeTab} onIndexChange={setActiveTab}>
-          {[todayPage, outfitPage, familyPage, settingsPage]}
-        </SwipeablePages>
-      </div>
+      <main className="max-w-lg mx-auto px-4 py-6 space-y-5">
+        <PwaInstallBanner />
+        <LocationSearch
+          currentCity={city}
+          onSelectCity={handleCityChange}
+          onGeolocate={handleGeolocate}
+          loading={loading}
+        />
 
-      <BottomNavBar activeIndex={activeTab} onTabChange={setActiveTab} />
+        {error && (
+          <div className="rounded-lg bg-destructive/10 border border-destructive/30 p-4 flex items-center gap-3 animate-fade-in">
+            <AlertCircle className="h-5 w-5 text-destructive shrink-0" />
+            <p className="text-sm text-destructive flex-1">{error}</p>
+            <button
+              onClick={handleForceRefresh}
+              className="text-xs font-medium text-destructive underline underline-offset-2 hover:opacity-80 shrink-0"
+            >
+              {t("weather.refreshNow")}
+            </button>
+          </div>
+        )}
+
+        <div ref={scheduleRef}>
+          <WeeklySchedule ageGroup={ageGroup} />
+        </div>
+
+        <MorningSummary alerts={alerts} ageGroup={ageGroup} />
+        <ScheduleReminder ageGroup={ageGroup} onOpen={scrollToSchedule} />
+        <NightAlert weather={weather} alerts={alerts} />
+        <WeatherCard
+          weather={weather}
+          cacheAge={cacheAge}
+          onRefresh={handleForceRefresh}
+          loading={loading}
+        />
+        <TomorrowForecastCard weather={weather} ageGroup={ageGroup} tomorrow={tomorrow} forecastList={forecastList} />
+
+        <AiAnalysis weather={weather} ageGroup={ageGroup} dual={dual} />
+
+        <UvAlert weather={weather} />
+
+        <div className="space-y-3">
+          <h2 className="text-sm font-display font-700 text-muted-foreground uppercase tracking-wide">
+            {t("age.title")}
+          </h2>
+          <AgeGroupToggle selected={ageGroup} onChange={setAgeGroup} />
+        </div>
+
+        <DualClothingCard key={`${city}-${ageGroup}`} dual={dual} />
+        <ShareButton dual={dual} ageGroup={ageGroup} />
+        <DaycareChecklist ageGroup={ageGroup} weather={weather} />
+        <AffiliateSection />
+
+        <FeedbackSection ageGroup={ageGroup} />
+
+        <p className="text-center text-xs text-muted-foreground">
+          {t("misc.windTip")}
+        </p>
+      </main>
+
+      <Footer />
     </div>
   );
 };
