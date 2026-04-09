@@ -487,6 +487,7 @@ const clothingNameMap: Record<string, { sv: string; en: string }> = {
   "Sadehattu": { sv: "Regnhatt", en: "Rain hat" },
   "Tekniset ulkoiluhousut": { sv: "Tekniska utomhusbyxor", en: "Technical outdoor trousers" },
   "Vedenpitävät kengät": { sv: "Vattentäta skor", en: "Waterproof shoes" },
+  "Pehmeät tossut": { sv: "Mjuka tossor", en: "Soft booties" },
 };
 
 const clothingDescMap: Record<string, { sv: string; en: string }> = {
