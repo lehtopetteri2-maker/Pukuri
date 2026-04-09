@@ -223,7 +223,7 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
                         <span className="text-xs text-muted-foreground ml-1.5">{r.state}</span>
                       )}
                     </div>
-                    <span className="text-sm shrink-0">{countryFlag(r.country)}</span>
+                    <span className="text-xs text-muted-foreground shrink-0">{countryName(r.country)}</span>
                   </button>
                 ))
               ) : (
