@@ -105,7 +105,8 @@ export default function DaycareChecklist({ ageGroup, weather }: DaycareChecklist
   };
 
   const dayReminderKey = getDayReminder();
-  const allItems = [...SPARE_CLOTHES, ...miscItems];
+  const spareClothes = useMemo(() => getSpareClothes(), []);
+  const allItems = [...spareClothes, ...miscItems];
   const allDone = allItems.every((i) => checked.has(i.id));
 
   const toggle = useCallback((id: string) => {
@@ -158,7 +159,7 @@ export default function DaycareChecklist({ ageGroup, weather }: DaycareChecklist
           {t("checklist.spareClothes")}
         </h3>
         <div className="space-y-1.5">
-          {SPARE_CLOTHES.map((item) => renderItem(item, true))}
+          {spareClothes.map((item) => renderItem(item, true))}
         </div>
       </div>
 
