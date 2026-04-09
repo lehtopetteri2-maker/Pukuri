@@ -112,7 +112,8 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
   }, []);
 
   const fetchGeoResults = useCallback(async (q: string) => {
-    if (q.trim().length < 2) {
+    const trimmed = q.trim();
+    if (trimmed.length < 2) {
       setResults([]);
       setSearching(false);
       return;
@@ -120,17 +121,30 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
 
     setSearching(true);
     try {
-      // Single request without country restriction, limit=20
-      const url = `${GEO_BASE}?q=${encodeURIComponent(q.trim())}&limit=20&appid=${API_KEY}`;
-      const res = await fetch(url);
-      if (!res.ok) {
-        setResults([]);
-        return;
-      }
-      const data: GeoResult[] = await res.json();
-      const deduped = deduplicateResults(data);
-      const sorted = sortByRelevance(deduped, q.trim());
-      setResults(sorted);
+      const normalized = normalizeNordic(trimmed);
+      const alias = CITY_ALIASES[trimmed.toLowerCase()];
+
+      // Build unique query variants
+      const queries = new Set([trimmed]);
+      if (normalized !== trimmed) queries.add(normalized);
+      if (alias) queries.add(alias);
+
+      // Fetch all variants in parallel
+      const fetches = [...queries].map(async (term) => {
+        const url = `${GEO_BASE}?q=${encodeURIComponent(term)}&limit=20&appid=${API_KEY}`;
+        try {
+          const res = await fetch(url);
+          if (!res.ok) return [];
+          return (await res.json()) as GeoResult[];
+        } catch {
+          return [];
+        }
+      });
+
+      const allResults = (await Promise.all(fetches)).flat();
+      const deduped = deduplicateResults(allResults);
+      const sorted = sortByRelevance(deduped, trimmed);
+      setResults(sorted.slice(0, 20));
     } catch {
       setResults([]);
     } finally {
