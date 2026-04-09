@@ -108,6 +108,7 @@ const mildRainGear: Record<AgeGroup, ClothingItem[]> = {
     { name: "Vedenpitävä kuoritakki", emoji: "🧥", description: "Vedenpitävä kuoritakki" },
     { name: "Vettä hylkivät kengät", emoji: "👟", description: "Vettä hylkivät kengät" },
     { name: "Huppari", emoji: "👕", description: "Fleece tai huppari" },
+    { name: "Ohut pipo", emoji: "🧢", description: "Ohut pipo" },
   ],
 };
 
