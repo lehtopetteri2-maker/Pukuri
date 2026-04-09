@@ -196,6 +196,17 @@ const Index = () => {
     <div className="px-4 py-6 space-y-5">
       <PwaInstallBanner />
 
+      <p className="text-sm text-muted-foreground text-center leading-relaxed">
+        {t("hero.intro" as any)}
+      </p>
+
+      <LocationSearch
+        currentCity={city}
+        onSelectCity={handleCityChange}
+        onGeolocate={handleGeolocate}
+        loading={loading}
+      />
+
       {error && (
         <div className="rounded-lg bg-destructive/10 border border-destructive/30 p-4 flex items-center gap-3 animate-fade-in">
           <AlertCircle className="h-5 w-5 text-destructive shrink-0" />
@@ -255,12 +266,12 @@ const Index = () => {
   // Tab 4: Asetukset (Settings)
   const settingsPage = (
     <div className="px-4 py-6 space-y-5">
-      <LocationSearch
-        currentCity={city}
-        onSelectCity={handleCityChange}
-        onGeolocate={handleGeolocate}
-        loading={loading}
-      />
+      <div className="space-y-3">
+        <h2 className="text-sm font-display font-700 text-muted-foreground uppercase tracking-wide">
+          {t("tab.settings" as any)}
+        </h2>
+        <LanguageSwitcher />
+      </div>
       <div className="space-y-3">
         <h2 className="text-sm font-display font-700 text-muted-foreground uppercase tracking-wide">
           {t("header.subtitle")}
