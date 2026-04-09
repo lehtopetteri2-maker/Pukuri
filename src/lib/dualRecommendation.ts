@@ -147,9 +147,11 @@ function applyActivityLevel(items: ClothingItem[], ageGroup: AgeGroup): Clothing
   const result = [...items];
 
   if (ageGroup === "vauva") {
-    // Baby is stationary — always add an extra insulation layer
+    // Baby is stationary — add extra insulation layer only in cool weather (< +15 °C)
     const hasExtra = result.some(i => i.name === "Lämpöpussi / lisäkerros");
-    if (!hasExtra) {
+    const temp = items.length > 0 ? undefined : undefined; // temperature not available here, check by gear
+    const isWarmGear = result.some(i => i.name === "Aurinkohattu" || i.name === "Pehmeät tossut");
+    if (!hasExtra && !isWarmGear) {
       result.push({
         name: "Lämpöpussi / lisäkerros",
         emoji: "🧸",
