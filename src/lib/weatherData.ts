@@ -480,11 +480,36 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
 
   // Deduplicate by name
   const seen = new Set<string>();
-  return base.filter((item) => {
+  const deduped = base.filter((item) => {
     if (seen.has(item.name)) return false;
     seen.add(item.name);
     return true;
   });
+
+  // Ensure at least one pair of shoes is always present at the end
+  const hasShoes = deduped.some((i) => SHOE_NAMES.has(i.name));
+  if (!hasShoes) {
+    if (weather.rainProbability > 40) {
+      if (ageGroup === "koululainen") {
+        deduped.push({ name: "Vedenpitävät kengät", emoji: "👟", description: "Vedenpitävät kengät pitävät jalat kuivina" });
+      } else {
+        deduped.push(temp < 10
+          ? { name: "Kumisaappaat + villasukat", emoji: "🥾🧦", description: "Kumisaappaat ja villasukat suojaavat kylmältä" }
+          : { name: "Kumisaappaat", emoji: "🥾", description: "Kumisaappaat ohuilla sukilla" }
+        );
+      }
+    } else if (temp > 15) {
+      deduped.push({ name: "Kevyet kengät", emoji: "👟", description: "Kevyet kengät" });
+    } else if (temp >= 5) {
+      deduped.push({ name: "Välikausikengät", emoji: "🥾", description: "Vettähylkivät välikausikengät" });
+    } else if (temp >= -5) {
+      deduped.push({ name: "Talvikengät", emoji: "🥾", description: "Lämpimät kengät" });
+    } else {
+      deduped.push({ name: "Talvisaappaat", emoji: "🥾", description: "Lämpimät vedenpitävät saappaat" });
+    }
+  }
+
+  return deduped;
 }
 
 
