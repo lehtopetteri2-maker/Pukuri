@@ -109,17 +109,6 @@ const translations = {
   "item.vaihtohanskat": { fi: "Vaihtohanskat", sv: "Extravantar", en: "Extra gloves" },
   "item.lamminkerrasto": { fi: "Lämmin kerrasto", sv: "Varmt underställ", en: "Warm base layer" },
   "item.luistimet": { fi: "Luistimet & kypärä", sv: "Skridskor & hjälm", en: "Ice skates & helmet" },
-  "item.pyorakypara": { fi: "Pyöräilykypärä", sv: "Cykelhjälm", en: "Bike helmet" },
-  "item.retkievaat": { fi: "Retkieväät", sv: "Utflyktsmat", en: "Trail snacks" },
-  "item.hiihtosukset": { fi: "Hiihtosukset", sv: "Skidstavar", en: "Ski poles" },
-  "item.heijastinliivi": { fi: "Heijastinliivi", sv: "Reflexväst", en: "Reflective vest" },
-  "item.istuinalusta": { fi: "Istuinalusta", sv: "Sittunderlag", en: "Seat pad" },
-  "item.unipussi": { fi: "Unipussi (vaunu-unia varten)", sv: "Sovsäck (för vagnvilar)", en: "Sleeping bag (for stroller naps)" },
-
-  "checklist.activeItems": { fi: "Hallinnoi tavaroita", sv: "Hantera saker", en: "Manage items" },
-  "checklist.activeItemsDesc": { fi: "Valitse mitkä tavarat ovat tällä viikolla aktiivisia", sv: "Välj vilka saker som är aktiva denna vecka", en: "Choose which items are active this week" },
-  "checklist.showSettings": { fi: "⚙️ Muokkaa listaa", sv: "⚙️ Redigera lista", en: "⚙️ Edit list" },
-  "checklist.hideSettings": { fi: "Piilota asetukset", sv: "Dölj inställningar", en: "Hide settings" },
 
   // Weekdays
   "weekday.0": { fi: "Sunnuntai", sv: "Söndag", en: "Sunday" },

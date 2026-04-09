@@ -1,14 +1,12 @@
 import { useState, useMemo, useEffect, useCallback } from "react";
 import { AgeGroup, WeatherData } from "@/lib/weatherData";
-import { AlertTriangle, Settings } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
 import { useLanguage, TranslationKey } from "@/lib/i18n";
-import { Switch } from "@/components/ui/switch";
 
 interface ChecklistItem {
   id: string;
   labelKey: TranslationKey;
   emoji: string;
-  seasonal?: boolean; // if true, subject to seasonal hide rule
 }
 
 const SPARE_CLOTHES: ChecklistItem[] = [
@@ -19,83 +17,38 @@ const SPARE_CLOTHES: ChecklistItem[] = [
   { id: "vaihtosukat", labelKey: "item.vaihtosukat", emoji: "🧦" },
 ];
 
-// All possible misc items per age group (weather-dynamic + static + new items)
-const allMiscByAge: Record<AgeGroup, ChecklistItem[]> = {
+const miscByAge: Record<AgeGroup, ChecklistItem[]> = {
   vauva: [
     { id: "vaippapaketti", labelKey: "item.vaippapaketti", emoji: "🧷" },
     { id: "tutti", labelKey: "item.tutti", emoji: "🍼" },
     { id: "unilelu", labelKey: "item.unilelu", emoji: "🧸" },
     { id: "aurinkorasva", labelKey: "item.aurinkorasva", emoji: "☀️" },
-    { id: "lippis", labelKey: "item.lippis", emoji: "🧢" },
-    { id: "kuravarusteet", labelKey: "item.kuravarusteet", emoji: "🌧️" },
-    { id: "vaihtohanskat", labelKey: "item.vaihtohanskat", emoji: "🧤" },
-    { id: "lamminkerrasto", labelKey: "item.lamminkerrasto", emoji: "🧶" },
-    { id: "heijastinliivi", labelKey: "item.heijastinliivi", emoji: "🦺" },
-    { id: "istuinalusta", labelKey: "item.istuinalusta", emoji: "🪑" },
-    { id: "unipussi", labelKey: "item.unipussi", emoji: "🛏️" },
-    { id: "retkievaat", labelKey: "item.retkievaat", emoji: "🥪" },
   ],
   taapero: [
     { id: "juomapullo", labelKey: "item.juomapullo", emoji: "💧" },
     { id: "omalelu", labelKey: "item.omalelu", emoji: "🧸" },
     { id: "välipala", labelKey: "item.välipala", emoji: "🍎" },
     { id: "aurinkorasva", labelKey: "item.aurinkorasva", emoji: "☀️" },
-    { id: "lippis", labelKey: "item.lippis", emoji: "🧢" },
-    { id: "kuravarusteet", labelKey: "item.kuravarusteet", emoji: "🌧️" },
-    { id: "vaihtohanskat", labelKey: "item.vaihtohanskat", emoji: "🧤" },
-    { id: "lamminkerrasto", labelKey: "item.lamminkerrasto", emoji: "🧶" },
-    { id: "pyorakypara", labelKey: "item.pyorakypara", emoji: "⛑️" },
-    { id: "heijastinliivi", labelKey: "item.heijastinliivi", emoji: "🦺" },
-    { id: "istuinalusta", labelKey: "item.istuinalusta", emoji: "🪑" },
-    { id: "retkievaat", labelKey: "item.retkievaat", emoji: "🥪" },
   ],
   "leikki-ikäinen": [
     { id: "juomapullo", labelKey: "item.juomapullo", emoji: "💧" },
     { id: "omalelu", labelKey: "item.omalelu", emoji: "🧸" },
     { id: "välipala", labelKey: "item.välipala", emoji: "🍎" },
     { id: "aurinkorasva", labelKey: "item.aurinkorasva", emoji: "☀️" },
-    { id: "lippis", labelKey: "item.lippis", emoji: "🧢" },
-    { id: "kuravarusteet", labelKey: "item.kuravarusteet", emoji: "🌧️" },
-    { id: "vaihtohanskat", labelKey: "item.vaihtohanskat", emoji: "🧤" },
-    { id: "lamminkerrasto", labelKey: "item.lamminkerrasto", emoji: "🧶" },
-    { id: "luistimet", labelKey: "item.luistimet", emoji: "⛸️", seasonal: true },
-    { id: "hiihtosukset", labelKey: "item.hiihtosukset", emoji: "🎿", seasonal: true },
-    { id: "pyorakypara", labelKey: "item.pyorakypara", emoji: "⛑️" },
-    { id: "heijastinliivi", labelKey: "item.heijastinliivi", emoji: "🦺" },
-    { id: "istuinalusta", labelKey: "item.istuinalusta", emoji: "🪑" },
-    { id: "retkievaat", labelKey: "item.retkievaat", emoji: "🥪" },
   ],
   koululainen: [
     { id: "avaimet", labelKey: "item.avaimet", emoji: "🔑" },
     { id: "välipala", labelKey: "item.välipala", emoji: "🍎" },
     { id: "uikkarit", labelKey: "item.uikkarit", emoji: "🩱" },
     { id: "sisäliikunta", labelKey: "item.sisäliikunta", emoji: "🏃" },
-    { id: "lippis", labelKey: "item.lippis", emoji: "🧢" },
-    { id: "kuravarusteet", labelKey: "item.kuravarusteet", emoji: "🌧️" },
-    { id: "vaihtohanskat", labelKey: "item.vaihtohanskat", emoji: "🧤" },
-    { id: "luistimet", labelKey: "item.luistimet", emoji: "⛸️", seasonal: true },
-    { id: "hiihtosukset", labelKey: "item.hiihtosukset", emoji: "🎿", seasonal: true },
-    { id: "pyorakypara", labelKey: "item.pyorakypara", emoji: "⛑️" },
-    { id: "heijastinliivi", labelKey: "item.heijastinliivi", emoji: "🦺" },
-    { id: "istuinalusta", labelKey: "item.istuinalusta", emoji: "🪑" },
-    { id: "retkievaat", labelKey: "item.retkievaat", emoji: "🥪" },
   ],
 };
 
-function isSeasonallyHidden(): boolean {
-  const now = new Date();
-  const month = now.getMonth();
-  const day = now.getDate();
-  return (month === 3 && day >= 10) || (month >= 4 && month <= 6) || (month === 7 && day <= 2);
-}
-
-function getStorageKey(ag: AgeGroup, type: "checked" | "note" | "active") { return `daycare-checklist-${ag}-${type}`; }
+function getStorageKey(ag: AgeGroup, type: "checked" | "note") { return `daycare-checklist-${ag}-${type}`; }
 function loadChecked(ag: AgeGroup): Set<string> { try { const r = localStorage.getItem(getStorageKey(ag, "checked")); return r ? new Set(JSON.parse(r)) : new Set(); } catch { return new Set(); } }
 function saveChecked(ag: AgeGroup, s: Set<string>) { localStorage.setItem(getStorageKey(ag, "checked"), JSON.stringify([...s])); }
 function loadNote(ag: AgeGroup): string { return localStorage.getItem(getStorageKey(ag, "note")) || ""; }
 function saveNote(ag: AgeGroup, n: string) { localStorage.setItem(getStorageKey(ag, "note"), n); }
-function loadActive(ag: AgeGroup): Set<string> | null { try { const r = localStorage.getItem(getStorageKey(ag, "active")); return r ? new Set(JSON.parse(r)) : null; } catch { return null; } }
-function saveActive(ag: AgeGroup, s: Set<string>) { localStorage.setItem(getStorageKey(ag, "active"), JSON.stringify([...s])); }
 
 interface DaycareChecklistProps { ageGroup: AgeGroup; weather: WeatherData; }
 
@@ -103,44 +56,32 @@ export default function DaycareChecklist({ ageGroup, weather }: DaycareChecklist
   const { t } = useLanguage();
   const [checked, setChecked] = useState<Set<string>>(() => loadChecked(ageGroup));
   const [note, setNote] = useState(() => loadNote(ageGroup));
-  const [showSettings, setShowSettings] = useState(false);
 
-  // Get all available misc items for this age group, filtering seasonal
-  const hideSeasonalItems = isSeasonallyHidden();
-  const availableMiscItems = useMemo(() => {
-    return allMiscByAge[ageGroup].filter(item => {
-      if (item.seasonal && hideSeasonalItems) return false;
-      return true;
-    });
-  }, [ageGroup, hideSeasonalItems]);
-
-  // Default active = all items from the original static+dynamic lists
-  const [activeItems, setActiveItems] = useState<Set<string>>(() => {
-    const saved = loadActive(ageGroup);
-    if (saved) return saved;
-    // Default: activate all available items
-    return new Set(availableMiscItems.map(i => i.id));
-  });
-
-  useEffect(() => {
-    setChecked(loadChecked(ageGroup));
-    setNote(loadNote(ageGroup));
-    const saved = loadActive(ageGroup);
-    if (saved) {
-      setActiveItems(saved);
-    } else {
-      setActiveItems(new Set(allMiscByAge[ageGroup].filter(i => !(i.seasonal && isSeasonallyHidden())).map(i => i.id)));
-    }
-  }, [ageGroup]);
-
+  useEffect(() => { setChecked(loadChecked(ageGroup)); setNote(loadNote(ageGroup)); }, [ageGroup]);
   useEffect(() => { saveChecked(ageGroup, checked); }, [checked, ageGroup]);
   useEffect(() => { saveNote(ageGroup, note); }, [note, ageGroup]);
-  useEffect(() => { saveActive(ageGroup, activeItems); }, [activeItems, ageGroup]);
 
-  // Only show active misc items in the checklist
-  const visibleMiscItems = useMemo(() => {
-    return availableMiscItems.filter(item => activeItems.has(item.id));
-  }, [availableMiscItems, activeItems]);
+  const seasonalItems = useMemo(() => {
+    const items: ChecklistItem[] = [];
+    const ids = new Set<string>();
+    const add = (id: string, labelKey: TranslationKey, emoji: string) => { if (!ids.has(id)) { items.push({ id, labelKey, emoji }); ids.add(id); } };
+
+    const temp = weather.temperature;
+    const isRainy = weather.rainProbability > 40 || weather.afternoonRain;
+
+    if (temp > 10) add("lippis", "item.lippis", "🧢");
+    if (isRainy) { add("kuravarusteet", "item.kuravarusteet", "🌧️"); add("vaihtohanskat", "item.vaihtohanskat", "🧤"); }
+    if (temp < 10 && ageGroup !== "koululainen") add("lamminkerrasto", "item.lamminkerrasto", "🧶");
+    const now = new Date();
+    const month = now.getMonth(); // 0-indexed
+    const day = now.getDate();
+    const hideSkates = (month === 3 && day >= 10) || (month >= 4 && month <= 6) || (month === 7 && day <= 2);
+    if (!hideSkates && (ageGroup === "leikki-ikäinen" || ageGroup === "koululainen") && temp < 0) add("luistimet", "item.luistimet", "⛸️");
+
+    return items;
+  }, [ageGroup, weather.temperature, weather.rainProbability, weather.afternoonRain]);
+
+  const miscItems = useMemo(() => [...seasonalItems, ...miscByAge[ageGroup]], [ageGroup, seasonalItems]);
 
   const getDayReminder = (): TranslationKey | null => {
     const day = new Date().getDay();
@@ -153,15 +94,11 @@ export default function DaycareChecklist({ ageGroup, weather }: DaycareChecklist
   };
 
   const dayReminderKey = getDayReminder();
-  const allItems = [...SPARE_CLOTHES, ...visibleMiscItems];
-  const allDone = allItems.length > 0 && allItems.every((i) => checked.has(i.id));
+  const allItems = [...SPARE_CLOTHES, ...miscItems];
+  const allDone = allItems.every((i) => checked.has(i.id));
 
   const toggle = useCallback((id: string) => {
     setChecked((prev) => { const n = new Set(prev); if (n.has(id)) n.delete(id); else n.add(id); return n; });
-  }, []);
-
-  const toggleActive = useCallback((id: string) => {
-    setActiveItems((prev) => { const n = new Set(prev); if (n.has(id)) n.delete(id); else n.add(id); return n; });
   }, []);
 
   const renderItem = (item: ChecklistItem, muted = false) => {
@@ -215,43 +152,11 @@ export default function DaycareChecklist({ ageGroup, weather }: DaycareChecklist
       </div>
 
       <div>
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="text-xs font-display font-600 text-muted-foreground uppercase tracking-wide">
-            {t("checklist.miscItems")}
-          </h3>
-          <button
-            onClick={() => setShowSettings(!showSettings)}
-            className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <Settings className="h-3.5 w-3.5" />
-            {showSettings ? t("checklist.hideSettings") : t("checklist.showSettings")}
-          </button>
-        </div>
-
-        {showSettings && (
-          <div className="mb-4 p-3 rounded-md border border-border bg-muted/20 space-y-2">
-            <p className="text-xs text-muted-foreground mb-2">{t("checklist.activeItemsDesc")}</p>
-            {availableMiscItems.map((item) => (
-              <div key={item.id} className="flex items-center justify-between py-1.5">
-                <div className="flex items-center gap-2">
-                  <span className="text-base">{item.emoji}</span>
-                  <span className="text-sm text-foreground">{t(item.labelKey)}</span>
-                </div>
-                <Switch
-                  checked={activeItems.has(item.id)}
-                  onCheckedChange={() => toggleActive(item.id)}
-                />
-              </div>
-            ))}
-          </div>
-        )}
-
+        <h3 className="text-xs font-display font-600 text-muted-foreground uppercase tracking-wide mb-2">
+          {t("checklist.miscItems")}
+        </h3>
         <div className="space-y-2 mb-3">
-          {visibleMiscItems.length > 0 ? (
-            visibleMiscItems.map((item) => renderItem(item))
-          ) : (
-            <p className="text-xs text-muted-foreground italic py-2">{t("checklist.showSettings")}</p>
-          )}
+          {miscItems.map((item) => renderItem(item))}
         </div>
         <div>
           <label htmlFor={`note-${ageGroup}`} className="text-xs font-display font-600 text-muted-foreground uppercase tracking-wide mb-1.5 block">
