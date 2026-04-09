@@ -482,6 +482,11 @@ const clothingNameMap: Record<string, { sv: string; en: string }> = {
   "Kevyet housut": { sv: "Lätta byxor", en: "Light trousers" },
   "Sukat": { sv: "Strumpor", en: "Socks" },
   "Huomio": { sv: "OBS", en: "Note" },
+  "Ohut kuorihaalari": { sv: "Tunn skaloverall", en: "Thin shell overall" },
+  "Sadeasu": { sv: "Regnställ", en: "Rain suit" },
+  "Sadehattu": { sv: "Regnhatt", en: "Rain hat" },
+  "Tekniset ulkoiluhousut": { sv: "Tekniska utomhusbyxor", en: "Technical outdoor trousers" },
+  "Vedenpitävät kengät": { sv: "Vattentäta skor", en: "Waterproof shoes" },
 };
 
 const clothingDescMap: Record<string, { sv: string; en: string }> = {
@@ -584,6 +589,16 @@ const clothingDescMap: Record<string, { sv: string; en: string }> = {
   "Suojaa vauva suoralta auringolta ja tuulelta": { sv: "Skydda babyn från direkt sol och vind", en: "Protect baby from direct sunlight and wind" },
   "+1 … +15 °C — kuoritakki ja kerroksia": { sv: "+1 … +15 °C — skaljacka och lager", en: "+1 … +15 °C — shell jacket and layers" },
   "+1 … +15 °C — tekniset kuorivaatteet ja kerroksia": { sv: "+1 … +15 °C — tekniska skalkläder och lager", en: "+1 … +15 °C — technical shell clothing and layers" },
+  "Ohut tekninen kuorihaalari sateen varalle": { sv: "Tunn teknisk skaloverall för regn", en: "Thin technical shell overall for rain" },
+  "Ohut puuvillainen kypärämyssy": { sv: "Tunn bomullshjälmhuva", en: "Thin cotton balaclava" },
+  "Muista vaunujen sadesuoja!": { sv: "Kom ihåg regnskyddet till vagnen!", en: "Remember the stroller rain cover!" },
+  "Sadeasu tai tekniset kuorivaatteet": { sv: "Regnställ eller tekniska skalkläder", en: "Rain suit or technical shell clothing" },
+  "Pitkähihainen paita alle": { sv: "Långärmad tröja under", en: "Long-sleeve shirt underneath" },
+  "Lippis tai sadehattu": { sv: "Keps eller regnhatt", en: "Cap or rain hat" },
+  "Vedenpitävä kuoritakki tai sadetakki": { sv: "Vattentät skaljacka eller regnjacka", en: "Waterproof shell jacket or rain jacket" },
+  "Farkut tai tekniset ulkoiluhousut": { sv: "Jeans eller tekniska utomhusbyxor", en: "Jeans or technical outdoor trousers" },
+  "Vedenpitävät kengät tai tennarit": { sv: "Vattentäta skor eller sneakers", en: "Waterproof shoes or sneakers" },
+  "Pakkaa sateenvarjo tai sadeviitta reppuun": { sv: "Packa paraply eller regnponcho i ryggsäcken", en: "Pack an umbrella or rain poncho in the backpack" },
 };
 
 export type { ClothingItem } from "./weatherData";
