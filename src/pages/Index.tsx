@@ -266,12 +266,12 @@ const Index = () => {
   // Tab 4: Asetukset (Settings)
   const settingsPage = (
     <div className="px-4 py-6 space-y-5">
-      <LocationSearch
-        currentCity={city}
-        onSelectCity={handleCityChange}
-        onGeolocate={handleGeolocate}
-        loading={loading}
-      />
+      <div className="space-y-3">
+        <h2 className="text-sm font-display font-700 text-muted-foreground uppercase tracking-wide">
+          {t("tab.settings" as any)}
+        </h2>
+        <LanguageSwitcher />
+      </div>
       <div className="space-y-3">
         <h2 className="text-sm font-display font-700 text-muted-foreground uppercase tracking-wide">
           {t("header.subtitle")}
