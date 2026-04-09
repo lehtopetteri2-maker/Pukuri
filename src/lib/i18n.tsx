@@ -78,7 +78,7 @@ const translations = {
   "checklist.title.school": { fi: "🎒 Koulureppu", sv: "🎒 Skolryggsäck", en: "🎒 School backpack" },
   "checklist.allPacked": { fi: "✅ Kaikki pakattu!", sv: "✅ Allt packat!", en: "✅ All packed!" },
   "checklist.weatherGear": { fi: "🌦️ Säänmukaiset varusteet", sv: "🌦️ Väderanpassad utrustning", en: "🌦️ Weather-appropriate gear" },
-  "checklist.spareClothes": { fi: "👕 Varavaatteet (arkisto) — tarkista viikoittain", sv: "👕 Ombyteskläder (arkiv) — kontrollera varje vecka", en: "👕 Spare clothes (archive) — check weekly" },
+  "checklist.spareClothes": { fi: "👕 Perusvarusteet", sv: "👕 Basutrustning", en: "👕 Essentials" },
   "checklist.miscItems": { fi: "🎲 Satunnaiset tavarat", sv: "🎲 Övriga saker", en: "🎲 Miscellaneous items" },
   "checklist.myNote": { fi: "📝 Oma muistiinpano", sv: "📝 Min anteckning", en: "📝 My note" },
   "checklist.notePlaceholder": { fi: "Kirjoita tähän oma tavara tai muistutus…", sv: "Skriv din egen sak eller påminnelse här…", en: "Write your own item or reminder here…" },
