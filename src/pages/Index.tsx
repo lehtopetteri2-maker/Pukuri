@@ -1,5 +1,4 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from "react";
-import DebugPanel from "@/components/DebugPanel";
 import WeatherCard from "@/components/WeatherCard";
 import AgeGroupToggle from "@/components/AgeGroupToggle";
 import DualClothingCard from "@/components/DualClothingCard";
@@ -77,12 +76,6 @@ const Index = () => {
   const [error, setError] = useState<string | null>(null);
   const [cacheAge, setCacheAge] = useState<number | null>(initial.cacheAge);
   const scheduleRef = useRef<HTMLDivElement>(null);
-  const [debugTemp, setDebugTemp] = useState<number | null>(null);
-
-  const effectiveWeather = useMemo(() => {
-    if (debugTemp === null) return weather;
-    return { ...weather, temperature: debugTemp, feelsLike: debugTemp - 2 };
-  }, [weather, debugTemp]);
 
   const alerts = useMemo(() => {
     if (loading && forecastList.length === 0) return emptyAlerts();
