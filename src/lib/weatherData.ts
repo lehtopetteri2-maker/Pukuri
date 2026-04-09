@@ -113,39 +113,41 @@ const mildRainGear: Record<AgeGroup, ClothingItem[]> = {
   ],
 };
 
-/** +12…+18 °C — lämmin kevät */
+/** +15…+18 °C — lämmin kevät / alkukesä */
 const warmSpringGear: Record<AgeGroup, ClothingItem[]> = {
   vauva: [
-    { name: "Body", emoji: "👶", description: "Ohut puuvillabody" },
-    { name: "Ohut haalari", emoji: "👕", description: "Kevyt ulkohaalari" },
-    { name: "Ohut pipo", emoji: "🧢", description: "Puuvillapipo" },
+    { name: "Puuvillabody", emoji: "👶", description: "Ohut, pitkähihainen puuvillabody" },
+    { name: "Puuvillahousut", emoji: "👖", description: "Ohuet puuvillahousut" },
+    { name: "Kypärämyssy", emoji: "🧢", description: "Ohut puuvillainen kypärämyssy tai aurinkohattu" },
+    { name: "Ohuet sukat", emoji: "🧦", description: "Ohuet sukat" },
   ],
   taapero: [
-    { name: "Collegehousut", emoji: "👖", description: "Joustavat collegehousut" },
-    { name: "Pitkähihainen paita", emoji: "👕", description: "Kevyt pitkähihainen" },
-    { name: "Kevyt takki", emoji: "🧥", description: "Kevyt takki tai liivi" },
-    { name: "Lenkkarit", emoji: "👟", description: "Kevyet kengät" },
+    { name: "Pitkähihainen paita", emoji: "👕", description: "Pitkähihainen ohut paita tai t-paita" },
+    { name: "Neuletakki", emoji: "🧥", description: "Ohut neuletakki tai huppari" },
+    { name: "Ohuet housut", emoji: "👖", description: "Ohuet housut tai leggingsit" },
+    { name: "Ohut pipo", emoji: "🎿", description: "Ohut pipo tai lippis" },
+    { name: "Sukat", emoji: "🧦", description: "Sukat" },
   ],
   "leikki-ikäinen": [
-    { name: "Collegehousut", emoji: "👖", description: "Collegehousut tai farkut" },
-    { name: "Pitkähihainen paita", emoji: "👕", description: "Kevyt pitkähihainen" },
-    { name: "Kevyt takki", emoji: "🧥", description: "Kevyt takki tai liivi" },
-    { name: "Lenkkarit", emoji: "👟", description: "Kevyet kengät" },
+    { name: "T-paita", emoji: "👕", description: "T-paita" },
+    { name: "Pitkähihainen paita", emoji: "👕", description: "Ohut pitkähihainen paita tai huppari" },
+    { name: "Kevyet housut", emoji: "👖", description: "Kevyet housut" },
+    { name: "Lippalakki", emoji: "🧢", description: "Lippis tai ohut panta" },
   ],
   koululainen: [
+    { name: "T-paita", emoji: "👕", description: "T-paita" },
+    { name: "Huppari", emoji: "👕", description: "Huppari tai kevyt takki" },
     { name: "Farkut", emoji: "👖", description: "Farkut tai collegehousut" },
-    { name: "Pitkähihainen paita", emoji: "👕", description: "Kevyt pitkähihainen" },
-    { name: "Kevyt takki", emoji: "🧥", description: "Kevyt takki tai liivi" },
-    { name: "Lenkkarit", emoji: "👟", description: "Kevyet kengät" },
   ],
 };
 
 /** Yli +18 °C — kesä */
 const warmGear: Record<AgeGroup, ClothingItem[]> = {
   vauva: [
-    { name: "Body", emoji: "👶", description: "Ohut puuvillabody" },
-    { name: "Aurinkohattu", emoji: "👒", description: "Leveälierinen hattu" },
-    { name: "Ohut haalari", emoji: "👕", description: "Kevyt ulkohaalari" },
+    { name: "Puuvillabody", emoji: "👶", description: "Ohut, pitkähihainen puuvillabody" },
+    { name: "Puuvillahousut", emoji: "👖", description: "Ohuet puuvillahousut" },
+    { name: "Aurinkohattu", emoji: "👒", description: "Leveälierinen hattu tai kypärämyssy" },
+    { name: "Ohuet sukat", emoji: "🧦", description: "Ohuet sukat" },
   ],
   taapero: [
     { name: "T-paita", emoji: "👕", description: "Kevyt paita" },
@@ -154,7 +156,7 @@ const warmGear: Record<AgeGroup, ClothingItem[]> = {
     { name: "Aurinkohattu", emoji: "👒", description: "Lippalakki tai hattu" },
   ],
   "leikki-ikäinen": [
-    { name: "T-paita", emoji: "👕", description: "Kevyt paita" },
+    { name: "T-paita", emoji: "👕", description: "T-paita" },
     { name: "Shortsit", emoji: "🩳", description: "Shortsit tai hame" },
     { name: "Sandaalit", emoji: "👡", description: "Avoimet kengät" },
     { name: "Lippalakki", emoji: "🧢", description: "Aurinkosuoja" },
@@ -228,19 +230,19 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
     ));
   } else if (temp < 1) {
     base.push(...coldSnowGear[ageGroup]);
-  } else if (temp <= 12) {
-    // +1…+12 °C — välikausi
+  } else if (temp <= 15) {
+    // +1…+15 °C — välikausi
     if (ageGroup === "koululainen") {
       base.push({
         name: "Tekniset kuorivaatteet",
         emoji: "🧥",
-        description: "+1 … +12 °C — tekniset kuorivaatteet ja kerroksia",
+        description: "+1 … +15 °C — tekniset kuorivaatteet ja kerroksia",
       });
     } else {
       base.push({
         name: "Välikausivaatteet",
         emoji: "🍂",
-        description: "+1 … +12 °C — kuoritakki ja kerroksia",
+        description: "+1 … +15 °C — kuoritakki ja kerroksia",
       });
     }
     base.push(...mildRainGear[ageGroup]);
@@ -257,13 +259,10 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
       base.push({ name: "Tuubihuivi", emoji: "🧣", description: "Tuuli yli 5 m/s — tuubihuivi suojaa" });
     }
   } else if (temp <= 18) {
-    // +12…+18 °C — lämmin kevät
+    // +15…+18 °C — lämmin kevät / alkukesä
     base.push(...warmSpringGear[ageGroup]);
-    if (weather.condition === "sunny") {
-      const hasHat = base.some((i) => i.name.includes("Lippalakki") || i.name.includes("Aurinkohattu"));
-      if (!hasHat) {
-        base.push({ name: "Lippalakki", emoji: "🧢", description: "Aurinkoisella säällä suojaksi" });
-      }
+    if (ageGroup === "vauva") {
+      base.push({ name: "Huomio", emoji: "☀️", description: "Suojaa vauva suoralta auringolta ja tuulelta" });
     }
   } else {
     // Yli +18 °C — kesä
@@ -416,15 +415,17 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
     "Vuorellinen sadehaalari", "Sadehaalari tai kurahousut & sadetakki",
     "Ohuet kuravarusteet", "Kurahousut ja kurahanskat", "Vuorettomat kurahousut",
     "Body", "Ohut haalari", "T-paita", "Collegehousut", "Farkut", "Shortsit",
+    "Puuvillabody", "Puuvillahousut", "Ohuet housut", "Kevyet housut",
   ]);
   const MID_NAMES = new Set([
     "Lämmin välikerros", "Villakerrastot", "Välikerrastot", "Välikerrasto",
-    "Huppari", "Pitkähihainen paita",
+    "Huppari", "Pitkähihainen paita", "Neuletakki",
   ]);
   const HEAD_GLOVE_NAMES = new Set([
     "Pipo", "Ohut pipo", "Lippalakki", "Lippis/Hattu", "Aurinkohattu",
-    "Kauluri",
+    "Kauluri", "Kypärämyssy",
     "Hanskat", "Lapaset", "Rukkaset", "Sormikkaat", "Lapaset/Rukkaset",
+    "Ohuet sukat", "Sukat",
   ]);
 
   function sortPriority(item: ClothingItem): number {

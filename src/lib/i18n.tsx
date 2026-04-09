@@ -473,6 +473,15 @@ const clothingNameMap: Record<string, { sv: string; en: string }> = {
   "Lämpöpussi / lisäkerros": { sv: "Åkpåse / extra lager", en: "Footmuff / extra layer" },
   "Tekniset kuorivaatteet": { sv: "Tekniska skalkläder", en: "Technical shell clothing" },
   "Rattaissa lisäkerros": { sv: "Extra lager i vagnen", en: "Extra layer in stroller" },
+  "Puuvillabody": { sv: "Bomullsbody", en: "Cotton bodysuit" },
+  "Puuvillahousut": { sv: "Bomullsbyxor", en: "Cotton trousers" },
+  "Kypärämyssy": { sv: "Hjälmhuva", en: "Balaclava cap" },
+  "Ohuet sukat": { sv: "Tunna strumpor", en: "Thin socks" },
+  "Neuletakki": { sv: "Stickad kofta", en: "Knit cardigan" },
+  "Ohuet housut": { sv: "Tunna byxor", en: "Thin trousers" },
+  "Kevyet housut": { sv: "Lätta byxor", en: "Light trousers" },
+  "Sukat": { sv: "Strumpor", en: "Socks" },
+  "Huomio": { sv: "OBS", en: "Note" },
 };
 
 const clothingDescMap: Record<string, { sv: string; en: string }> = {
@@ -558,6 +567,23 @@ const clothingDescMap: Record<string, { sv: string; en: string }> = {
   "Aurinkoinen sää — lippis suojaa": { sv: "Soligt väder — keps skyddar", en: "Sunny weather — cap protects" },
   "Paksu pipo kovaan pakkaseen": { sv: "Tjock mössa i hård kyla", en: "Thick beanie for hard frost" },
   "Ohut pipo viileään säähän": { sv: "Tunn mössa i svalt väder", en: "Thin beanie for cool weather" },
+  "Ohut, pitkähihainen puuvillabody": { sv: "Tunn, långärmad bomullsbody", en: "Thin, long-sleeve cotton bodysuit" },
+  "Ohuet puuvillahousut": { sv: "Tunna bomullsbyxor", en: "Thin cotton trousers" },
+  "Ohut puuvillainen kypärämyssy tai aurinkohattu": { sv: "Tunn bomullshjälmhuva eller solhatt", en: "Thin cotton balaclava or sun hat" },
+  "Ohuet sukat": { sv: "Tunna strumpor", en: "Thin socks" },
+  "Pitkähihainen ohut paita tai t-paita": { sv: "Långärmad tunn tröja eller t-shirt", en: "Long-sleeve thin shirt or t-shirt" },
+  "Ohut neuletakki tai huppari": { sv: "Tunn stickad kofta eller hoodie", en: "Thin knit cardigan or hoodie" },
+  "Ohuet housut tai leggingsit": { sv: "Tunna byxor eller leggings", en: "Thin trousers or leggings" },
+  "Ohut pipo tai lippis": { sv: "Tunn mössa eller keps", en: "Thin beanie or cap" },
+  "Sukat": { sv: "Strumpor", en: "Socks" },
+  "Ohut pitkähihainen paita tai huppari": { sv: "Tunn långärmad tröja eller hoodie", en: "Thin long-sleeve shirt or hoodie" },
+  "Kevyet housut": { sv: "Lätta byxor", en: "Light trousers" },
+  "Lippis tai ohut panta": { sv: "Keps eller tunt pannband", en: "Cap or thin headband" },
+  "Huppari tai kevyt takki": { sv: "Hoodie eller lätt jacka", en: "Hoodie or light jacket" },
+  "Leveälierinen hattu tai kypärämyssy": { sv: "Bredbrättad hatt eller hjälmhuva", en: "Wide-brimmed hat or balaclava" },
+  "Suojaa vauva suoralta auringolta ja tuulelta": { sv: "Skydda babyn från direkt sol och vind", en: "Protect baby from direct sunlight and wind" },
+  "+1 … +15 °C — kuoritakki ja kerroksia": { sv: "+1 … +15 °C — skaljacka och lager", en: "+1 … +15 °C — shell jacket and layers" },
+  "+1 … +15 °C — tekniset kuorivaatteet ja kerroksia": { sv: "+1 … +15 °C — tekniska skalkläder och lager", en: "+1 … +15 °C — technical shell clothing and layers" },
 };
 
 export type { ClothingItem } from "./weatherData";
