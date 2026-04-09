@@ -482,6 +482,11 @@ const clothingNameMap: Record<string, { sv: string; en: string }> = {
   "Kevyet housut": { sv: "Lätta byxor", en: "Light trousers" },
   "Sukat": { sv: "Strumpor", en: "Socks" },
   "Huomio": { sv: "OBS", en: "Note" },
+  "Ohut kuorihaalari": { sv: "Tunn skaloverall", en: "Thin shell overall" },
+  "Sadeasu": { sv: "Regnställ", en: "Rain suit" },
+  "Sadehattu": { sv: "Regnhatt", en: "Rain hat" },
+  "Tekniset ulkoiluhousut": { sv: "Tekniska utomhusbyxor", en: "Technical outdoor trousers" },
+  "Vedenpitävät kengät": { sv: "Vattentäta skor", en: "Waterproof shoes" },
 };
 
 const clothingDescMap: Record<string, { sv: string; en: string }> = {
