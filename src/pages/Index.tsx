@@ -250,11 +250,9 @@ const Index = () => {
           <AgeGroupToggle selected={ageGroup} onChange={setAgeGroup} />
         </div>
 
-        <DualClothingCard key={`${city}-${ageGroup}-${city}`} dual={dual} />
+        <DualClothingCard key={`${city}-${ageGroup}`} dual={dual} />
         <ShareButton dual={dual} ageGroup={ageGroup} />
         <DaycareChecklist ageGroup={ageGroup} weather={weather} />
-
-        <DebugPanel weather={weather} onOverride={setDebugTemp} />
         <AffiliateSection />
 
         <FeedbackSection ageGroup={ageGroup} />
