@@ -164,13 +164,9 @@ const Index = () => {
     return () => clearInterval(interval);
   }, [city]);
 
-  const handleCityChange = useCallback((newCity: string, lat?: number, lon?: number) => {
-    if (lat !== undefined && lon !== undefined) {
-      loadWeatherByCoords(lat, lon);
-    } else {
-      loadWeather(newCity);
-    }
-  }, [loadWeather, loadWeatherByCoords]);
+  const handleCityChange = useCallback((newCity: string) => {
+    loadWeather(newCity);
+  }, [loadWeather]);
 
   const handleForceRefresh = useCallback(() => {
     loadWeather(city, true);
