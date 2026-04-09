@@ -450,6 +450,7 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
     "Ohuet kuravarusteet", "Kurahousut ja kurahanskat", "Vuorettomat kurahousut",
     "Body", "Ohut haalari", "T-paita", "Collegehousut", "Farkut", "Shortsit",
     "Puuvillabody", "Puuvillahousut", "Ohuet housut", "Kevyet housut",
+    "Ohut kuorihaalari", "Sadeasu", "Tekniset ulkoiluhousut", "Vedenpitävät kengät",
   ]);
   const MID_NAMES = new Set([
     "Lämmin välikerros", "Villakerrastot", "Välikerrastot", "Välikerrasto",
@@ -457,7 +458,7 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
   ]);
   const HEAD_GLOVE_NAMES = new Set([
     "Pipo", "Ohut pipo", "Lippalakki", "Lippis/Hattu", "Aurinkohattu",
-    "Kauluri", "Kypärämyssy",
+    "Kauluri", "Kypärämyssy", "Sadehattu",
     "Hanskat", "Lapaset", "Rukkaset", "Sormikkaat", "Lapaset/Rukkaset",
     "Ohuet sukat", "Sukat",
   ]);
