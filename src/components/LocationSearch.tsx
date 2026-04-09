@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { Search, MapPin, Loader2 } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
-import { cityWeather } from "@/lib/cityWeatherData";
+import { getCitiesByCountry } from "@/lib/cityWeatherData";
+import { getSavedCountry } from "@/lib/countryStore";
 
 interface LocationSearchProps {
   currentCity: string;
@@ -9,8 +10,6 @@ interface LocationSearchProps {
   onGeolocate: () => void;
   loading: boolean;
 }
-
-const allCities = Object.keys(cityWeather);
 
 export default function LocationSearch({ currentCity, onSelectCity, onGeolocate, loading }: LocationSearchProps) {
   const { t } = useLanguage();
@@ -29,13 +28,18 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
+  const countryCities = useMemo(() => {
+    const country = getSavedCountry();
+    return Object.keys(getCitiesByCountry(country));
+  }, []);
+
   const filtered = useMemo(() => {
     if (!query.trim()) return [];
     const q = query.trim().toLowerCase();
-    return allCities
+    return countryCities
       .filter((c) => c.toLowerCase().startsWith(q))
       .slice(0, 20);
-  }, [query]);
+  }, [query, countryCities]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
