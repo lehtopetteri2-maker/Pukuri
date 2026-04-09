@@ -9,13 +9,24 @@ interface ChecklistItem {
   emoji: string;
 }
 
-const SPARE_CLOTHES: ChecklistItem[] = [
-  { id: "varahousut", labelKey: "item.varahousut", emoji: "👖" },
-  { id: "varapaita", labelKey: "item.varapaita", emoji: "👕" },
-  { id: "alusvaatteet", labelKey: "item.alusvaatteet", emoji: "🩲" },
-  { id: "varahanskat", labelKey: "item.varahanskat", emoji: "🧤" },
-  { id: "vaihtosukat", labelKey: "item.vaihtosukat", emoji: "🧦" },
-];
+function getSpareClothes(): ChecklistItem[] {
+  const month = new Date().getMonth() + 1; // 1-12
+  const isReflectorSeason = month >= 9 || month <= 3; // Sep–Mar
+
+  const items: ChecklistItem[] = [
+    { id: "vaihtosukat", labelKey: "item.vaihtosukat", emoji: "🧦" },
+    { id: "varahanskat", labelKey: "item.varahanskat", emoji: "🧤" },
+    { id: "varapaita", labelKey: "item.varapaita", emoji: "👕" },
+    { id: "varahousut", labelKey: "item.varahousut", emoji: "👖" },
+    { id: "alusvaatteet", labelKey: "item.alusvaatteet", emoji: "🩲" },
+  ];
+
+  if (isReflectorSeason) {
+    items.push({ id: "heijastin", labelKey: "item.heijastin" as any, emoji: "🔦" });
+  }
+
+  return items;
+}
 
 const miscByAge: Record<AgeGroup, ChecklistItem[]> = {
   vauva: [

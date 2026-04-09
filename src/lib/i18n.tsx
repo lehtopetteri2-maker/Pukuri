@@ -91,7 +91,8 @@ const translations = {
   // Checklist items
   "item.varahousut": { fi: "Varahousut", sv: "Reservbyxor", en: "Spare trousers" },
   "item.varapaita": { fi: "Varapaita", sv: "Reservtröja", en: "Spare shirt" },
-  "item.alusvaatteet": { fi: "Alusvaatteet (2 kpl)", sv: "Underkläder (2 st)", en: "Underwear (2 pcs)" },
+  "item.alusvaatteet": { fi: "Alusvaatteet", sv: "Underkläder", en: "Underwear" },
+  "item.heijastin": { fi: "Heijastin tai heijastinliivi", sv: "Reflex eller reflexväst", en: "Reflector or reflector vest" },
   "item.varahanskat": { fi: "Varahanskat", sv: "Reservvantar", en: "Spare gloves" },
   "item.vaihtosukat": { fi: "Vaihtosukat", sv: "Reservstrumpor", en: "Spare socks" },
   "item.vaippapaketti": { fi: "Vaippapaketti", sv: "Blöjpaket", en: "Diaper pack" },
