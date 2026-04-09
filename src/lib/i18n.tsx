@@ -40,12 +40,12 @@ const translations = {
   // Morning summary
   "morning.title": { fi: "☀️ Vinkki aamuun", sv: "☀️ Morgontips", en: "☀️ Morning tip" },
   "morning.loading": { fi: "Haetaan päivän suosituksia...", sv: "Hämtar dagens rekommendationer...", en: "Fetching today's recommendations..." },
-  "morning.rainStart": { fi: "Säävahti huomasi: sade alkaa arviolta klo {time}. Muista kuravarusteet päiväkotiin!", sv: "Vädervakten märkte: regn börjar ungefär kl {time}. Kom ihåg regnkläder till dagis!", en: "Säävahti noticed: rain starts around {time}. Remember rain gear for daycare!" },
-  "morning.rainStart.school": { fi: "Säävahti huomasi: sade alkaa arviolta klo {time}. Muista kuravarusteet kouluun!", sv: "Vädervakten märkte: regn börjar ungefär kl {time}. Kom ihåg regnkläder till skolan!", en: "Säävahti noticed: rain starts around {time}. Remember rain gear for school!" },
+  "morning.rainStart": { fi: "Pukuri huomasi: sade alkaa arviolta klo {time}. Muista kuravarusteet päiväkotiin!", sv: "Pukuri märkte: regn börjar ungefär kl {time}. Kom ihåg regnkläder till dagis!", en: "Pukuri noticed: rain starts around {time}. Remember rain gear for daycare!" },
+  "morning.rainStart.school": { fi: "Pukuri huomasi: sade alkaa arviolta klo {time}. Muista kuravarusteet kouluun!", sv: "Pukuri märkte: regn börjar ungefär kl {time}. Kom ihåg regnkläder till skolan!", en: "Pukuri noticed: rain starts around {time}. Remember rain gear for school!" },
   "morning.rainDaycare": { fi: "Sade alkaa arviolta klo {time}. Muista kuravarusteet päiväkotiin!", sv: "Regn börjar ungefär kl {time}. Kom ihåg regnkläder till dagis!", en: "Rain starts around {time}. Remember rain gear for daycare!" },
   "morning.rainDaycare.school": { fi: "Sade alkaa arviolta klo {time}. Muista kuravarusteet kouluun!", sv: "Regn börjar ungefär kl {time}. Kom ihåg regnkläder till skolan!", en: "Rain starts around {time}. Remember rain gear for school!" },
-  "morning.freezing": { fi: "Säävahti huomasi: tie on liukas ja aamu on kylmä, valitse lämpimät kengät.", sv: "Vädervakten märkte: vägen är hal och morgonen kall, välj varma skor.", en: "Säävahti noticed: roads are slippery and the morning is cold, choose warm shoes." },
-  "morning.uvHigh": { fi: "Säävahti huomasi: UV-indeksi nousee yli 3 tänään. Muista aurinkorasva lapselle!", sv: "Vädervakten märkte: UV-index stiger över 3 idag. Kom ihåg solskyddskräm!", en: "Säävahti noticed: UV index rises above 3 today. Remember sunscreen for the child!" },
+  "morning.freezing": { fi: "Pukuri huomasi: tie on liukas ja aamu on kylmä, valitse lämpimät kengät.", sv: "Pukuri märkte: vägen är hal och morgonen kall, välj varma skor.", en: "Pukuri noticed: roads are slippery and the morning is cold, choose warm shoes." },
+  "morning.uvHigh": { fi: "Pukuri huomasi: UV-indeksi nousee yli 3 tänään. Muista aurinkorasva lapselle!", sv: "Pukuri märkte: UV-index stiger över 3 idag. Kom ihåg solskyddskräm!", en: "Pukuri noticed: UV index rises above 3 today. Remember sunscreen for the child!" },
   "morning.windChill": { fi: "Viima tekee säästä purevan ({speed} m/s), suosi tuulenpitävää.", sv: "Blåsten gör vädret bitande ({speed} m/s), välj vindtäta kläder.", en: "Wind chill makes it feel bitter ({speed} m/s), choose windproof clothing." },
   "morning.calmDay": { fi: "Sää on vakaa, nauti päivästä! Normaalit kauden vaatteet riittävät. 🌤️", sv: "Vädret är stabilt, njut av dagen! Normala säsongskläder räcker. 🌤️", en: "Weather is stable, enjoy the day! Normal seasonal clothes will do. 🌤️" },
 
@@ -53,8 +53,8 @@ const translations = {
   "night.title": { fi: "🌙 Ilta-muistutus", sv: "🌙 Kvällspåminnelse", en: "🌙 Evening reminder" },
   "night.freezing": { fi: "Huomiseksi pakastuu ({from}° → {to}°), etsi toppahousut valmiiksi!", sv: "Det fryser i morgon ({from}° → {to}°), plocka fram täckbyxor!", en: "Freezing tomorrow ({from}° → {to}°), get snow trousers ready!" },
   "night.hardFrost": { fi: "Yöllä kireä pakkanen ({temp}°), jätä vaatteet eteiseen valmiiksi!", sv: "Hård frost i natt ({temp}°), lägg kläderna i hallen!", en: "Hard frost tonight ({temp}°), lay out clothes in the hallway!" },
-  "night.tomorrowColder": { fi: "Säävahti huomasi: huominen on selvästi kylmempi kuin tämä päivä ({today}° → {tomorrow}°). Varaudu vaatevaihtoon!", sv: "Vädervakten märkte: i morgon blir det betydligt kallare ({today}° → {tomorrow}°). Förbered klädombyte!", en: "Säävahti noticed: tomorrow is much colder than today ({today}° → {tomorrow}°). Prepare for a clothing change!" },
-  "night.tomorrowWarmer": { fi: "Säävahti huomasi: huominen on selvästi lämpimämpi kuin tämä päivä ({today}° → {tomorrow}°). Varaudu vaatevaihtoon!", sv: "Vädervakten märkte: i morgon blir det betydligt varmare ({today}° → {tomorrow}°). Förbered klädombyte!", en: "Säävahti noticed: tomorrow is much warmer than today ({today}° → {tomorrow}°). Prepare for a clothing change!" },
+  "night.tomorrowColder": { fi: "Pukuri huomasi: huominen on selvästi kylmempi kuin tämä päivä ({today}° → {tomorrow}°). Varaudu vaatevaihtoon!", sv: "Pukuri märkte: i morgon blir det betydligt kallare ({today}° → {tomorrow}°). Förbered klädombyte!", en: "Pukuri noticed: tomorrow is much colder than today ({today}° → {tomorrow}°). Prepare for a clothing change!" },
+  "night.tomorrowWarmer": { fi: "Pukuri huomasi: huominen on selvästi lämpimämpi kuin tämä päivä ({today}° → {tomorrow}°). Varaudu vaatevaihtoon!", sv: "Pukuri märkte: i morgon blir det betydligt varmare ({today}° → {tomorrow}°). Förbered klädombyte!", en: "Pukuri noticed: tomorrow is much warmer than today ({today}° → {tomorrow}°). Prepare for a clothing change!" },
   "night.tomorrowRain": { fi: "Huomenna tarvitaan kuravarusteita, tarkista että ne ovat repussa.", sv: "I morgon behövs regnutrustning, kontrollera att den finns i ryggsäcken.", en: "Rain gear needed tomorrow, check that it's in the backpack." },
   "night.dryGear": { fi: "Muista ottaa märät varusteet ja kengät kuivumaan! 👟", sv: "Kom ihåg att torka blöta kläder och skor! 👟", en: "Remember to dry wet gear and shoes! 👟" },
   "night.windChill": { fi: "Viima tekee säästä purevan ({speed} m/s), suosi tuulenpitävää huomenna.", sv: "Blåsten gör vädret bitande ({speed} m/s), välj vindtäta kläder i morgon.", en: "Wind chill makes it feel bitter ({speed} m/s), choose windproof clothing tomorrow." },
@@ -130,7 +130,7 @@ const translations = {
   "tomorrow.afternoonGear": { fi: "Iltapäivän varusteet", sv: "Eftermiddagens utrustning", en: "Afternoon gear" },
 
   // AI Analysis
-  "ai.title": { fi: "Säävahdin analyysi", sv: "Väderpyttens analys", en: "Säävahti's analysis" },
+  "ai.title": { fi: "Pukurin analyysi", sv: "Pukuris analys", en: "Pukuri's analysis" },
   "ai.ageGroup": { fi: "Ikäryhmä", sv: "Åldersgrupp", en: "Age group" },
   "ai.analyzing": { fi: "Analysoidaan...", sv: "Analyserar...", en: "Analyzing..." },
   "ai.updated": { fi: "Päivitetty", sv: "Uppdaterad", en: "Updated" },
