@@ -21,6 +21,26 @@ interface GeoResult {
   state?: string;
 }
 
+// Normalize Nordic characters: å→a, ä→a, ö→o, ø→o, æ→ae, ü→u
+function normalizeNordic(s: string): string {
+  return s
+    .replace(/[åÅ]/g, (c) => (c === "å" ? "a" : "A"))
+    .replace(/[äÄ]/g, (c) => (c === "ä" ? "a" : "A"))
+    .replace(/[öÖ]/g, (c) => (c === "ö" ? "o" : "O"))
+    .replace(/[øØ]/g, (c) => (c === "ø" ? "o" : "O"))
+    .replace(/[æÆ]/g, (c) => (c === "æ" ? "ae" : "AE"))
+    .replace(/[üÜ]/g, (c) => (c === "ü" ? "u" : "U"));
+}
+
+// Common Finnish/local name → international name aliases
+const CITY_ALIASES: Record<string, string> = {
+  tukholma: "Stockholm", kööpenhamina: "Copenhagen", kööbenhavn: "Copenhagen",
+  oslo: "Oslo", bergen: "Bergen", göteborg: "Gothenburg",
+  malmö: "Malmö", uumaja: "Umeå", tromssa: "Tromsø",
+  ateena: "Athens", pariisi: "Paris", lontoo: "London",
+  berliini: "Berlin", rooma: "Rome", pietari: "Saint Petersburg",
+};
+
 // Deduplicate results by lat/lon (rounded to 2 decimals)
 function deduplicateResults(results: GeoResult[]): GeoResult[] {
   const seen = new Set<string>();
@@ -32,19 +52,31 @@ function deduplicateResults(results: GeoResult[]): GeoResult[] {
   });
 }
 
-// Prioritize settlements over POIs by preferring results with state/country info
+// Check if a GeoResult matches the query (name or local_names)
+function matchesQuery(r: GeoResult, q: string): boolean {
+  const nq = normalizeNordic(q.toLowerCase());
+  if (normalizeNordic(r.name.toLowerCase()).startsWith(nq)) return true;
+  if (r.local_names) {
+    return Object.values(r.local_names).some(
+      (ln) => normalizeNordic(ln.toLowerCase()).startsWith(nq)
+    );
+  }
+  return false;
+}
+
 function sortByRelevance(results: GeoResult[], query: string): GeoResult[] {
   const q = query.toLowerCase();
+  const nq = normalizeNordic(q);
   return [...results].sort((a, b) => {
     // Exact name match first
-    const aExact = a.name.toLowerCase() === q ? 0 : 1;
-    const bExact = b.name.toLowerCase() === q ? 0 : 1;
+    const aExact = a.name.toLowerCase() === q || normalizeNordic(a.name.toLowerCase()) === nq ? 0 : 1;
+    const bExact = b.name.toLowerCase() === q || normalizeNordic(b.name.toLowerCase()) === nq ? 0 : 1;
     if (aExact !== bExact) return aExact - bExact;
-    // Starts-with match next
-    const aStarts = a.name.toLowerCase().startsWith(q) ? 0 : 1;
-    const bStarts = b.name.toLowerCase().startsWith(q) ? 0 : 1;
+    // Starts-with on original or normalized
+    const aStarts = (a.name.toLowerCase().startsWith(q) || normalizeNordic(a.name.toLowerCase()).startsWith(nq)) ? 0 : 1;
+    const bStarts = (b.name.toLowerCase().startsWith(q) || normalizeNordic(b.name.toLowerCase()).startsWith(nq)) ? 0 : 1;
     if (aStarts !== bStarts) return aStarts - bStarts;
-    // Nordic countries first (FI, SE, NO, DK)
+    // Nordic countries first
     const nordic = new Set(["FI", "SE", "NO", "DK"]);
     const aNordic = nordic.has(a.country) ? 0 : 1;
     const bNordic = nordic.has(b.country) ? 0 : 1;
