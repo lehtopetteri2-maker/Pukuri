@@ -1,5 +1,4 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from "react";
-import DebugPanel from "@/components/DebugPanel";
 import WeatherCard from "@/components/WeatherCard";
 import AgeGroupToggle from "@/components/AgeGroupToggle";
 import DualClothingCard from "@/components/DualClothingCard";
@@ -77,19 +76,13 @@ const Index = () => {
   const [error, setError] = useState<string | null>(null);
   const [cacheAge, setCacheAge] = useState<number | null>(initial.cacheAge);
   const scheduleRef = useRef<HTMLDivElement>(null);
-  const [debugTemp, setDebugTemp] = useState<number | null>(null);
-
-  const effectiveWeather = useMemo(() => {
-    if (debugTemp === null) return weather;
-    return { ...weather, temperature: debugTemp, feelsLike: debugTemp - 2 };
-  }, [weather, debugTemp]);
 
   const alerts = useMemo(() => {
     if (loading && forecastList.length === 0) return emptyAlerts();
-    return computeAlerts(forecastList, effectiveWeather.temperature, effectiveWeather.uvi);
-  }, [effectiveWeather, forecastList, loading]);
+    return computeAlerts(forecastList, weather.temperature, weather.uvi);
+  }, [weather, forecastList, loading]);
 
-  const dual = useMemo(() => computeDualRecommendation(effectiveWeather, ageGroup, forecastList), [effectiveWeather, ageGroup, forecastList]);
+  const dual = useMemo(() => computeDualRecommendation(weather, ageGroup, forecastList), [weather, ageGroup, forecastList]);
 
   const applyResult = useCallback((data: { current: WeatherData; tomorrow: TomorrowData; forecastList: any[]; fromApi: boolean }) => {
     setWeather(data.current);
@@ -98,7 +91,7 @@ const Index = () => {
     setCity(data.current.city);
     saveCity(data.current.city);
     saveWeatherCache(data.current.city, data.current, data.tomorrow, data.forecastList, data.fromApi);
-    console.log("[Säävahti] Säädata saatu:", { city: data.current.city, temp: data.current.temperature, forecastEntries: data.forecastList.length });
+    console.log("[Pukuri] Säädata saatu:", { city: data.current.city, temp: data.current.temperature, forecastEntries: data.forecastList.length });
     setCacheAge(0);
   }, []);
 
@@ -237,18 +230,18 @@ const Index = () => {
 
         <MorningSummary alerts={alerts} ageGroup={ageGroup} />
         <ScheduleReminder ageGroup={ageGroup} onOpen={scrollToSchedule} />
-        <NightAlert weather={effectiveWeather} alerts={alerts} />
+        <NightAlert weather={weather} alerts={alerts} />
         <WeatherCard
-          weather={effectiveWeather}
+          weather={weather}
           cacheAge={cacheAge}
           onRefresh={handleForceRefresh}
           loading={loading}
         />
-        <TomorrowForecastCard weather={effectiveWeather} ageGroup={ageGroup} tomorrow={tomorrow} forecastList={forecastList} />
+        <TomorrowForecastCard weather={weather} ageGroup={ageGroup} tomorrow={tomorrow} forecastList={forecastList} />
 
-        <AiAnalysis weather={effectiveWeather} ageGroup={ageGroup} dual={dual} />
+        <AiAnalysis weather={weather} ageGroup={ageGroup} dual={dual} />
 
-        <UvAlert weather={effectiveWeather} />
+        <UvAlert weather={weather} />
 
         <div className="space-y-3">
           <h2 className="text-sm font-display font-700 text-muted-foreground uppercase tracking-wide">
@@ -257,11 +250,9 @@ const Index = () => {
           <AgeGroupToggle selected={ageGroup} onChange={setAgeGroup} />
         </div>
 
-        <DualClothingCard key={`${city}-${ageGroup}-${debugTemp}`} dual={dual} />
+        <DualClothingCard key={`${city}-${ageGroup}`} dual={dual} />
         <ShareButton dual={dual} ageGroup={ageGroup} />
-        <DaycareChecklist ageGroup={ageGroup} weather={effectiveWeather} />
-
-        <DebugPanel weather={weather} onOverride={setDebugTemp} />
+        <DaycareChecklist ageGroup={ageGroup} weather={weather} />
         <AffiliateSection />
 
         <FeedbackSection ageGroup={ageGroup} />

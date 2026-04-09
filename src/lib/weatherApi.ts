@@ -46,12 +46,12 @@ async function tryFetchJson(url: string, label: string): Promise<any | null> {
     const res = await fetch(url);
     if (!res.ok) {
       const body = await res.text();
-      console.log(`[Säävahti] ${label} API error ${res.status}: ${body}`);
+      console.log(`[Pukuri] ${label} API error ${res.status}: ${body}`);
       return null;
     }
     return await res.json();
   } catch (err) {
-    console.log(`[Säävahti] ${label} network error:`, err);
+    console.log(`[Pukuri] ${label} network error:`, err);
     return null;
   }
 }
