@@ -77,17 +77,19 @@ const Index = () => {
   const [error, setError] = useState<string | null>(null);
   const [cacheAge, setCacheAge] = useState<number | null>(initial.cacheAge);
   const scheduleRef = useRef<HTMLDivElement>(null);
+  const [debugTemp, setDebugTemp] = useState<number | null>(null);
+
+  const effectiveWeather = useMemo(() => {
+    if (debugTemp === null) return weather;
+    return { ...weather, temperature: debugTemp, feelsLike: debugTemp - 2 };
+  }, [weather, debugTemp]);
 
   const alerts = useMemo(() => {
     if (loading && forecastList.length === 0) return emptyAlerts();
+    return computeAlerts(forecastList, effectiveWeather.temperature, effectiveWeather.uvi);
+  }, [effectiveWeather, forecastList, loading]);
 
-    console.log("Säädata saatu:", weather);
-    console.log("Generoidaan tekstit...");
-
-    return computeAlerts(forecastList, weather.temperature, weather.uvi);
-  }, [weather, forecastList, loading]);
-
-  const dual = useMemo(() => computeDualRecommendation(weather, ageGroup, forecastList), [weather, ageGroup, forecastList]);
+  const dual = useMemo(() => computeDualRecommendation(effectiveWeather, ageGroup, forecastList), [effectiveWeather, ageGroup, forecastList]);
 
   const applyResult = useCallback((data: { current: WeatherData; tomorrow: TomorrowData; forecastList: any[]; fromApi: boolean }) => {
     setWeather(data.current);
