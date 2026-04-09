@@ -18,7 +18,6 @@ const translations = {
   "tab.outfit": { fi: "Varustelu", sv: "Utrustning", en: "Outfit" },
   "tab.family": { fi: "Perhe", sv: "Familj", en: "Family" },
   "tab.settings": { fi: "Asetukset", sv: "Inställningar", en: "Settings" },
-  "hero.intro": { fi: "Pohjoismainen pukeutumisopas, joka automatisoi perheesi aamut sääennusteen mukaan.", sv: "En nordisk klädguide som automatiserar familjens morgnar enligt väderprognosen.", en: "A Nordic dressing guide that automates your family's mornings based on the weather forecast." },
 
   // Header
   "header.title": { fi: "Säävahti", sv: "Väderpytten", en: "Säävahti" },
