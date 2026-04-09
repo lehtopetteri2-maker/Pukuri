@@ -7,10 +7,12 @@ export default function LanguageSwitcher() {
     { value: "fi", label: "FI", flag: "🇫🇮" },
     { value: "sv", label: "SV", flag: "🇸🇪" },
     { value: "en", label: "EN", flag: "🇬🇧" },
+    { value: "et", label: "ET", flag: "🇪🇪" },
+    { value: "ar", label: "AR", flag: "🇸🇦" },
   ];
 
   return (
-    <div className="flex items-center rounded-lg border border-border bg-muted/50 p-0.5">
+    <div className="flex items-center rounded-lg border border-border bg-muted/50 p-0.5 flex-wrap gap-0.5">
       {options.map((opt) => (
         <button
           key={opt.value}
