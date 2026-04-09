@@ -121,7 +121,7 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
   };
 
   return (
-    <div ref={containerRef} className="relative animate-fade-in">
+    <div ref={containerRef} className="relative animate-fade-in" style={{ zIndex: 9999 }}>
       {loading && (
         <div className="absolute inset-0 z-20 flex items-center justify-center bg-card/80 rounded-lg backdrop-blur-sm">
           <div className="flex items-center gap-2 text-primary">
@@ -131,7 +131,7 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
         </div>
       )}
 
-      <div className="rounded-lg bg-card p-4 shadow-sm border border-border space-y-3">
+      <div className="rounded-lg bg-card p-4 shadow-sm border border-border space-y-3" style={{ overflow: 'visible' }}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-foreground">
             <MapPin className="h-4 w-4 text-primary" />
@@ -150,7 +150,7 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="relative">
+        <form onSubmit={handleSubmit} className="relative" style={{ overflow: 'visible' }}>
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           {searching && (
             <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground animate-spin" />
@@ -168,8 +168,13 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
 
           {open && results.length > 0 && (
             <div
-              className="absolute top-full left-0 right-0 mt-1 rounded-md border border-border bg-popover shadow-md overflow-y-auto"
-              style={{ zIndex: 9999, maxHeight: '60vh' }}
+              className="absolute top-full left-0 right-0 mt-1 rounded-md border border-border shadow-lg overflow-y-auto"
+              style={{
+                zIndex: 9999,
+                maxHeight: '60vh',
+                backgroundColor: 'hsl(var(--popover))',
+                color: 'hsl(var(--popover-foreground))',
+              }}
             >
               {results.map((city) => (
                 <button
