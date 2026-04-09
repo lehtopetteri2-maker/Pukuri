@@ -290,26 +290,60 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
       };
     };
 
-    if (ageGroup === "koululainen") {
-      // Koululaisille (7–10 v): kuorivaatteet
+    // --- Lämmin sade (≥ +15 °C): korvaa perusvarusteet kokonaan ---
+    if (temp >= 15) {
+      if (ageGroup === "vauva") {
+        base.length = 0;
+        base.push(
+          { name: "Ohut kuorihaalari", emoji: "🧥", description: "Ohut tekninen kuorihaalari sateen varalle" },
+          { name: "Puuvillahousut", emoji: "👖", description: "Ohuet puuvillahousut" },
+          { name: "Kypärämyssy", emoji: "🧢", description: "Ohut puuvillainen kypärämyssy" },
+          { name: "Huomio", emoji: "🌧️", description: "Muista vaunujen sadesuoja!" },
+        );
+      } else if (ageGroup === "taapero" || ageGroup === "leikki-ikäinen") {
+        base.length = 0;
+        base.push(
+          { name: "Sadeasu", emoji: "🌧️", description: "Sadeasu tai tekniset kuorivaatteet" },
+          { name: "Pitkähihainen paita", emoji: "👕", description: "Pitkähihainen paita alle" },
+          { name: "Ohuet housut", emoji: "👖", description: "Ohuet housut tai leggingsit" },
+          { name: "Kumisaappaat", emoji: "🥾", description: "Kumisaappaat ohuilla sukilla" },
+          { name: "Kurahanskat", emoji: "🧤", description: "Kevyet kurahanskat" },
+          { name: "Sadehattu", emoji: "🧢", description: "Lippis tai sadehattu" },
+        );
+      } else if (ageGroup === "koululainen") {
+        base.length = 0;
+        base.push(
+          { name: "Vedenpitävä kuoritakki", emoji: "🧥", description: "Vedenpitävä kuoritakki tai sadetakki" },
+          { name: "Tekniset ulkoiluhousut", emoji: "👖", description: "Farkut tai tekniset ulkoiluhousut" },
+          { name: "Vedenpitävät kengät", emoji: "👟", description: "Vedenpitävät kengät tai tennarit" },
+          { name: "Huomio", emoji: "🌧️", description: "Pakkaa sateenvarjo tai sadeviitta reppuun" },
+        );
+      } else {
+        // leikki-ikäinen fallback (shouldn't reach here)
+        base.length = 0;
+        base.push(
+          { name: "Sadeasu", emoji: "🌧️", description: "Sadeasu tai tekniset kuorivaatteet" },
+          { name: "Pitkähihainen paita", emoji: "👕", description: "Pitkähihainen paita alle" },
+          { name: "Ohuet housut", emoji: "👖", description: "Ohuet housut tai leggingsit" },
+          { name: "Kumisaappaat", emoji: "🥾", description: "Kumisaappaat ohuilla sukilla" },
+          { name: "Kurahanskat", emoji: "🧤", description: "Kevyet kurahanskat" },
+          { name: "Sadehattu", emoji: "🧢", description: "Lippis tai sadehattu" },
+        );
+      }
+    } else if (ageGroup === "koululainen") {
+      // Koululaisille (7–10 v): kuorivaatteet (kylmä sade)
       base.unshift(
         { name: "Vedenpitävä kuoritakki", emoji: "🧥", description: "Vedenpitävä kuoritakki sateelta suojaan" },
         { name: "Vedenpitävät ulkoiluhousut", emoji: "👖", description: "Vedenpitävät ulkoiluhousut sadesäälle" },
         { name: "Vettä hylkivät kengät", emoji: "👟", description: "Vettä hylkivät kengät pitävät jalat kuivina" },
       );
     } else if (ageGroup === "taapero" || ageGroup === "leikki-ikäinen") {
-      // Taapero & leikki-ikäinen: sadehaalari / kuravarusteet
+      // Taapero & leikki-ikäinen: sadehaalari / kuravarusteet (kylmä sade)
       const kumpparit = kumisaappaatWithSocks(temp);
       if (temp < 5) {
         base.unshift(
           { name: "Vuorellinen sadehaalari", emoji: "🌧️", description: "Vuorellinen sadehaalari tai kuravarusteet välikausipuvun päällä" },
           { name: "Kurahanskat", emoji: "🧤", description: "Vedenpitävät kurahanskat" },
-          { name: kumpparit.name, emoji: kumpparit.emoji, description: kumpparit.description },
-        );
-      } else if (temp > 15) {
-        base.unshift(
-          { name: "Ohuet kuravarusteet", emoji: "🌧️", description: "Ohuet kuravarusteet — kevyet ja ilmavat" },
-          { name: "Kurahanskat", emoji: "🧤", description: "Kevyet kurahanskat" },
           { name: kumpparit.name, emoji: kumpparit.emoji, description: kumpparit.description },
         );
       } else {
@@ -320,7 +354,7 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
         );
       }
     } else {
-      // Vauva: yksinkertaiset kuravarusteet
+      // Vauva: yksinkertaiset kuravarusteet (kylmä sade)
       const kumpparit = kumisaappaatWithSocks(temp);
       if (temp > 10) {
         base.unshift(
