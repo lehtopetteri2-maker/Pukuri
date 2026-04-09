@@ -256,10 +256,6 @@ const Index = () => {
         <AffiliateSection />
 
         <FeedbackSection ageGroup={ageGroup} />
-
-        <p className="text-center text-xs text-muted-foreground">
-          {t("misc.windTip")}
-        </p>
       </main>
 
       <Footer />
