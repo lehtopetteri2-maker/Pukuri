@@ -16,7 +16,7 @@ function getSavedLanguage(): Language {
 // Flat translation keys
 const translations = {
   // Header
-  "header.title": { fi: "Pukuri", sv: "Pukuri", en: "Pukuri", et: "Pukuri", ar: "Pukuri" },
+  "header.title": { fi: "Pukuri – Aamun älykkäät varustevalinnat", sv: "Pukuri – Smarta utrustningsval på morgonen", en: "Pukuri – Smart Morning Outfit Picks", et: "Pukuri – Nutikad hommikused riietusvalikud", ar: "Pukuri – خيارات ملابس الصباح الذكية" },
   "header.subtitle": { fi: "Älykäs apu aamun varustevalintoihin", sv: "Smart hjälp med morgonens utrustningsval", en: "Smart help for morning outfit choices", et: "Nutikas abi hommikuse riietuse valikuks", ar: "مساعد ذكي لاختيار ملابس الصباح" },
 
   // Location search
