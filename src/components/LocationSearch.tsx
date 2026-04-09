@@ -146,7 +146,7 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
             <div className="flex-1 overflow-y-auto border-t border-border px-1 pb-4">
               {filtered.length === 0 ? (
                 <div className="py-8 text-center text-sm text-muted-foreground">
-                  {t("location.noResults") || "Ei tuloksia"}
+                  Ei tuloksia
                 </div>
               ) : (
                 filtered.map((city) => (
