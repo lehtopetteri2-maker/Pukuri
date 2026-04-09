@@ -34,7 +34,7 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
     const q = query.trim().toLowerCase();
     return allCities
       .filter((c) => c.toLowerCase().startsWith(q))
-      .slice(0, 8);
+      .slice(0, 20);
   }, [query]);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -106,7 +106,18 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
           />
 
           {open && filtered.length > 0 && (
-            <div className="absolute z-30 top-full left-0 right-0 mt-1 rounded-md border border-border bg-popover shadow-md overflow-hidden">
+            <div
+              className="absolute z-30 top-full left-0 right-0 mt-1 rounded-md border border-border bg-popover shadow-md overflow-y-auto"
+              style={{ maxHeight: 'calc(100vh - 100% - 50px - 64px)' }}
+              ref={(el) => {
+                if (el) {
+                  const rect = el.getBoundingClientRect();
+                  const viewportH = window.innerHeight;
+                  const maxH = viewportH - rect.top - 50;
+                  el.style.maxHeight = `${Math.max(maxH, 120)}px`;
+                }
+              }}
+            >
               {filtered.map((city) => (
                 <button
                   key={city}
