@@ -14,7 +14,7 @@ function getSavedLanguage(): Language {
 // Flat translation keys
 const translations = {
   // Header
-  "header.title": { fi: "Säävahti", sv: "Väderpytten", en: "Säävahti" },
+  "header.title": { fi: "Pukuri", sv: "Pukuri", en: "Pukuri" },
   "header.subtitle": { fi: "Älykäs apu aamun varustevalintoihin", sv: "Smart hjälp med morgonens utrustningsval", en: "Smart help for morning outfit choices" },
 
   // Location search
