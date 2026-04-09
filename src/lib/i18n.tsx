@@ -542,7 +542,7 @@ const clothingDescMap: Record<string, { sv: string; en: string }> = {
   "Leveälierinen hattu": { sv: "Bredbrättad hatt", en: "Wide-brimmed hat" },
   "Kevyt paita": { sv: "Lätt tröja", en: "Light shirt" },
   "Kevyet shortsit": { sv: "Lätta shorts", en: "Light shorts" },
-  "Avoimet kengät": { sv: "Öppna skor", en: "Open shoes" },
+  "Kevyet kengät": { sv: "Lätta skor", en: "Lightweight shoes" },
   "Lippalakki tai hattu": { sv: "Keps eller hatt", en: "Cap or hat" },
   "Shortsit tai hame": { sv: "Shorts eller kjol", en: "Shorts or skirt" },
   "Aurinkosuoja": { sv: "Solskydd", en: "Sun protection" },
