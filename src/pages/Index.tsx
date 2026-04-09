@@ -200,7 +200,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <header className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-lg mx-auto px-4 py-4 flex items-center gap-3">
-          <img src={logoImg} alt="Säävahti" className="h-10 w-10 rounded-lg object-contain" />
+          <img src={logoImg} alt="Pukuri" className="h-10 w-10 rounded-lg object-contain" />
           <div className="flex-1">
             <h1 className="text-xl font-display font-800 text-foreground leading-tight tracking-tight">{t("header.title")}</h1>
             <p className="text-[11px] font-medium text-muted-foreground tracking-wide">{t("header.subtitle")}</p>

@@ -74,7 +74,7 @@ const FeedbackSection = ({ ageGroup }: FeedbackSectionProps) => {
       <Card className="border-primary/20 bg-primary/5">
         <CardContent className="p-6 text-center space-y-2">
           <MessageSquareHeart className="h-8 w-8 text-primary mx-auto" />
-          <p className="text-sm font-medium text-foreground">Kiitos palautteesta! Se auttaa kehittämään Säävahtia.</p>
+          <p className="text-sm font-medium text-foreground">Kiitos palautteesta! Se auttaa kehittämään Pukuria.</p>
           <p className="text-xs text-muted-foreground">{t("feedback.thanksDesc")}</p>
         </CardContent>
       </Card>
