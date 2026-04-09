@@ -83,11 +83,9 @@ const coldSnowGear: Record<AgeGroup, ClothingItem[]> = {
   ],
 };
 
-const mildRainGear: Record<AgeGroup, ClothingItem[]> = {
+const mildBaseGear: Record<AgeGroup, ClothingItem[]> = {
   vauva: [
     { name: "Välikausihaalari", emoji: "🧥", description: "Kevyt haalari" },
-    { name: "Sadehaalari", emoji: "🌧️", description: "Vedenpitävä haalari päälle" },
-    { name: "Kumisaappaat", emoji: "🥾", description: "Pienet kumpparet" },
     { name: "Ohut pipo", emoji: "🧢", description: "Puuvillapipo" },
   ],
   taapero: [
@@ -106,8 +104,8 @@ const mildRainGear: Record<AgeGroup, ClothingItem[]> = {
   ],
   koululainen: [
     { name: "Välikausihousut", emoji: "👖", description: "Joustavat välikausihousut" },
-    { name: "Vedenpitävä kuoritakki", emoji: "🧥", description: "Vedenpitävä kuoritakki" },
-    { name: "Vettä hylkivät kengät", emoji: "👟", description: "Vettä hylkivät kengät" },
+    { name: "Kuoritakki", emoji: "🧥", description: "Tuulenpitävä kuoritakki" },
+    { name: "Välikausikengät", emoji: "🥾", description: "Vettähylkivät välikausikengät" },
     { name: "Huppari", emoji: "👕", description: "Fleece tai huppari" },
     { name: "Ohut pipo", emoji: "🧢", description: "Ohut pipo" },
   ],
@@ -207,7 +205,7 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
         description: "Kevätkausi — kuoritakki ja lämmin välikerros alle",
       });
     }
-    base.push(...mildRainGear[ageGroup]);
+    base.push(...mildBaseGear[ageGroup]);
     // Layering tip for spring
     base.push({
       name: "Lämmin välikerros",
@@ -247,7 +245,7 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
         description: "+1 … +15 °C — kuoritakki ja kerroksia",
       });
     }
-    base.push(...mildRainGear[ageGroup]);
+    base.push(...mildBaseGear[ageGroup]);
     // Paikoillaan oleva pieni lapsi — lisäkerros
     if (ageGroup === "vauva" || ageGroup === "taapero") {
       base.push({
@@ -274,8 +272,8 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
     }
   }
 
-  // Sadevarusteet (rainProbability > 40 %)
-  if (weather.rainProbability > 40) {
+  // Sadevarusteet (rainProbability > 30 %)
+  if (weather.rainProbability > 30 || weather.condition === "rainy") {
     // Lämpötilan mukaan: alle +10°C -> + villasukat kumisaappaisiin
     const kumisaappaatWithSocks = (temp: number): ClothingItem => {
       if (temp < 10) {
