@@ -1,28 +1,39 @@
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Search, MapPin, Loader2, X } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
-import { cityWeather } from "@/lib/cityWeatherData";
+
+const API_KEY = "247aa2ee8cccf0e1e53ea7ab0aeb4e7d";
+const GEO_BASE = "https://api.openweathermap.org/geo/1.0";
+const NORDIC_COUNTRIES = new Set(["FI", "SE", "NO", "DK"]);
+
+interface GeoResult {
+  name: string;
+  local_names?: Record<string, string>;
+  lat: number;
+  lon: number;
+  country: string;
+  state?: string;
+}
 
 interface LocationSearchProps {
   currentCity: string;
-  onSelectCity: (city: string) => void;
+  onSelectCity: (city: string, lat?: number, lon?: number) => void;
   onGeolocate: () => void;
   loading: boolean;
 }
 
-const allCities = Object.keys(cityWeather).sort((a, b) => a.localeCompare(b, "fi"));
-
 export default function LocationSearch({ currentCity, onSelectCity, onGeolocate, loading }: LocationSearchProps) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [query, setQuery] = useState("");
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [results, setResults] = useState<GeoResult[]>([]);
+  const [searching, setSearching] = useState(false);
   const sheetInputRef = useRef<HTMLInputElement>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
 
-  // Lock body scroll when sheet is open
   useEffect(() => {
     if (sheetOpen) {
       document.body.style.overflow = "hidden";
-      // Focus sheet input after animation
       setTimeout(() => sheetInputRef.current?.focus(), 100);
     } else {
       document.body.style.overflow = "";
@@ -30,26 +41,71 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
     return () => { document.body.style.overflow = ""; };
   }, [sheetOpen]);
 
-  const filtered = useMemo(() => {
-    if (!query.trim()) return allCities;
-    const q = query.trim().toLowerCase();
-    return allCities.filter((c) => c.toLowerCase().includes(q));
-  }, [query]);
+  const searchGeo = useCallback(async (q: string) => {
+    if (!q.trim() || q.trim().length < 2) {
+      setResults([]);
+      setSearching(false);
+      return;
+    }
+    setSearching(true);
+    try {
+      const res = await fetch(
+        `${GEO_BASE}/direct?q=${encodeURIComponent(q.trim())}&limit=20&appid=${API_KEY}`
+      );
+      if (!res.ok) { setResults([]); return; }
+      const data: GeoResult[] = await res.json();
+      // Filter to Nordic countries and deduplicate by name+country
+      const nordic = data.filter((r) => NORDIC_COUNTRIES.has(r.country));
+      const seen = new Set<string>();
+      const deduped = nordic.filter((r) => {
+        const key = `${r.name}-${r.country}-${r.state ?? ""}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+      setResults(deduped);
+    } catch {
+      setResults([]);
+    } finally {
+      setSearching(false);
+    }
+  }, []);
 
-  const handleSelect = (city: string) => {
-    onSelectCity(city);
+  const handleQueryChange = (val: string) => {
+    setQuery(val);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => searchGeo(val), 300);
+  };
+
+  const displayName = (r: GeoResult): string => {
+    // Try local name in user's language
+    const localKey = lang === "fi" ? "fi" : lang === "sv" ? "sv" : "en";
+    const local = r.local_names?.[localKey];
+    if (local && local !== r.name) return `${local} (${r.name})`;
+    return r.name;
+  };
+
+  const countryFlag = (code: string) => {
+    const flags: Record<string, string> = { FI: "🇫🇮", SE: "🇸🇪", NO: "🇳🇴", DK: "🇩🇰" };
+    return flags[code] ?? "";
+  };
+
+  const handleSelect = (r: GeoResult) => {
+    const name = r.local_names?.fi ?? r.local_names?.en ?? r.name;
+    onSelectCity(name, r.lat, r.lon);
     setQuery("");
+    setResults([]);
     setSheetOpen(false);
   };
 
   const handleClose = () => {
     setQuery("");
+    setResults([]);
     setSheetOpen(false);
   };
 
   return (
     <>
-      {/* Compact location bar */}
       <div className="relative animate-fade-in">
         {loading && (
           <div className="absolute inset-0 z-20 flex items-center justify-center bg-card/80 rounded-lg backdrop-blur-sm">
@@ -79,7 +135,6 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
             </button>
           </div>
 
-          {/* Fake input that opens the bottom sheet */}
           <button
             type="button"
             onClick={() => setSheetOpen(true)}
@@ -91,21 +146,16 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
         </div>
       </div>
 
-      {/* Bottom Sheet overlay */}
       {sheetOpen && (
         <div className="fixed inset-0 z-50 flex flex-col">
-          {/* Backdrop */}
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={handleClose} />
 
-          {/* Sheet */}
           <div className="relative mt-auto bg-card rounded-t-2xl shadow-2xl border-t border-border flex flex-col animate-fade-in"
                style={{ maxHeight: "90vh", minHeight: "50vh" }}>
-            {/* Handle bar */}
             <div className="flex justify-center pt-3 pb-1">
               <div className="w-10 h-1 rounded-full bg-muted-foreground/30" />
             </div>
 
-            {/* Header with search */}
             <div className="px-4 pb-3 space-y-3">
               <div className="flex items-center justify-between">
                 <h2 className="text-base font-display font-700 text-foreground">
@@ -125,13 +175,12 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
                   ref={sheetInputRef}
                   type="text"
                   value={query}
-                  onChange={(e) => setQuery(e.target.value)}
+                  onChange={(e) => handleQueryChange(e.target.value)}
                   placeholder={t("location.searchPlaceholder")}
                   className="w-full rounded-md border border-input bg-background pl-9 pr-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/30 transition-shadow"
                 />
               </div>
 
-              {/* Geolocation button */}
               <button
                 onClick={() => { onGeolocate(); handleClose(); }}
                 disabled={loading}
@@ -142,29 +191,38 @@ export default function LocationSearch({ currentCity, onSelectCity, onGeolocate,
               </button>
             </div>
 
-            {/* City list */}
             <div className="flex-1 overflow-y-auto border-t border-border px-1 pb-4">
-              {filtered.length === 0 ? (
-                <div className="py-8 text-center text-sm text-muted-foreground">
-                  Ei tuloksia
+              {searching ? (
+                <div className="py-8 flex items-center justify-center gap-2 text-muted-foreground">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span className="text-sm">Haetaan...</span>
                 </div>
-              ) : (
-                filtered.map((city) => (
+              ) : query.trim().length > 0 && results.length === 0 ? (
+                <div className="py-8 text-center text-sm text-muted-foreground">
+                  {query.trim().length < 2 ? "Kirjoita vähintään 2 merkkiä" : "Ei tuloksia"}
+                </div>
+              ) : results.length > 0 ? (
+                results.map((r, i) => (
                   <button
-                    key={city}
+                    key={`${r.name}-${r.lat}-${r.lon}-${i}`}
                     type="button"
-                    onClick={() => handleSelect(city)}
+                    onClick={() => handleSelect(r)}
                     className="w-full text-left px-4 py-3 text-sm text-foreground hover:bg-accent hover:text-accent-foreground transition-colors flex items-center gap-3 border-b border-border/50 last:border-0"
                   >
                     <MapPin className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-                    <span className={city === currentCity ? "font-700 text-primary" : ""}>
-                      {city}
-                    </span>
-                    {city === currentCity && (
-                      <span className="ml-auto text-xs text-primary">✓</span>
-                    )}
+                    <div className="flex-1 min-w-0">
+                      <span className="font-medium">{displayName(r)}</span>
+                      {r.state && (
+                        <span className="text-xs text-muted-foreground ml-1.5">{r.state}</span>
+                      )}
+                    </div>
+                    <span className="text-sm shrink-0">{countryFlag(r.country)}</span>
                   </button>
                 ))
+              ) : (
+                <div className="py-8 text-center text-sm text-muted-foreground">
+                  {lang === "fi" ? "Kirjoita paikkakunnan nimi" : lang === "sv" ? "Skriv ortnamn" : "Type a place name"}
+                </div>
               )}
             </div>
           </div>
