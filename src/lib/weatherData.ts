@@ -205,7 +205,7 @@ export function getClothingRecommendation(weather: WeatherData, ageGroup: AgeGro
         description: "Kevätkausi — kuoritakki ja lämmin välikerros alle",
       });
     }
-    base.push(...mildRainGear[ageGroup]);
+    base.push(...mildBaseGear[ageGroup]);
     // Layering tip for spring
     base.push({
       name: "Lämmin välikerros",
