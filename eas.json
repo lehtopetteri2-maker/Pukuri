@@ -4,10 +4,12 @@
   },
   "build": {
     "production": {
-      "node": "20.x",
       "android": {
         "buildType": "app-bundle"
       }
     }
+  },
+  "submit": {
+    "production": {}
   }
 }
