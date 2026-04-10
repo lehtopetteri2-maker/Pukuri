@@ -20,6 +20,11 @@
     "ios": {
       "bundleIdentifier": "com.pukuri.app",
       "supportsTablet": true
+    },
+    "extra": {
+      "eas": {
+        "projectId":d9b7c5a7-6bd2-4d28-989c-ed89ce35784b
       }
     }
   }
+}
