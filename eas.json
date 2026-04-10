@@ -4,12 +4,12 @@
   },
   "build": {
     "production": {
+      "env": {
+        "NPM_CONFIG_CHECK_FILES": "false"
+      },
       "android": {
         "buildType": "app-bundle"
       }
     }
-  },
-  "submit": {
-    "production": {}
   }
 }
