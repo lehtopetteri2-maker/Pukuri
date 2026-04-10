@@ -16,6 +16,15 @@
         "ACCESS_COARSE_LOCATION",
         "ACCESS_FINE_LOCATION"
       ]
+    },
+    "ios": {
+      "bundleIdentifier": "com.pukuri.app",
+      "supportsTablet": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "pukuri"
+      }
     }
   }
 }
