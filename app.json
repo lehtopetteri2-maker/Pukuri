@@ -1,0 +1,8 @@
+{
+  "name": "Pukuri",
+  "slug": "pukuri",
+  "version": "1.0.0",
+  "description": "Sääpohjainen pukeutumissuositussovellus lapsille",
+  "orientation": "portrait",
+  "platforms": ["ios", "android", "web"]
+}
