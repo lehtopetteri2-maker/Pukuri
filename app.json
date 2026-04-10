@@ -20,8 +20,6 @@
     "ios": {
       "bundleIdentifier": "com.pukuri.app",
       "supportsTablet": true
-    },
-      }
     }
   }
 }
