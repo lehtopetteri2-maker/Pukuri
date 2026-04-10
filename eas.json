@@ -1,10 +1,6 @@
 {
-  "cli": {
-    "version": ">= 5.9.1"
-  },
   "build": {
     "production": {
-      "node": "20.19.0",
       "android": {
         "buildType": "app-bundle"
       }
