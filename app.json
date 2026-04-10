@@ -4,12 +4,12 @@
     "slug": "pukuri",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "assets/icon.png",
+    "icon": "./icon.png",
     "userInterfaceStyle": "light",
     "android": {
       "package": "com.pukuri.app",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icon.png",
+        "foregroundImage": "./icon.png",
         "backgroundColor": "#ffffff"
       },
       "permissions": [
