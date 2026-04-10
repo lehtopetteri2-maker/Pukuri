@@ -5,6 +5,9 @@
   "build": {
     "production": {
       "node": "20.19.0",
+      "env": {
+        "NPM_CONFIG_CHECK_FILES": "false"
+      },
       "android": {
         "buildType": "app-bundle"
       }
