@@ -1,13 +1,10 @@
 {
   "cli": {
-    "version": ">= 5.9.1",
-    "appVersionSource": "remote"
+    "version": ">= 5.9.1"
   },
   "build": {
     "production": {
-      "env": {
-        "EAS_BUILD_NO_EXPO_GO_WARNING": "true"
-      },
+      "node": "20.19.0",
       "android": {
         "buildType": "app-bundle"
       }
