@@ -8,7 +8,7 @@ interface WeeklyScheduleProps {
   ageGroup: AgeGroup;
 }
 
-const STORAGE_KEY_PREFIX = "saavahti-viikko-ohjelma-";
+const STORAGE_KEY_PREFIX = "pukuri-viikko-ohjelma-";
 const MAX_WIDTH = 1200;
 
 function getStoredImage(ageGroup: AgeGroup): string | null {

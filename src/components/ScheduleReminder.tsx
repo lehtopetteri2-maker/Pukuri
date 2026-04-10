@@ -6,7 +6,7 @@ interface ScheduleReminderProps {
   onOpen: () => void;
 }
 
-const STORAGE_KEY_PREFIX = "saavahti-viikko-ohjelma-";
+const STORAGE_KEY_PREFIX = "pukuri-viikko-ohjelma-";
 
 export default function ScheduleReminder({ ageGroup, onOpen }: ScheduleReminderProps) {
   const { t } = useLanguage();

@@ -28,7 +28,7 @@ export default function ShareButton({ dual, ageGroup }: ShareButtonProps) {
     if (dual.mudFactor) {
       msg += `💧 ${t("share.rememberMud")}\n`;
     }
-    msg += `\n🔗 https://saavahti-weather-buddy.lovable.app`;
+    msg += `\n🔗 https://pukuri.lovable.app`;
     return msg;
   };
 

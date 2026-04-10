@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useCallback, ReactNode, useEffect 
 
 export type Language = "fi" | "sv" | "en" | "et" | "ar";
 
-const LANG_KEY = "saavahti-language";
+const LANG_KEY = "pukuri-language";
 
 function getSavedLanguage(): Language {
   const saved = localStorage.getItem(LANG_KEY);

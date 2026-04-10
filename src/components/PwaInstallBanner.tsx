@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { X, Share, Download } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 
-const DISMISS_KEY = "saavahti-pwa-dismissed";
+const DISMISS_KEY = "pukuri-pwa-dismissed";
 
 export default function PwaInstallBanner() {
   const { t } = useLanguage();
