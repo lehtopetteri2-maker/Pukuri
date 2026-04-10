@@ -1,7 +1,7 @@
 import type { WeatherData } from "./weatherData";
 import type { TomorrowData } from "./weatherApi";
 
-const CACHE_KEY = "saavahti-weather-cache";
+const CACHE_KEY = "pukuri-weather-cache";
 const CACHE_TTL = 20 * 60 * 1000; // 20 minutes
 
 /** Max distance in km to consider coordinates "same location" */

@@ -37,11 +37,11 @@ export function searchCities(query: string): string[] {
 }
 
 export function getSavedCity(): string {
-  return localStorage.getItem("saavahti-city") || "Helsinki";
+  return localStorage.getItem("pukuri-city") || "Helsinki";
 }
 
 export function saveCity(city: string): void {
-  localStorage.setItem("saavahti-city", city);
+  localStorage.setItem("pukuri-city", city);
 }
 
 const coldSnowGear: Record<AgeGroup, ClothingItem[]> = {

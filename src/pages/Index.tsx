@@ -23,7 +23,7 @@ import { getCachedWeather, getCachedWeatherByCoords, isCacheFresh, getCacheAgeMi
 import { ForecastAlerts, emptyAlerts, computeAlerts } from "@/lib/forecastAlerts";
 import FeedbackSection from "@/components/FeedbackSection";
 import { CloudSnow, AlertCircle } from "lucide-react";
-import logoImg from "@/assets/saavahti-logo.png";
+import logoImg from "@/assets/icon.png";
 import { toast } from "sonner";
 import { useLanguage } from "@/lib/i18n";
 
