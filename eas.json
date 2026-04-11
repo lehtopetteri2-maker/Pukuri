@@ -8,8 +8,9 @@
         "EAS_BUILD_BUN_ENABLED": "0",
         "EAS_BUILD_SKIP_EXPO_DOCTOR": "true",
         "EAS_BUILD_NO_EXPO_GO_WARNING": "true",
-        "NPM_CONFIG_FUND": "false"
+        "NPM_FLAGS": "--no-package-lock"
       }
     }
   }
 }
+
