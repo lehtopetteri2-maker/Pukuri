@@ -1,1 +1,13 @@
-
+{
+  "build": {
+    "production": {
+      "android": {
+        "buildType": "app-bundle"
+      },
+      "env": {
+        "EAS_BUILD_BUN_ENABLED": "0",
+        "EAS_BUILD_SKIP_EXPO_DOCTOR": "true"
+      }
+    }
+  }
+}
