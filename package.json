@@ -9,7 +9,8 @@
     "react-native": "0.73.6",
     "lucide-react-native": "*",
     "expo-constants": "~15.4.6",
-    "expo-font": "~11.10.3"
+    "expo-font": "~11.10.3",
+    "expo-location": "~16.5.5"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
