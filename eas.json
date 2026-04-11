@@ -1,6 +1,7 @@
 {
   "build": {
     "production": {
+      "node": "20.19.0",
       "env": {
         "EAS_BUILD_BUN_ENABLED": "0"
       },
