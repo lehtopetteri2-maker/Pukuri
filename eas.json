@@ -5,13 +5,14 @@
   },
   "build": {
     "production": {
-      "env": {
-        "EAS_BUILD_NO_EXPO_GO_WARNING": "true",
-        "EAS_BUILD_SKIP_EXPO_DOCTOR": "true"
-      },
       "android": {
         "buildType": "app-bundle",
         "image": "ubuntu-22.04-jdk-17-ndk-r26b"
+      },
+      "env": {
+        "EAS_BUILD_SKIP_EXPO_DOCTOR": "true",
+        "EAS_BUILD_NO_EXPO_GO_WARNING": "true",
+        "EAS_BUILD_BUN_ENABLED": "0"
       }
     }
   }
