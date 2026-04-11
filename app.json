@@ -1,21 +1,20 @@
-{
+
   "expo": {
-    "name": "Pukuri – Älykäs apu aamun varustevalintoihin",
+    "name": "Pukuri",
     "slug": "pukuri",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "android": {
       "package": "com.pukuri.app",
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/icon.png",
-        "backgroundColor": "#ffffff"
-      },
       "permissions": [
         "ACCESS_COARSE_LOCATION",
         "ACCESS_FINE_LOCATION"
       ]
+    },
+    "extra": {
+      "eas": {
+        "projectId": "d9b7c5a7-6bd2-4d28-989c-ed89ce35784b"
+      }
     }
   }
-}
