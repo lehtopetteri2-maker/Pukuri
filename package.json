@@ -9,9 +9,7 @@
     "react-native": "0.73.6",
     "lucide-react-native": "*",
     "expo-constants": "~15.4.6",
-    "expo-font": "~11.10.3",
-    "expo-file-system": "~16.0.9",
-    "expo-keep-awake": "~12.8.2"
+    "expo-font": "~11.10.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
