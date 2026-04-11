@@ -4,8 +4,13 @@
     "slug": "pukuri",
     "version": "1.0.0",
     "orientation": "portrait",
+    "userInterfaceStyle": "light",
     "android": {
-      "package": "com.pukuri.app"
+      "package": "com.pukuri.app",
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION"
+      ]
     },
     "extra": {
       "eas": {
