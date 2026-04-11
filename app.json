@@ -1,4 +1,4 @@
-
+{
   "expo": {
     "name": "Pukuri",
     "slug": "pukuri",
@@ -18,3 +18,4 @@
       }
     }
   }
+}
