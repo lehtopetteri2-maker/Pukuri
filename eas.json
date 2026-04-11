@@ -1,15 +1,12 @@
 {
-  "cli": {
-    "version": ">= 5.9.1"
-  },
   "build": {
     "production": {
+      "env": {
+        "EAS_BUILD_BUN_ENABLED": "0"
+      },
       "android": {
         "buildType": "app-bundle"
       }
     }
-  },
-  "submit": {
-    "production": {}
   }
 }
