@@ -1,13 +1,10 @@
 {
-  "cli": {
-    "version": ">= 5.9.1"
-  },
   "build": {
     "production": {
       "node": "20.19.0",
       "env": {
-        "EAS_BUILD_BUN_ENABLED": "0",
-        "EAS_BUILD_NPM_ENABLED": "1"
+        "EAS_BUILD_NO_EXPO_GO_WARNING": "true",
+        "EAS_BUILD_SKIP_EXPO_DOCTOR": "true"
       },
       "android": {
         "buildType": "app-bundle"
