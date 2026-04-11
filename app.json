@@ -2,7 +2,7 @@
   "expo": {
     "name": "Pukuri – Älykäs apu aamun varustevalintoihin",
     "slug": "pukuri",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./src/assets/icon.png",
     "android": {
