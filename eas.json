@@ -4,12 +4,12 @@
   },
   "build": {
     "production": {
+      "env": {
+        "EAS_BUILD_BUN_ENABLED": "0"
+      },
       "android": {
         "buildType": "app-bundle"
       }
     }
-  },
-  "submit": {
-    "production": {}
   }
 }
